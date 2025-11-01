@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="zh"><head>
+<title>Crypto - X8@0E的博客</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="description" content="一、古典密码1.凯撒密码[SWPUCTF 2021 新生赛]ez_caesar1234567891011121314151617181920附件.pyimport base64def caesar(plaintext):   #定义凯撒密码加密函数，参数为明文    str_list &#x3D; list(plaintext)    i &#x3D; 0    while i &lt; len(plaintext)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Crypto">
+<meta property="og:url" content="http://example.com/2025/10/20/Crypto/index.html">
+<meta property="og:site_name" content="X8@0E的博客">
+<meta property="og:description" content="一、古典密码1.凯撒密码[SWPUCTF 2021 新生赛]ez_caesar1234567891011121314151617181920附件.pyimport base64def caesar(plaintext):   #定义凯撒密码加密函数，参数为明文    str_list &#x3D; list(plaintext)    i &#x3D; 0    while i &lt; len(plaintext)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251020202404116.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251020203844589.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251020203925269.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251020204047996.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251020204138052.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251025115837583.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251025120248250.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251025134233907.png">
+<meta property="article:published_time" content="2025-10-20T11:47:30.726Z">
+<meta property="article:modified_time" content="2025-10-25T08:06:10.923Z">
+<meta property="article:author" content="X8@0E">
+<meta property="article:tag" content="凯撒密码">
+<meta property="article:tag" content="维吉尼亚密码">
+<meta property="article:tag" content="RSA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251020202404116.png">
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1761989925253">
+
+<link rel="stylesheet" href="/css/style.css?v=1761989925253">
+
+
+
+
+    
+        <link rel="stylesheet" href="/custom.css?v=1761989925253">
+    
+
+
+
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+<script src="/lib/lax.min.js" async></script>
+
+
+<script async src="/js/app.js?v=1761989925253"></script>
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<meta name="generator" content="Hexo 7.3.0"></head><body class="nexmoe mdui-drawer-body-left"><div id="nexmoe-background"><div class="nexmoe-bg" style="background-image: url(https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080)"></div><div class="mdui-appbar mdui-shadow-0"><div class="mdui-toolbar"><a class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: &#039;#drawer&#039;, swipe: true}" title="menu"><i class="mdui-icon nexmoefont icon-menu"></i></a><div class="mdui-toolbar-spacer"></div><a class="mdui-btn mdui-btn-icon" href="/" title="X8@0E"><img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></a></div></div></div><div id="nexmoe-header"><div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="X8@0E">
+            <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E" alt="X8@0E">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>43</div>
+        <div><span>标签</span>77</div>
+        <div><span>分类</span>14</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-douban-fill"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+
+
+	<script async src="/js/search.js?v=1761989925254"></script>
+
+
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://blog.csdn.net/2301_81325456/article/details/147025965"
+			target="_blank"
+			mdui-tooltip="{content: 'CSDN'}"
+			style="
+				color: rgb(247, 132, 34);
+				background-color: rgba(247, 132, 34, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Crypto/">Crypto</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/NSSCTF/">NSSCTF</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnhub/">Vulnhub</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnvm靶机复现/">Vulnvm靶机复现</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-信息收集/">ctfshow-web-信息收集</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-命令执行/">ctfshow-web-命令执行</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件上传/">ctfshow-web-文件上传</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件包含/">ctfshow-web-文件包含</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-爆破/">ctfshow-web-爆破</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/sql注入/">sql注入</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulhub/">vulhub</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulnhub/">vulnhub</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/群友靶机/">群友靶机</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/自制靶机/">自制靶机</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/1Panel/" style="font-size: 10px;">1Panel</a> <a href="/tags/3%E4%B8%AA%E7%82%B9/" style="font-size: 10px;">3个点</a> <a href="/tags/Argon2Cracker/" style="font-size: 10px;">Argon2Cracker</a> <a href="/tags/Cookie-GLOBALS/" style="font-size: 10px;">Cookie--GLOBALS</a> <a href="/tags/Cypher%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">Cypher注入</a> <a href="/tags/DC/" style="font-size: 15px;">DC</a> <a href="/tags/GIF%E7%BB%95%E8%BF%87/" style="font-size: 10px;">GIF绕过</a> <a href="/tags/Jinja2/" style="font-size: 10px;">Jinja2</a> <a href="/tags/JoomScan/" style="font-size: 10px;">JoomScan</a> <a href="/tags/LFI%E5%88%B0RCE-open%E5%87%BD%E6%95%B0/" style="font-size: 10px;">LFI到RCE(open函数)</a> <a href="/tags/NSSCTF/" style="font-size: 15px;">NSSCTF</a> <a href="/tags/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">Nginx解析漏洞</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/RUNPATH/" style="font-size: 10px;">RUNPATH</a> <a href="/tags/Rabbit/" style="font-size: 10px;">Rabbit</a> <a href="/tags/SSRF/" style="font-size: 10px;">SSRF</a> <a href="/tags/Vulnhub/" style="font-size: 15px;">Vulnhub</a> <a href="/tags/Vulnvm/" style="font-size: 10px;">Vulnvm</a> <a href="/tags/WAF/" style="font-size: 10px;">WAF</a> <a href="/tags/WPA-01-cap/" style="font-size: 10px;">WPA-01.cap</a> <a href="/tags/aircrack-ng/" style="font-size: 10px;">aircrack-ng</a> <a href="/tags/basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">basic认证爆破</a> <a href="/tags/cgi%E6%96%87%E4%BB%B6/" style="font-size: 10px;">cgi文件</a> <a href="/tags/ctfshow/" style="font-size: 20px;">ctfshow</a> <a href="/tags/dirtycow/" style="font-size: 10px;">dirtycow</a> <a href="/tags/docker%E4%BA%A4%E4%BA%92%E5%BC%8Fshell/" style="font-size: 10px;">docker交互式shell</a> <a href="/tags/drupal/" style="font-size: 10px;">drupal</a> <a href="/tags/ffuf/" style="font-size: 10px;">ffuf</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E/" style="font-size: 10px;">fork解决断连</a> <a href="/tags/ftp/" style="font-size: 10px;">ftp</a> <a href="/tags/ghfs/" style="font-size: 10px;">ghfs</a> <a href="/tags/ldd/" style="font-size: 10px;">ldd</a> <a href="/tags/les-sh/" style="font-size: 10px;">les.sh</a> <a href="/tags/linpeas-sh/" style="font-size: 10px;">linpeas.sh</a> <a href="/tags/lsattr-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">lsattr--查看文件扩展属性</a> <a href="/tags/motto/" style="font-size: 10px;">motto</a> <a href="/tags/msfvenom/" style="font-size: 15px;">msfvenom</a> <a href="/tags/mysql-old-password/" style="font-size: 10px;">mysql_old_password</a> <a href="/tags/nikto/" style="font-size: 10px;">nikto</a> <a href="/tags/nohup/" style="font-size: 10px;">nohup</a> <a href="/tags/php%E6%8F%90%E6%9D%83root/" style="font-size: 10px;">php提权root</a> <a href="/tags/poc/" style="font-size: 10px;">poc</a> <a href="/tags/put%E6%96%B9%E6%B3%95/" style="font-size: 10px;">put方法</a> <a href="/tags/python3-5/" style="font-size: 10px;">python3.5</a> <a href="/tags/rce/" style="font-size: 10px;">rce</a> <a href="/tags/readelf/" style="font-size: 10px;">readelf</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sqlmap/" style="font-size: 10px;">sqlmap</a> <a href="/tags/sql%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">sql二次注入</a> <a href="/tags/ssh%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4/" style="font-size: 10px;">ssh弱口令爆破</a> <a href="/tags/ssh%E7%A7%98%E9%92%A5%E7%94%9F%E6%88%90%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">ssh秘钥生成连接</a> <a href="/tags/stegseek/" style="font-size: 10px;">stegseek</a> <a href="/tags/suForce/" style="font-size: 10px;">suForce</a> <a href="/tags/url%E6%88%AA%E6%96%AD/" style="font-size: 10px;">url截断</a> <a href="/tags/vite/" style="font-size: 10px;">vite</a> <a href="/tags/web%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="font-size: 10px;">web命令执行</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">web文件上传</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 10px;">web文件包含</a> <a href="/tags/web%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 10px;">web源码泄露</a> <a href="/tags/web%E7%88%86%E7%A0%B4/" style="font-size: 10px;">web爆破</a> <a href="/tags/x-forwarded-for%E7%9A%84ip%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">x-forwarded-for的ip欺骗</a> <a href="/tags/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E-CVE-2025-30208/" style="font-size: 10px;">任意文件读取漏洞(CVE-2025-30208)</a> <a href="/tags/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/" style="font-size: 10px;">凯撒密码</a> <a href="/tags/%E5%90%8E%E9%9D%A2%E5%8A%A0-jpg%E5%90%8E%E7%BC%80/" style="font-size: 10px;">后面加.jpg后缀</a> <a href="/tags/%E5%9F%9F%E6%8E%A7/" style="font-size: 10px;">域控</a> <a href="/tags/%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">密码爆破</a> <a href="/tags/%E6%8F%90%E6%9D%83-env-reset/" style="font-size: 10px;">提权!env_reset</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">插件漏洞</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5-ua%E6%B7%BB%E5%8A%A0%E6%9C%A8%E9%A9%AC/" style="font-size: 10px;">日志注入+ua添加木马</a> <a href="/tags/%E6%AD%A3%E5%90%91shell/" style="font-size: 10px;">正向shell</a> <a href="/tags/%E7%8A%B6%E6%80%81%E7%A0%81/" style="font-size: 10px;">状态码</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 10px;">环境变量</a> <a href="/tags/%E7%A9%BA%E6%A0%BC/" style="font-size: 10px;">空格</a> <a href="/tags/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81/" style="font-size: 10px;">维吉尼亚密码</a> <a href="/tags/%E8%9A%81%E5%89%91/" style="font-size: 10px;">蚁剑</a> <a href="/tags/%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96/" style="font-size: 10px;">越界读取</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(77);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+    
+        
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章归档</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">43</span></li></ul>
+    </div>
+  </div>
+
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">最新文章</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/10/20/Crypto/">Crypto</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/11/%E6%B5%81%E9%87%8F%E6%81%B6%E6%84%8F%E6%94%BB%E5%87%BB/">流量分析恶意攻击</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/10/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/09/hackableII/">hackablell</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/07/Me-and-My-Girlfriend-1/">Me-and-My-Girlfriend-1</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+            <li>
+                <a href="" target="_blank" >
+                    <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></img>
+                    <p>X8@0E</p>
+                </a>
+            </li>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+    
+   
+    <div class="nexmoe-copyright">
+        &copy; 2025 X8@0E
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer --></div><div id="nexmoe-content"><div class="nexmoe-primary"><div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="https://img.shetu66.com/2023/11/22/1700641714095150.jpg" alt="Crypto" loading="lazy">
+            <h1>Crypto</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2025年10月20日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/Crypto/">Crypto</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h1 id="一、古典密码"><a href="#一、古典密码" class="headerlink" title="一、古典密码"></a>一、古典密码</h1><h2 id="1-凯撒密码"><a href="#1-凯撒密码" class="headerlink" title="1.凯撒密码"></a>1.凯撒密码</h2><h3 id="SWPUCTF-2021-新生赛-ez-caesar"><a href="#SWPUCTF-2021-新生赛-ez-caesar" class="headerlink" title="[SWPUCTF 2021 新生赛]ez_caesar"></a>[SWPUCTF 2021 新生赛]ez_caesar</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">附件.py</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">caesar</span>(<span class="params">plaintext</span>):   <span class="comment">#定义凯撒密码加密函数，参数为明文</span></span><br><span class="line">    str_list = <span class="built_in">list</span>(plaintext)</span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i &lt; <span class="built_in">len</span>(plaintext):</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> str_list[i].isalpha():  <span class="comment">#如果当前字符不是字母，保持不变。</span></span><br><span class="line">            str_list[i] = str_list[i]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            a = <span class="string">&quot;A&quot;</span> <span class="keyword">if</span> str_list[i].isupper() <span class="keyword">else</span> <span class="string">&quot;a&quot;</span>   <span class="comment">#如果是字母，就会判断是大写还是小写</span></span><br><span class="line">            str_list[i] = <span class="built_in">chr</span>((<span class="built_in">ord</span>(str_list[i]) - <span class="built_in">ord</span>(a) + <span class="number">5</span>) % <span class="number">26</span> + <span class="built_in">ord</span>(a) <span class="keyword">or</span> <span class="number">5</span>)  <span class="comment">#将字符转换为0-25的数字，向右偏移5位（凯撒移位）</span></span><br><span class="line">        i = i + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>.join(str_list)</span><br><span class="line"></span><br><span class="line">flag = <span class="string">&quot;*************************&quot;</span></span><br><span class="line"><span class="built_in">str</span> = caesar(flag)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">str</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#str=&quot;U1hYSFlLe2R0em1mYWpwc3RiaGZqeGZ3fQ==&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="base64的特征"><a href="#base64的特征" class="headerlink" title="base64的特征"></a>base64的特征</h3><p>1.字符集固定：仅由 <code>A-Z</code>、<code>a-z</code>、<code>0-9</code>、<code>+</code>、<code>/</code> 这64个字符组成，通常末尾用 <code>=</code> 作为填充。</p>
+<p>2.长度规律：编码后的字符串长度总是4的倍数（不足时用 <code>=</code> 填充）。</p>
+<p>凯撒(caesar)的特征</p>
+<p>1.字符平移：所有字母在字母表中<strong>整体、固定地偏移</strong>一个位置。</p>
+<p>2.字母集不变：密文仅由字母组成，且<strong>保持原始的大小写</strong>。</p>
+<p>3.词形保留：单词的<strong>长度和结构</strong>与明文完全相同。</p>
+<p>例如：偏移3位时：<code>ABC</code> → <code>DEF</code>，<code>hello</code> → <code>khoor</code></p>
+<p>通过观察文本是否仍像有意义的单词或短语，但所有字母都被系统地“替换”成了字母表中的另一个字母，来快速判断它是否可能是凯撒密码，如果是凯撒密码的话就要找到它的偏移量。</p>
+<p>解密思路就是先base64解码再凯撒解码</p>
+<h3 id="解法一：在线解密网站"><a href="#解法一：在线解密网站" class="headerlink" title="解法一：在线解密网站"></a>解法一：在线解密网站</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://ctf.bugku.com/tools#:~:text=Bugku%20CTF%E5%9C%A8</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251020202404116.png" alt="image-20251020202404116" data-caption="image-20251020202404116" loading="lazy"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SXXHYK&#123;dtzmfajpstbhfjxfw&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251020203844589.png" alt="image-20251020203844589" data-caption="image-20251020203844589" loading="lazy"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSSCTF&#123;youhaveknowcaesar&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果它的偏移量很小的话就可以通过网站的枚举来解密找到flag</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251020203925269.png" alt="image-20251020203925269" data-caption="image-20251020203925269" loading="lazy"></p>
+<h3 id="解法二：工具—-随波逐流-CTF编码工具"><a href="#解法二：工具—-随波逐流-CTF编码工具" class="headerlink" title="解法二：工具—[随波逐流]CTF编码工具"></a>解法二：工具—[随波逐流]CTF编码工具</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251020204047996.png" alt="image-20251020204047996" data-caption="image-20251020204047996" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251020204138052.png" alt="image-20251020204138052" data-caption="image-20251020204138052" loading="lazy"></p>
+<h2 id="2-维吉尼亚密码特征"><a href="#2-维吉尼亚密码特征" class="headerlink" title="2.维吉尼亚密码特征"></a>2.维吉尼亚密码特征</h2><p>1.周期性多表替换：使用一个<strong>重复的密钥词</strong>进行加密，导致相同的明文字母在不同位置会被加密成不同的密文字母。</p>
+<p>2.打破频率分布：密文中字母的频率分布比单表替换密码（如凯撒）<strong>平坦得多</strong>，更接近随机分布。</p>
+<p>3.密钥是关键：加密强度完全依赖于密钥的保密性和长度。</p>
+<p>你通过观察密文，发现<strong>同一个明文字母（如高频字母E）在密文中对应多个不同字母</strong>，但这种替换呈现出一定的周期性规律，来识别维吉尼亚密码，而维吉尼亚密码关键就是要确定其秘钥key是什么</p>
+<h3 id="SWPUCTF-2021-新生赛-crypto9"><a href="#SWPUCTF-2021-新生赛-crypto9" class="headerlink" title="[SWPUCTF 2021 新生赛]crypto9"></a>[SWPUCTF 2021 新生赛]crypto9</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">附件.txt-&gt;.py</span><br><span class="line">AKKPLX&#123;qv5x0021-7n8w-wr05-x25w-7882ntu5q984&#125;  <span class="comment">#密文</span></span><br><span class="line">脚本给你了，去解吧</span><br><span class="line"></span><br><span class="line">letter_list = <span class="string">&#x27;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#x27;</span>  <span class="comment"># 字母表</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据输入的key生成key列表</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Get_KeyList</span>(<span class="params">key</span>):</span><br><span class="line">    key_list = []</span><br><span class="line">    <span class="keyword">for</span> ch <span class="keyword">in</span> key:</span><br><span class="line">        key_list.append(<span class="built_in">ord</span>(ch.upper()) - <span class="number">65</span>) <span class="comment"># A=0, B=1, ..., Z=25</span></span><br><span class="line">    <span class="keyword">return</span> key_list  <span class="comment">#key_list = [13,18,18]</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 加密函数,加密公式：C = (P + K) mod 26,只对字母进行加密，非字母字符原样保留,持原文的大小写格式</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Encrypt</span>(<span class="params">plaintext, key_list</span>):</span><br><span class="line">    ciphertext = <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> ch <span class="keyword">in</span> plaintext:  <span class="comment"># 遍历明文</span></span><br><span class="line">        <span class="keyword">if</span> <span class="number">0</span> == i % <span class="built_in">len</span>(key_list):</span><br><span class="line">            i = <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> ch.isalpha():  <span class="comment"># 明文是否为字母,如果是,则判断大小写,分别进行加密</span></span><br><span class="line">            <span class="keyword">if</span> ch.isupper():</span><br><span class="line">                ciphertext += letter_list[(<span class="built_in">ord</span>(ch) - <span class="number">65</span> + key_list[i]) % <span class="number">26</span>]  <span class="comment">#注意前面的AKKPLX和NSSCTF的对应关系：N-&gt;（78 - 65 +13 ）%26-&gt; A，所以N先转为ASCII数字78，而这里的65是指ASCII 65大写字母A，这里78减去65之后就是P=13,而key_list[i]就是K在上面的代码里面就已经经过ASCII计算好了为13，这里模26之后就是0,0对应字母A，因为26字母表是从0开始到25编号，这样第一个加密字符就完成了,其他的加密字符以此类推，而C-&gt;（67 - 65 +13）%26-&gt; P，而P的字母表的位置编号就是15,所以秘钥key就是NSS一个循环，如果不确定可以都推出来看看是不是NSS一个循环</span></span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                ciphertext += letter_list[(<span class="built_in">ord</span>(ch) - <span class="number">97</span> + key_list[i]) % <span class="number">26</span>].lower()  <span class="comment">#小写</span></span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:  <span class="comment"># 如果密文不为字母,直接添加到密文字符串里</span></span><br><span class="line">            ciphertext += ch</span><br><span class="line">    <span class="keyword">return</span> ciphertext</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 解密函数,解密公式：P = (C - K) mod 26</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Decrypt</span>(<span class="params">ciphertext, key</span>):</span><br><span class="line">    plaintext = <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> ch <span class="keyword">in</span> ciphertext:  <span class="comment"># 遍历密文</span></span><br><span class="line">        <span class="keyword">if</span> <span class="number">0</span> == i % <span class="built_in">len</span>(key_list):</span><br><span class="line">            i = <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> ch.isalpha():  <span class="comment"># 密文为否为字母,如果是,则判断大小写,分别进行解密</span></span><br><span class="line">            <span class="keyword">if</span> ch.isupper():</span><br><span class="line">                plaintext += letter_list[(<span class="built_in">ord</span>(ch) - <span class="number">65</span> - key_list[i]) % <span class="number">26</span>]</span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                plaintext += letter_list[(<span class="built_in">ord</span>(ch) - <span class="number">97</span> - key_list[i]) % <span class="number">26</span>].lower()</span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:  <span class="comment"># 如果密文不为字母,直接添加到明文字符串里</span></span><br><span class="line">            plaintext += ch</span><br><span class="line">    <span class="keyword">return</span> plaintext</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;加密请按D,解密请按E:&quot;</span>)</span><br><span class="line">    user_input = <span class="built_in">input</span>();</span><br><span class="line">    <span class="keyword">while</span> (user_input != <span class="string">&#x27;D&#x27;</span> <span class="keyword">and</span> user_input != <span class="string">&#x27;E&#x27;</span>):  <span class="comment"># 输入合法性判断</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;输入有误!请重新输入:&quot;</span>)</span><br><span class="line">        user_input = <span class="built_in">input</span>()</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;请输入密钥:&quot;</span>)</span><br><span class="line">    key = <span class="built_in">input</span>()</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">False</span> == key.isalpha()):  <span class="comment"># 输入合法性判断</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;输入有误!密钥为字母,请重新输入:&quot;</span>)</span><br><span class="line">        key = <span class="built_in">input</span>()</span><br><span class="line"></span><br><span class="line">    key_list = Get_KeyList(key)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> user_input == <span class="string">&#x27;D&#x27;</span>:</span><br><span class="line">        <span class="comment"># 加密</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;请输入明文:&quot;</span>)</span><br><span class="line">        plaintext = <span class="built_in">input</span>()</span><br><span class="line">        ciphertext = Encrypt(plaintext, key_list)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;密文为:\n%s&quot;</span> % ciphertext)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 解密</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;请输入密文:&quot;</span>)</span><br><span class="line">        ciphertext = <span class="built_in">input</span>()</span><br><span class="line">        plaintext = Decrypt(ciphertext, key_list)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;明文为:\n%s&quot;</span> % plaintext)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="法一：直接使用题目提供的脚本"><a href="#法一：直接使用题目提供的脚本" class="headerlink" title="法一：直接使用题目提供的脚本"></a>法一：直接使用题目提供的脚本</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251025115837583.png" alt="image-20251025115837583" data-caption="image-20251025115837583" loading="lazy"></p>
+<p>一个交互式的脚本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSSCTF&#123;dd5f0021-7a8e-ee05-f25e-7882abc5d984&#125;</span><br></pre></td></tr></table></figure>
+
+<p>P，C 和 K 的含义</p>
+<p>P（Plaintext Number）<br>含义：明文字母对应的数字，取值范围：0-25</p>
+<p>转换规则：</p>
+<p>A &#x3D; 0, B &#x3D; 1, C &#x3D; 2, …, Z &#x3D; 25</p>
+<p>不区分大小写：’a’ 和 ‘A’ 都对应 0</p>
+<p>C（Ciphertext Number）<br>含义：C 是密文字母对应的数字，取值范围：0-25</p>
+<p>转换规则：</p>
+<p>A &#x3D; 0, B &#x3D; 1, C &#x3D; 2, …, Z &#x3D; 25</p>
+<p>不区分大小写：’a’ 和 ‘A’ 都对应 0</p>
+<p>K（Key Number）<br>含义：密钥字母对应的数字，取值范围：0-25</p>
+<p>转换规则：</p>
+<p>A &#x3D; 0, B &#x3D; 1, C &#x3D; 2, …, Z &#x3D; 25</p>
+<p>同样不区分大小写</p>
+<h3 id="法二：在线解密网站"><a href="#法二：在线解密网站" class="headerlink" title="法二：在线解密网站"></a>法二：在线解密网站</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://ctf.bugku.com/tools#:~:text=Bugku%20CTF%E5%9C%A8</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251025120248250.png" alt="image-20251025120248250" data-caption="image-20251025120248250" loading="lazy"></p>
+<h1 id="二、现代密码"><a href="#二、现代密码" class="headerlink" title="二、现代密码"></a>二、现代密码</h1><h2 id="1-RSA"><a href="#1-RSA" class="headerlink" title="1.RSA"></a>1.RSA</h2><ol>
+<li>RSA基础参数</li>
+</ol>
+<ul>
+<li><strong>公钥</strong>：(n, e)</li>
+<li><strong>私钥</strong>：(n, d)</li>
+<li><strong>密文</strong>：c</li>
+<li><strong>明文</strong>：m</li>
+</ul>
+<ol start="2">
+<li>解密公式</li>
+</ol>
+<p><strong>核心解密公式</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m = c^d mod n</span><br></pre></td></tr></table></figure>
+
+<p>其中：</p>
+<ul>
+<li>m &#x3D; 解密后的明文（整数形式）</li>
+<li>c &#x3D; 密文（整数形式）</li>
+<li>d &#x3D; 私钥指数</li>
+<li>n &#x3D; 模数（两个大素数的乘积）</li>
+</ul>
+<ol start="3">
+<li>解密步骤详解</li>
+</ol>
+<p>步骤1：将密文转换为整数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果密文是字节形式</span></span><br><span class="line">c = <span class="built_in">int</span>.from_bytes(ciphertext, <span class="string">&#x27;big&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果密文是十六进制字符串</span></span><br><span class="line">c = <span class="built_in">int</span>(ciphertext_hex, <span class="number">16</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果密文是Base64编码</span></span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line">cipher_bytes = base64.b64decode(ciphertext_b64)</span><br><span class="line">c = <span class="built_in">int</span>.from_bytes(cipher_bytes, <span class="string">&#x27;big&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>步骤2：执行模幂运算</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用快速幂算法</span></span><br><span class="line">m = <span class="built_in">pow</span>(c, d, n)</span><br></pre></td></tr></table></figure>
+
+<p>步骤3：将整数转换回明文</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 转换为字节</span></span><br><span class="line">plaintext = m.to_bytes((m.bit_length() + <span class="number">7</span>) // <span class="number">8</span>, <span class="string">&#x27;big&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者直接解码为字符串（如果原始是文本）</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    plaintext = plaintext.decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"><span class="keyword">except</span> UnicodeDecodeError:</span><br><span class="line">    <span class="comment"># 处理非文本数据</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="LitCTF-2023-家人们！谁懂啊，RSA签到都不会-初级"><a href="#LitCTF-2023-家人们！谁懂啊，RSA签到都不会-初级" class="headerlink" title="[LitCTF 2023]家人们！谁懂啊，RSA签到都不会 (初级)"></a>[LitCTF 2023]家人们！谁懂啊，RSA签到都不会 (初级)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">附件.py</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> secret <span class="keyword">import</span> flag</span><br><span class="line"></span><br><span class="line">m = bytes_to_long(flag)</span><br><span class="line">p = getPrime(<span class="number">512</span>)</span><br><span class="line">q = getPrime(<span class="number">512</span>)</span><br><span class="line">e = <span class="number">65537</span></span><br><span class="line">n = p*q</span><br><span class="line">c = <span class="built_in">pow</span>(m,e,n)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;p = <span class="subst">&#123;p&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;q = <span class="subst">&#123;q&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;c = <span class="subst">&#123;c&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">p = 12567387145159119014524309071236701639759988903138784984758783651292440613056150667165602473478042486784826835732833001151645545259394365039352263846276073</span></span><br><span class="line"><span class="string">q = 12716692565364681652614824033831497167911028027478195947187437474380470205859949692107216740030921664273595734808349540612759651241456765149114895216695451</span></span><br><span class="line"><span class="string">c = 108691165922055382844520116328228845767222921196922506468663428855093343772017986225285637996980678749662049989519029385165514816621011058462841314243727826941569954125384522233795629521155389745713798246071907492365062512521474965012924607857440577856404307124237116387085337087671914959900909379028727767057</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">解密脚本</span><br><span class="line"><span class="keyword">import</span> libnum  <span class="comment">#导入名为libnum的模块,它提供了一系列函数来处理大整数、素数测试、离散对数、有限域运算等</span></span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> long_to_bytes</span><br><span class="line">e = <span class="number">65537</span></span><br><span class="line">p = <span class="number">12567387145159119014524309071236701639759988903138784984758783651292440613056150667165602473478042486784826835732833001151645545259394365039352263846276073</span></span><br><span class="line">q = <span class="number">12716692565364681652614824033831497167911028027478195947187437474380470205859949692107216740030921664273595734808349540612759651241456765149114895216695451</span></span><br><span class="line">c = <span class="number">108691165922055382844520116328228845767222921196922506468663428855093343772017986225285637996980678749662049989519029385165514816621011058462841314243727826941569954125384522233795629521155389745713798246071907492365062512521474965012924607857440577856404307124237116387085337087671914959900909379028727767057</span></span><br><span class="line"><span class="comment"># 根据p、q可以算出n和φ(n)</span></span><br><span class="line">n = p * q</span><br><span class="line">phi_n = (p-<span class="number">1</span>)*(q-<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 根据e和φ(n)可以算出d</span></span><br><span class="line">d = libnum.invmod(e, phi_n) <span class="comment">#是一个调用 libnum 库中 invmod 函数的表达式。libnum 主要用于数论和代数计算，invmod 函数用于计算模逆元，#invmod(a, n) - 求a对于n的模逆,这里逆向加密过程中计算ψ(n)=(p-1)(q-1)，对ψ(n)保密,也就是对应根据ed=1modψ(n),求出d</span></span><br><span class="line"><span class="comment"># 根据c、d、n可以解密出明文m</span></span><br><span class="line">m = <span class="built_in">pow</span>(c, d, n)<span class="comment"># 对应前面解密算法中M=D(C)=C^d(mod n)</span></span><br><span class="line"><span class="comment"># 数字转字节序列</span></span><br><span class="line"><span class="built_in">print</span>(long_to_bytes(m))</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251025134233907.png" alt="image-20251025134233907" data-caption="image-20251025134233907" loading="lazy"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LitCTF&#123;it_is_easy_to_solve_question_when_you_know_p_and_q&#125;</span><br><span class="line"></span><br><span class="line">NSSCTF&#123;it_is_easy_to_solve_question_when_you_know_p_and_q&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-AES"><a href="#2-AES" class="headerlink" title="2.AES"></a>2.AES</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.toolhelper.cn/SymmetricEncryption/AES</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-SHA-256"><a href="#3-SHA-256" class="headerlink" title="3.SHA-256"></a>3.SHA-256</h2><p>核心特征：</p>
+<ul>
+<li><strong>输出长度</strong>：固定256位（32字节）</li>
+<li><strong>输入长度</strong>：理论上无限（最大2^64-1位）</li>
+<li><strong>确定性</strong>：相同输入总是产生相同输出</li>
+<li><strong>单向性</strong>：从哈希值无法反推原始数据</li>
+<li><strong>抗碰撞性</strong>：很难找到两个不同的输入产生相同的哈希值</li>
+</ul>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/RSA/" rel="tag">RSA</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/" rel="tag">凯撒密码</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81/" rel="tag">维吉尼亚密码</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1761989925204"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div></div><div class="nexmoe-post-right">    <div class="nexmoe-fixed">
+        <div class="nexmoe-tool">
+
+            
+
+            
+            
+            <button class="mdui-fab catalog" style="overflow:unset;">
+                <i class="nexmoefont icon-i-catalog"></i>
+                <div class="nexmoe-toc">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%8F%A4%E5%85%B8%E5%AF%86%E7%A0%81"><span class="toc-number">1.</span> <span class="toc-text">一、古典密码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81"><span class="toc-number">1.1.</span> <span class="toc-text">1.凯撒密码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SWPUCTF-2021-%E6%96%B0%E7%94%9F%E8%B5%9B-ez-caesar"><span class="toc-number">1.1.1.</span> <span class="toc-text">[SWPUCTF 2021 新生赛]ez_caesar</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#base64%E7%9A%84%E7%89%B9%E5%BE%81"><span class="toc-number">1.1.2.</span> <span class="toc-text">base64的特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E6%B3%95%E4%B8%80%EF%BC%9A%E5%9C%A8%E7%BA%BF%E8%A7%A3%E5%AF%86%E7%BD%91%E7%AB%99"><span class="toc-number">1.1.3.</span> <span class="toc-text">解法一：在线解密网站</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%EF%BC%9A%E5%B7%A5%E5%85%B7%E2%80%94-%E9%9A%8F%E6%B3%A2%E9%80%90%E6%B5%81-CTF%E7%BC%96%E7%A0%81%E5%B7%A5%E5%85%B7"><span class="toc-number">1.1.4.</span> <span class="toc-text">解法二：工具—[随波逐流]CTF编码工具</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81%E7%89%B9%E5%BE%81"><span class="toc-number">1.2.</span> <span class="toc-text">2.维吉尼亚密码特征</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SWPUCTF-2021-%E6%96%B0%E7%94%9F%E8%B5%9B-crypto9"><span class="toc-number">1.2.1.</span> <span class="toc-text">[SWPUCTF 2021 新生赛]crypto9</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%95%E4%B8%80%EF%BC%9A%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8%E9%A2%98%E7%9B%AE%E6%8F%90%E4%BE%9B%E7%9A%84%E8%84%9A%E6%9C%AC"><span class="toc-number">1.2.2.</span> <span class="toc-text">法一：直接使用题目提供的脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%95%E4%BA%8C%EF%BC%9A%E5%9C%A8%E7%BA%BF%E8%A7%A3%E5%AF%86%E7%BD%91%E7%AB%99"><span class="toc-number">1.2.3.</span> <span class="toc-text">法二：在线解密网站</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%8E%B0%E4%BB%A3%E5%AF%86%E7%A0%81"><span class="toc-number">2.</span> <span class="toc-text">二、现代密码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-RSA"><span class="toc-number">2.1.</span> <span class="toc-text">1.RSA</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#LitCTF-2023-%E5%AE%B6%E4%BA%BA%E4%BB%AC%EF%BC%81%E8%B0%81%E6%87%82%E5%95%8A%EF%BC%8CRSA%E7%AD%BE%E5%88%B0%E9%83%BD%E4%B8%8D%E4%BC%9A-%E5%88%9D%E7%BA%A7"><span class="toc-number">2.1.1.</span> <span class="toc-text">[LitCTF 2023]家人们！谁懂啊，RSA签到都不会 (初级)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-AES"><span class="toc-number">2.2.</span> <span class="toc-text">2.AES</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-SHA-256"><span class="toc-number">2.3.</span> <span class="toc-text">3.SHA-256</span></a></li></ol></li></ol>
+                </div>
+            </button>
+            
+
+            
+
+            <a href="#nexmoe-content" class="backtop toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+        </div>
+    </div>
+</div></div><div id="nexmoe-footer"><!--!--></div><div id="nexmoe-search-space"><div class="search-container"><div class="search-header"><div class="search-input-container"><input class="search-input" type="text" placeholder="搜索" onInput="sinput();"></div><a class="search-close" onclick="sclose();">×</a></div><div class="search-body"></div></div></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+</div></body></html>

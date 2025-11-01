@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="zh"><head>
+<title>爆破-web21-25 - X8@0E的博客</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="description" content="web21   以上是题目给的已知条件，因为题目只给了后台的密码字典，猜测后台用户名就是admin，接下来就用bp抓包用字典来爆破密码了bp抓包  用题目给的密码字典爆破1.payload位置设置 2.payload设置   3.攻击，看长度，长度跟其他不一样的一般就是这个 4.查看最终效果即可得到flag  其实一开始就可以从题目给的密码字典打开一看就可以看出密码就是shark63，因为它跟其他">
+<meta property="og:type" content="article">
+<meta property="og:title" content="爆破-web21-25">
+<meta property="og:url" content="http://example.com/2025/07/27/%E7%88%86%E7%A0%B4-web21-25/index.html">
+<meta property="og:site_name" content="X8@0E的博客">
+<meta property="og:description" content="web21   以上是题目给的已知条件，因为题目只给了后台的密码字典，猜测后台用户名就是admin，接下来就用bp抓包用字典来爆破密码了bp抓包  用题目给的密码字典爆破1.payload位置设置 2.payload设置   3.攻击，看长度，长度跟其他不一样的一般就是这个 4.查看最终效果即可得到flag  其实一开始就可以从题目给的密码字典打开一看就可以看出密码就是shark63，因为它跟其他">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250727202638133.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250727204522075.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250727204758896.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250727204958540.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250727205412168.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250727210910026.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250727210431755.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250727211108769.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250727210637498.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250727212041522.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250727212150999.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250727212241011.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728154958726.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728163932032.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728164336479.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728164648513.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728164756328.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728165013612.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728165031578.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728165556914.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728165632427.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728165703750.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728172717049.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728173300368.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728173448359.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728173701457.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728173543999.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728195653880.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728212853890.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728213053332.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728213332584.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728201311677.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728201946647.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250728202138315.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729160304540.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729160216995.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729160040786.png">
+<meta property="article:published_time" content="2025-07-27T12:21:47.675Z">
+<meta property="article:modified_time" content="2025-07-31T04:23:58.324Z">
+<meta property="article:author" content="X8@0E">
+<meta property="article:tag" content="ctfshow">
+<meta property="article:tag" content="web爆破">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250727202638133.png">
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1761989925427">
+
+<link rel="stylesheet" href="/css/style.css?v=1761989925427">
+
+
+
+
+    
+        <link rel="stylesheet" href="/custom.css?v=1761989925427">
+    
+
+
+
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+<script src="/lib/lax.min.js" async></script>
+
+
+<script async src="/js/app.js?v=1761989925428"></script>
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<meta name="generator" content="Hexo 7.3.0"></head><body class="nexmoe mdui-drawer-body-left"><div id="nexmoe-background"><div class="nexmoe-bg" style="background-image: url(https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080)"></div><div class="mdui-appbar mdui-shadow-0"><div class="mdui-toolbar"><a class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: &#039;#drawer&#039;, swipe: true}" title="menu"><i class="mdui-icon nexmoefont icon-menu"></i></a><div class="mdui-toolbar-spacer"></div><a class="mdui-btn mdui-btn-icon" href="/" title="X8@0E"><img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></a></div></div></div><div id="nexmoe-header"><div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="X8@0E">
+            <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E" alt="X8@0E">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>43</div>
+        <div><span>标签</span>77</div>
+        <div><span>分类</span>14</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-douban-fill"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+
+
+	<script async src="/js/search.js?v=1761989925428"></script>
+
+
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://blog.csdn.net/2301_81325456/article/details/147025965"
+			target="_blank"
+			mdui-tooltip="{content: 'CSDN'}"
+			style="
+				color: rgb(247, 132, 34);
+				background-color: rgba(247, 132, 34, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Crypto/">Crypto</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/NSSCTF/">NSSCTF</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnhub/">Vulnhub</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnvm靶机复现/">Vulnvm靶机复现</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-信息收集/">ctfshow-web-信息收集</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-命令执行/">ctfshow-web-命令执行</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件上传/">ctfshow-web-文件上传</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件包含/">ctfshow-web-文件包含</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-爆破/">ctfshow-web-爆破</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/sql注入/">sql注入</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulhub/">vulhub</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulnhub/">vulnhub</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/群友靶机/">群友靶机</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/自制靶机/">自制靶机</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/1Panel/" style="font-size: 10px;">1Panel</a> <a href="/tags/3%E4%B8%AA%E7%82%B9/" style="font-size: 10px;">3个点</a> <a href="/tags/Argon2Cracker/" style="font-size: 10px;">Argon2Cracker</a> <a href="/tags/Cookie-GLOBALS/" style="font-size: 10px;">Cookie--GLOBALS</a> <a href="/tags/Cypher%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">Cypher注入</a> <a href="/tags/DC/" style="font-size: 15px;">DC</a> <a href="/tags/GIF%E7%BB%95%E8%BF%87/" style="font-size: 10px;">GIF绕过</a> <a href="/tags/Jinja2/" style="font-size: 10px;">Jinja2</a> <a href="/tags/JoomScan/" style="font-size: 10px;">JoomScan</a> <a href="/tags/LFI%E5%88%B0RCE-open%E5%87%BD%E6%95%B0/" style="font-size: 10px;">LFI到RCE(open函数)</a> <a href="/tags/NSSCTF/" style="font-size: 15px;">NSSCTF</a> <a href="/tags/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">Nginx解析漏洞</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/RUNPATH/" style="font-size: 10px;">RUNPATH</a> <a href="/tags/Rabbit/" style="font-size: 10px;">Rabbit</a> <a href="/tags/SSRF/" style="font-size: 10px;">SSRF</a> <a href="/tags/Vulnhub/" style="font-size: 15px;">Vulnhub</a> <a href="/tags/Vulnvm/" style="font-size: 10px;">Vulnvm</a> <a href="/tags/WAF/" style="font-size: 10px;">WAF</a> <a href="/tags/WPA-01-cap/" style="font-size: 10px;">WPA-01.cap</a> <a href="/tags/aircrack-ng/" style="font-size: 10px;">aircrack-ng</a> <a href="/tags/basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">basic认证爆破</a> <a href="/tags/cgi%E6%96%87%E4%BB%B6/" style="font-size: 10px;">cgi文件</a> <a href="/tags/ctfshow/" style="font-size: 20px;">ctfshow</a> <a href="/tags/dirtycow/" style="font-size: 10px;">dirtycow</a> <a href="/tags/docker%E4%BA%A4%E4%BA%92%E5%BC%8Fshell/" style="font-size: 10px;">docker交互式shell</a> <a href="/tags/drupal/" style="font-size: 10px;">drupal</a> <a href="/tags/ffuf/" style="font-size: 10px;">ffuf</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E/" style="font-size: 10px;">fork解决断连</a> <a href="/tags/ftp/" style="font-size: 10px;">ftp</a> <a href="/tags/ghfs/" style="font-size: 10px;">ghfs</a> <a href="/tags/ldd/" style="font-size: 10px;">ldd</a> <a href="/tags/les-sh/" style="font-size: 10px;">les.sh</a> <a href="/tags/linpeas-sh/" style="font-size: 10px;">linpeas.sh</a> <a href="/tags/lsattr-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">lsattr--查看文件扩展属性</a> <a href="/tags/motto/" style="font-size: 10px;">motto</a> <a href="/tags/msfvenom/" style="font-size: 15px;">msfvenom</a> <a href="/tags/mysql-old-password/" style="font-size: 10px;">mysql_old_password</a> <a href="/tags/nikto/" style="font-size: 10px;">nikto</a> <a href="/tags/nohup/" style="font-size: 10px;">nohup</a> <a href="/tags/php%E6%8F%90%E6%9D%83root/" style="font-size: 10px;">php提权root</a> <a href="/tags/poc/" style="font-size: 10px;">poc</a> <a href="/tags/put%E6%96%B9%E6%B3%95/" style="font-size: 10px;">put方法</a> <a href="/tags/python3-5/" style="font-size: 10px;">python3.5</a> <a href="/tags/rce/" style="font-size: 10px;">rce</a> <a href="/tags/readelf/" style="font-size: 10px;">readelf</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sqlmap/" style="font-size: 10px;">sqlmap</a> <a href="/tags/sql%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">sql二次注入</a> <a href="/tags/ssh%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4/" style="font-size: 10px;">ssh弱口令爆破</a> <a href="/tags/ssh%E7%A7%98%E9%92%A5%E7%94%9F%E6%88%90%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">ssh秘钥生成连接</a> <a href="/tags/stegseek/" style="font-size: 10px;">stegseek</a> <a href="/tags/suForce/" style="font-size: 10px;">suForce</a> <a href="/tags/url%E6%88%AA%E6%96%AD/" style="font-size: 10px;">url截断</a> <a href="/tags/vite/" style="font-size: 10px;">vite</a> <a href="/tags/web%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="font-size: 10px;">web命令执行</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">web文件上传</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 10px;">web文件包含</a> <a href="/tags/web%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 10px;">web源码泄露</a> <a href="/tags/web%E7%88%86%E7%A0%B4/" style="font-size: 10px;">web爆破</a> <a href="/tags/x-forwarded-for%E7%9A%84ip%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">x-forwarded-for的ip欺骗</a> <a href="/tags/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E-CVE-2025-30208/" style="font-size: 10px;">任意文件读取漏洞(CVE-2025-30208)</a> <a href="/tags/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/" style="font-size: 10px;">凯撒密码</a> <a href="/tags/%E5%90%8E%E9%9D%A2%E5%8A%A0-jpg%E5%90%8E%E7%BC%80/" style="font-size: 10px;">后面加.jpg后缀</a> <a href="/tags/%E5%9F%9F%E6%8E%A7/" style="font-size: 10px;">域控</a> <a href="/tags/%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">密码爆破</a> <a href="/tags/%E6%8F%90%E6%9D%83-env-reset/" style="font-size: 10px;">提权!env_reset</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">插件漏洞</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5-ua%E6%B7%BB%E5%8A%A0%E6%9C%A8%E9%A9%AC/" style="font-size: 10px;">日志注入+ua添加木马</a> <a href="/tags/%E6%AD%A3%E5%90%91shell/" style="font-size: 10px;">正向shell</a> <a href="/tags/%E7%8A%B6%E6%80%81%E7%A0%81/" style="font-size: 10px;">状态码</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 10px;">环境变量</a> <a href="/tags/%E7%A9%BA%E6%A0%BC/" style="font-size: 10px;">空格</a> <a href="/tags/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81/" style="font-size: 10px;">维吉尼亚密码</a> <a href="/tags/%E8%9A%81%E5%89%91/" style="font-size: 10px;">蚁剑</a> <a href="/tags/%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96/" style="font-size: 10px;">越界读取</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(77);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+    
+        
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章归档</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">43</span></li></ul>
+    </div>
+  </div>
+
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">最新文章</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/10/20/Crypto/">Crypto</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/11/%E6%B5%81%E9%87%8F%E6%81%B6%E6%84%8F%E6%94%BB%E5%87%BB/">流量分析恶意攻击</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/10/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/09/hackableII/">hackablell</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/07/Me-and-My-Girlfriend-1/">Me-and-My-Girlfriend-1</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+            <li>
+                <a href="" target="_blank" >
+                    <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></img>
+                    <p>X8@0E</p>
+                </a>
+            </li>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+    
+   
+    <div class="nexmoe-copyright">
+        &copy; 2025 X8@0E
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer --></div><div id="nexmoe-content"><div class="nexmoe-primary"><div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="https://th.bing.com/th/id/R.55545cd6eb6d7bbd1a467442f0d50e66?rik=mD5kUtHuPyeNKQ&riu=http%3a%2f%2fn.sinaimg.cn%2fsinacn20110%2f600%2fw1920h1080%2f20190508%2fc057-hwsffza7769015.jpg&ehk=bM12hqHX6tE5Xri6kFH1Lez67AhXyjq6jVBcJN8GUxY%3d&risl=&pid=ImgRaw&r=0" alt="爆破-web21-25" loading="lazy">
+            <h1>爆破-web21-25</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2025年07月27日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/ctfshow-web-%E7%88%86%E7%A0%B4/">ctfshow-web-爆破</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h2 id="web21"><a href="#web21" class="headerlink" title="web21"></a>web21</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250727202638133.png" alt="image-20250727202638133" data-caption="image-20250727202638133" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250727204522075.png" alt="image-20250727204522075" data-caption="image-20250727204522075" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250727204758896.png" alt="image-20250727204758896" data-caption="image-20250727204758896" loading="lazy"></p>
+<h3 id="以上是题目给的已知条件，因为题目只给了后台的密码字典，猜测后台用户名就是admin，接下来就用bp抓包用字典来爆破密码了"><a href="#以上是题目给的已知条件，因为题目只给了后台的密码字典，猜测后台用户名就是admin，接下来就用bp抓包用字典来爆破密码了" class="headerlink" title="以上是题目给的已知条件，因为题目只给了后台的密码字典，猜测后台用户名就是admin，接下来就用bp抓包用字典来爆破密码了"></a>以上是题目给的已知条件，因为题目只给了后台的密码字典，猜测后台用户名就是admin，接下来就用bp抓包用字典来爆破密码了</h3><h2 id="bp抓包"><a href="#bp抓包" class="headerlink" title="bp抓包"></a>bp抓包</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250727204958540.png" alt="image-20250727204958540" data-caption="image-20250727204958540" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250727205412168.png" alt="image-20250727205412168" data-caption="image-20250727205412168" loading="lazy"></p>
+<h2 id="用题目给的密码字典爆破"><a href="#用题目给的密码字典爆破" class="headerlink" title="用题目给的密码字典爆破"></a>用题目给的密码字典爆破</h2><h3 id="1-payload位置设置"><a href="#1-payload位置设置" class="headerlink" title="1.payload位置设置"></a>1.payload位置设置</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250727210910026.png" alt="image-20250727210910026" data-caption="image-20250727210910026" loading="lazy"></p>
+<h3 id="2-payload设置"><a href="#2-payload设置" class="headerlink" title="2.payload设置"></a>2.payload设置</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250727210431755.png" alt="image-20250727210431755" data-caption="image-20250727210431755" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250727211108769.png" alt="image-20250727211108769" data-caption="image-20250727211108769" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250727210637498.png" alt="image-20250727210637498" data-caption="image-20250727210637498" loading="lazy"></p>
+<h3 id="3-攻击，看长度，长度跟其他不一样的一般就是这个"><a href="#3-攻击，看长度，长度跟其他不一样的一般就是这个" class="headerlink" title="3.攻击，看长度，长度跟其他不一样的一般就是这个"></a>3.攻击，看长度，长度跟其他不一样的一般就是这个</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250727212041522.png" alt="image-20250727212041522" data-caption="image-20250727212041522" loading="lazy"></p>
+<h3 id="4-查看最终效果即可得到flag"><a href="#4-查看最终效果即可得到flag" class="headerlink" title="4.查看最终效果即可得到flag"></a>4.查看最终效果即可得到flag</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250727212150999.png" alt="image-20250727212150999" data-caption="image-20250727212150999" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250727212241011.png" alt="image-20250727212241011" data-caption="image-20250727212241011" loading="lazy"></p>
+<p>其实一开始就可以从题目给的密码字典打开一看就可以看出密码就是shark63，因为它跟其他密码不一样，最特别</p>
+<h2 id="web22"><a href="#web22" class="headerlink" title="web22"></a>web22</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728154958726.png" alt="image-20250728154958726" data-caption="image-20250728154958726" loading="lazy"></p>
+<h2 id="web23"><a href="#web23" class="headerlink" title="web23"></a>web23</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728163932032.png" alt="image-20250728163932032" data-caption="image-20250728163932032" loading="lazy"></p>
+<p>要求找到一个特定的token值，使得其MD5哈希值满足某些条件才能获取flag</p>
+<h3 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a><strong>代码分析</strong></h3><ol>
+<li><p>获取token参数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;token&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$token</span> = <span class="title function_ invoke__">md5</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;token&#x27;</span>]);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用户通过<code>?token=xxx</code>传入一个值，程序会计算其MD5哈希值（32位十六进制字符串）。</li>
+</ul>
+</li>
+<li><p>第一个条件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">1</span>,<span class="number">1</span>) === <span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">14</span>,<span class="number">1</span>) &amp;&amp; <span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">14</span>,<span class="number">1</span>) === <span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">17</span>,<span class="number">1</span>))&#123;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>要求token的MD5哈希值的第2、15、18位字符相同（PHP的substr索引从0开始）。</li>
+<li>例如：token[1] &#x3D;&#x3D; token[14] &#x3D;&#x3D; token[17]</li>
+</ul>
+</li>
+<li><p>第二个条件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>((<span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">1</span>,<span class="number">1</span>)) + <span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">14</span>,<span class="number">1</span>)) + <span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">17</span>,<span class="number">1</span>)) / <span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">1</span>,<span class="number">1</span>) === <span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">31</span>,<span class="number">1</span>)))&#123;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将第2、15、18位的字符转换为整数（intval会忽略非数字字符，如a-f会转为0）。</li>
+<li>计算 (第2位 + 第15位 + 第18位) &#x2F; 第2位，结果必须等于第32位的字符的整数值。</li>
+<li>由于第2、15、18位相同，简化为：(3 * x) &#x2F; x &#x3D; 3，因此第32位字符必须是3。</li>
+</ul>
+</li>
+</ol>
+<p>暴力破解token：</p>
+<ul>
+<li>编写脚本枚举可能的token值，计算其MD5哈希，检查是否满足上述条件。</li>
+<li>由于MD5不可逆，只能通过穷举尝试。</li>
+</ul>
+<h2 id="法一：脚本爆破"><a href="#法一：脚本爆破" class="headerlink" title="法一：脚本爆破"></a>法一：脚本爆破</h2><h3 id="Python爆破脚本示例1"><a href="#Python爆破脚本示例1" class="headerlink" title="Python爆破脚本示例1"></a>Python爆破脚本示例1</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_token</span>():</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">100000000</span>):  <span class="comment"># 枚举范围根据需要调整</span></span><br><span class="line">        token = <span class="built_in">str</span>(i)</span><br><span class="line">        md5 = hashlib.md5(token.encode()).hexdigest()</span><br><span class="line">        <span class="comment"># 检查第2、15、18位是否相同且为数字</span></span><br><span class="line">        <span class="keyword">if</span> md5[<span class="number">1</span>] == md5[<span class="number">14</span>] == md5[<span class="number">17</span>] <span class="keyword">and</span> md5[<span class="number">1</span>].isdigit():</span><br><span class="line">            x = <span class="built_in">int</span>(md5[<span class="number">1</span>])</span><br><span class="line">            <span class="comment"># 检查第32位是否为3</span></span><br><span class="line">            <span class="keyword">if</span> md5[<span class="number">31</span>] == <span class="string">&#x27;3&#x27;</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;Found token: <span class="subst">&#123;token&#125;</span>&quot;</span>)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;MD5: <span class="subst">&#123;md5&#125;</span>&quot;</span>)</span><br><span class="line">                <span class="keyword">return</span> token</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">find_token()</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728164336479.png" alt="image-20250728164336479" data-caption="image-20250728164336479" loading="lazy"></p>
+<h3 id="Python爆破脚本示例2-别人的"><a href="#Python爆破脚本示例2-别人的" class="headerlink" title="Python爆破脚本示例2(别人的)"></a>Python爆破脚本示例2(别人的)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">md5</span>(<span class="params">s</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">type</span>(s) != <span class="built_in">bytes</span>:</span><br><span class="line">        s = <span class="built_in">bytes</span>(s, encoding=<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">    hash_md5 = hashlib.md5()</span><br><span class="line">    hash_md5.update(s)</span><br><span class="line">    <span class="keyword">return</span> hash_md5.hexdigest()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">web23</span>():</span><br><span class="line">    <span class="built_in">dir</span> = string.digits + string.ascii_uppercase + string.ascii_lowercase</span><br><span class="line">    <span class="comment"># 这里我不知道多少位能满足需求，所以写成变量，如果1-3位跑不出来，我可以跑更多位的</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">4</span>):</span><br><span class="line">        <span class="keyword">for</span> comb <span class="keyword">in</span> itertools.combinations_with_replacement(<span class="built_in">dir</span>, i):</span><br><span class="line">            str_comb = <span class="string">&quot;&quot;</span>.join(comb)</span><br><span class="line">            v_md5 = md5(str_comb)</span><br><span class="line">            <span class="keyword">if</span> v_md5[<span class="number">1</span>] == v_md5[<span class="number">14</span>] == v_md5[<span class="number">17</span>]:</span><br><span class="line">                <span class="keyword">try</span>: <span class="comment"># 除零异常，字符串无法转int异常，我懒得处理了，统统忽略就行了</span></span><br><span class="line">                    <span class="keyword">if</span> ((<span class="built_in">int</span>(v_md5[<span class="number">1</span>])+<span class="built_in">int</span>(v_md5[<span class="number">14</span>])+<span class="built_in">int</span>(v_md5[<span class="number">17</span>]))/<span class="built_in">int</span>(v_md5[<span class="number">1</span>])==<span class="built_in">int</span>(v_md5[<span class="number">31</span>])):</span><br><span class="line">                        <span class="built_in">print</span>(str_comb)</span><br><span class="line">                        <span class="built_in">print</span>(v_md5[<span class="number">1</span>], v_md5[<span class="number">14</span>], v_md5[<span class="number">17</span>])</span><br><span class="line">                <span class="keyword">except</span>:</span><br><span class="line">                    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    web23()</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728164648513.png" alt="image-20250728164412456" data-caption="image-20250728164412456" loading="lazy"></p>
+<h3 id="php-别人的"><a href="#php-别人的" class="headerlink" title="php(别人的)"></a>php(别人的)</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728164756328.png" alt="image-20250728164756328" data-caption="image-20250728164756328" loading="lazy"></p>
+<h2 id="法二：fuzz-下面的字典是结合脚本跑出来的结果的值"><a href="#法二：fuzz-下面的字典是结合脚本跑出来的结果的值" class="headerlink" title="法二：fuzz(下面的字典是结合脚本跑出来的结果的值)"></a>法二：fuzz(下面的字典是结合脚本跑出来的结果的值)</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728165013612.png" alt="image-20250728165013612" data-caption="image-20250728165013612" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728165031578.png" alt="image-20250728165031578" data-caption="image-20250728165031578" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728165556914.png" alt="image-20250728165556914" data-caption="image-20250728165556914" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728165632427.png" alt="image-20250728165632427" data-caption="image-20250728165632427" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728165703750.png" alt="image-20250728165703750" data-caption="image-20250728165703750" loading="lazy"></p>
+<h2 id="web24"><a href="#web24" class="headerlink" title="web24"></a>web24</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728172717049.png" alt="image-20250728172717049" data-caption="image-20250728172717049" loading="lazy"></p>
+<p>目标是传入一个参数r，使其值与服务器生成的mt_rand()值相等，从而获取flag。</p>
+<h3 id="代码分析-1"><a href="#代码分析-1" class="headerlink" title="代码分析"></a><strong>代码分析</strong></h3><ol>
+<li><p>设置随机数种子</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">mt_srand</span>(<span class="number">372619038</span>);  <span class="comment">// 固定种子</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>mt_srand()用固定种子（372619038）初始化Mersenne Twister伪随机数生成器，因此后续的mt_rand()输出是可预测的。</li>
+</ul>
+</li>
+<li><p>检查参数r</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="title function_ invoke__">intval</span>(<span class="variable">$r</span>) === <span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">mt_rand</span>()))&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用户通过?r&#x3D;xxx传入的值（转为整数后）必须等于mt_rand()的下一个输出值（也转为整数）。</li>
+</ul>
+</li>
+<li><p>系统信息泄露</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">system</span>(<span class="string">&#x27;cat /proc/version&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>输出Linux内核版本（5.4.0-163-generic），但此信息对解题无直接影响。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="解题原理"><a href="#解题原理" class="headerlink" title="解题原理"></a><strong>解题原理</strong></h3><ul>
+<li>PHP的mt_rand()在种子固定时，生成的序列是确定的。</li>
+<li>若知道种子（这里是372619038），可以本地复现相同的随机数序列。</li>
+</ul>
+<h3 id="解题步骤"><a href="#解题步骤" class="headerlink" title="解题步骤"></a><strong>解题步骤</strong></h3><ol>
+<li><p>本地复现mt_rand()输出<br>在相同PHP环境下（相同版本），用相同种子调用mt_rand()，获取第一个值：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">mt_srand</span>(<span class="number">372619038</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">mt_rand</span>();  <span class="comment">// 输出：1155388967</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="法一：本地php"><a href="#法一：本地php" class="headerlink" title="法一：本地php"></a>法一：本地php</h4><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728173300368.png" alt="image-20250728173300368" data-caption="image-20250728173300368" loading="lazy"></p>
+<h4 id="法二：在线php沙盒"><a href="#法二：在线php沙盒" class="headerlink" title="法二：在线php沙盒"></a>法二：在线php沙盒</h4><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728173448359.png" alt="image-20250728173448359" data-caption="image-20250728173448359" loading="lazy"></p>
+</li>
+<li><p>构造Payload<br>传入r&#x3D;1155388967即可满足条件：</p>
+<h4 id="法一：URL"><a href="#法一：URL" class="headerlink" title="法一：URL"></a>法一：URL</h4><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://210d0c32-c987-4696-8b79-600530e82849.challenge.ctf.show/?r=1155388967</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728173701457.png" alt="image-20250728173701457" data-caption="image-20250728173701457" loading="lazy"></p>
+<h4 id="法二：bp"><a href="#法二：bp" class="headerlink" title="法二：bp"></a>法二：bp</h4><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728173543999.png" alt="image-20250728173543999" data-caption="image-20250728173543999" loading="lazy"></p>
+<h3 id="扩展知识"><a href="#扩展知识" class="headerlink" title="扩展知识"></a>扩展知识</h3><h2 id="本地计算mt-rand-的第一个值（1155388967）是怎么计算的？"><a href="#本地计算mt-rand-的第一个值（1155388967）是怎么计算的？" class="headerlink" title="本地计算mt_rand()的第一个值（1155388967）是怎么计算的？"></a>本地计算mt_rand()的第一个值（1155388967）是怎么计算的？</h2><p>在PHP中，当使用 mt_srand()设置固定种子后，mt_rand()生成的随机数序列是<strong>确定</strong>的（伪随机）。因此，只要知道种子值，就可以在本地复现相同的随机数序列。</p>
+<h3 id="方法1：在本地使用相同的PHP环境运行代码"><a href="#方法1：在本地使用相同的PHP环境运行代码" class="headerlink" title="方法1：在本地使用相同的PHP环境运行代码"></a>方法1：在本地使用相同的PHP环境运行代码</h3><h3 id="方法2：使用Python的-random模块模拟PHP的mt-rand"><a href="#方法2：使用Python的-random模块模拟PHP的mt-rand" class="headerlink" title="方法2：使用Python的 random模块模拟PHP的mt_rand()"></a>方法2：使用Python的 random模块模拟PHP的mt_rand()</h3><h3 id="方法3：使用在线PHP沙盒"><a href="#方法3：使用在线PHP沙盒" class="headerlink" title="方法3：使用在线PHP沙盒"></a>方法3：使用在线PHP沙盒</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">mt_srand</span>(<span class="number">372619038</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">mt_rand</span>();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="web25"><a href="#web25" class="headerlink" title="web25"></a>web25</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728195653880.png" alt="image-20250728195653880" data-caption="image-20250728195653880" loading="lazy"></p>
+<p>涉及 mt_srand()和 mt_rand() 的可预测性问题。目标是构造一个 r 参数和 token Cookie，使得服务器返回 flag</p>
+<h2 id="代码分析-2"><a href="#代码分析-2" class="headerlink" title="代码分析"></a>代码分析</h2><h3 id="1-种子生成"><a href="#1-种子生成" class="headerlink" title="1. 种子生成"></a>1. 种子生成</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">mt_srand</span>(<span class="title function_ invoke__">hexdec</span>(<span class="title function_ invoke__">substr</span>(<span class="title function_ invoke__">md5</span>(<span class="variable">$flag</span>), <span class="number">0</span>, <span class="number">8</span>)));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>md5($flag)：计算 <code>flag</code> 的MD5哈希（32位十六进制字符串）。</li>
+<li>substr(md5($flag), 0, 8)：取前8位（如 5d41402a）。</li>
+<li>hexdec()：将8位十六进制字符串转为十进制整数（如 5d41402a→ 1564567594）。</li>
+<li>mt_srand()：用这个整数作为种子初始化伪随机数生成器。</li>
+</ul>
+<hr>
+<h3 id="2-检查-r-参数"><a href="#2-检查-r-参数" class="headerlink" title="2. 检查 r 参数"></a>2. 检查 <code>r</code> 参数</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$rand</span> = <span class="title function_ invoke__">intval</span>(<span class="variable">$r</span>) - <span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">mt_rand</span>());</span><br><span class="line"><span class="keyword">if</span> ((!<span class="variable">$rand</span>)) &#123;  <span class="comment">// 即 $r == mt_rand()</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$_COOKIE</span>[<span class="string">&#x27;token&#x27;</span>] == (<span class="title function_ invoke__">mt_rand</span>() + <span class="title function_ invoke__">mt_rand</span>())) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>$r 必须等于第一个 mt_rand()的值。</li>
+<li>token Cookie 必须等于后续两个 mt_rand()的和。</li>
+</ul>
+<hr>
+<p>分析上述代码，可知需要进入到打印flag的分支，需要满足$rand0&#x3D;0，即$r等于第1次的mt_rand()值，同时需要满足token值等于第2次mt_rand()值与第3次mt_rand()值的和，由于mr_srand()的seed值不变，可由第一次的mt_rand()值反推mr_srand()的seed值。</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>由于种子未知，我们需要利用 echo $rand 信息泄漏来推断种子和随机数序列。</p>
+<h3 id="步骤1：获取第一个-mt-rand-的值"><a href="#步骤1：获取第一个-mt-rand-的值" class="headerlink" title="步骤1：获取第一个 mt_rand()的值"></a>步骤1：获取第一个 mt_rand()的值</h3><ol>
+<li>发送 ?r&#x3D;0：<ul>
+<li>服务器计算 $rand &#x3D; 0 - mt_rand()。</li>
+<li>返回 -mt_rand()的值（如 -123456789）。</li>
+<li>因此，第一个 mt_rand() &#x3D; -($rand)。</li>
+</ul>
+</li>
+</ol>
+<h3 id="步骤2：推断种子"><a href="#步骤2：推断种子" class="headerlink" title="步骤2：推断种子"></a>步骤2：推断种子</h3><h2 id="php-mt-seed工具"><a href="#php-mt-seed工具" class="headerlink" title="php_mt_seed工具"></a>php_mt_seed工具</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用于通过已知的伪随机数序列反推出 PHP 的mt_rand() 函数的种子值。</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="下载工具https-www-openwall-com-php-mt-seed-php-mt-seed-4-0-tar-gz"><a href="#下载工具https-www-openwall-com-php-mt-seed-php-mt-seed-4-0-tar-gz" class="headerlink" title="下载工具https://www.openwall.com/php_mt_seed/php_mt_seed-4.0.tar.gz"></a>下载工具<a target="_blank" rel="noopener" href="https://www.openwall.com/php_mt_seed/php_mt_seed-4.0.tar.gz">https://www.openwall.com/php_mt_seed/php_mt_seed-4.0.tar.gz</a></h4><h3 id="1-进入存放压缩包目录并解压缩：tar-zxvf-php-mt-seed-4-0-tar-gz"><a href="#1-进入存放压缩包目录并解压缩：tar-zxvf-php-mt-seed-4-0-tar-gz" class="headerlink" title="1.进入存放压缩包目录并解压缩：tar -zxvf php_mt_seed-4.0.tar.gz"></a>1.进入存放压缩包目录并解压缩：tar -zxvf php_mt_seed-4.0.tar.gz</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728212853890.png" alt="image-20250728212853890" data-caption="image-20250728212853890" loading="lazy"></p>
+<h3 id="2-赋予权限：chmod-777-php-mt-seed-c"><a href="#2-赋予权限：chmod-777-php-mt-seed-c" class="headerlink" title="2.赋予权限：chmod  777 php_mt_seed.c"></a>2.赋予权限：chmod  777 php_mt_seed.c</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728213053332.png" alt="image-20250728213053332" data-caption="image-20250728213053332" loading="lazy"></p>
+<h3 id="3-执行：-php-mt-seed-第一次种子生成数"><a href="#3-执行：-php-mt-seed-第一次种子生成数" class="headerlink" title="3.执行：.&#x2F;php_mt_seed 第一次种子生成数"></a>3.执行：.&#x2F;php_mt_seed 第一次种子生成数</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728213332584.png" alt="image-20250728213332584" data-caption="image-20250728213332584" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728201311677.png" alt="image-20250728201311677" data-caption="image-20250728201311677" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728201946647.png" alt="image-20250728201946647" data-caption="image-20250728201946647" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250728202138315.png" alt="image-20250728202138315" data-caption="image-20250728202138315" loading="lazy"></p>
+<p>因为容器关闭了重新开了一个</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729160304540.png" alt="image-20250729160304540" data-caption="image-20250729160304540" loading="lazy"></p>
+<h3 id="4-操作"><a href="#4-操作" class="headerlink" title="4.操作"></a>4.操作</h3><h4 id="法一：hackbar-如果没有回显就去浏览器里面把cookies的缓存删掉再重新进入即可"><a href="#法一：hackbar-如果没有回显就去浏览器里面把cookies的缓存删掉再重新进入即可" class="headerlink" title="法一：hackbar(如果没有回显就去浏览器里面把cookies的缓存删掉再重新进入即可)"></a>法一：hackbar(如果没有回显就去浏览器里面把cookies的缓存删掉再重新进入即可)</h4><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729160216995.png" alt="image-20250729160216995" data-caption="image-20250729160216995" loading="lazy"></p>
+<h4 id="法二：bp-注意cookie的存放位置，否则回显不了"><a href="#法二：bp-注意cookie的存放位置，否则回显不了" class="headerlink" title="法二：bp(注意cookie的存放位置，否则回显不了)"></a>法二：bp(注意cookie的存放位置，否则回显不了)</h4><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729160040786.png" alt="image-20250729160040786" data-caption="image-20250729160040786" loading="lazy"></p>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/ctfshow/" rel="tag">ctfshow</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/web%E7%88%86%E7%A0%B4/" rel="tag">web爆破</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1761989925211"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div></div><div class="nexmoe-post-right">    <div class="nexmoe-fixed">
+        <div class="nexmoe-tool">
+
+            
+
+            
+            
+            <button class="mdui-fab catalog" style="overflow:unset;">
+                <i class="nexmoefont icon-i-catalog"></i>
+                <div class="nexmoe-toc">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#web21"><span class="toc-number">1.</span> <span class="toc-text">web21</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A5%E4%B8%8A%E6%98%AF%E9%A2%98%E7%9B%AE%E7%BB%99%E7%9A%84%E5%B7%B2%E7%9F%A5%E6%9D%A1%E4%BB%B6%EF%BC%8C%E5%9B%A0%E4%B8%BA%E9%A2%98%E7%9B%AE%E5%8F%AA%E7%BB%99%E4%BA%86%E5%90%8E%E5%8F%B0%E7%9A%84%E5%AF%86%E7%A0%81%E5%AD%97%E5%85%B8%EF%BC%8C%E7%8C%9C%E6%B5%8B%E5%90%8E%E5%8F%B0%E7%94%A8%E6%88%B7%E5%90%8D%E5%B0%B1%E6%98%AFadmin%EF%BC%8C%E6%8E%A5%E4%B8%8B%E6%9D%A5%E5%B0%B1%E7%94%A8bp%E6%8A%93%E5%8C%85%E7%94%A8%E5%AD%97%E5%85%B8%E6%9D%A5%E7%88%86%E7%A0%B4%E5%AF%86%E7%A0%81%E4%BA%86"><span class="toc-number">1.1.</span> <span class="toc-text">以上是题目给的已知条件，因为题目只给了后台的密码字典，猜测后台用户名就是admin，接下来就用bp抓包用字典来爆破密码了</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bp%E6%8A%93%E5%8C%85"><span class="toc-number">2.</span> <span class="toc-text">bp抓包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E9%A2%98%E7%9B%AE%E7%BB%99%E7%9A%84%E5%AF%86%E7%A0%81%E5%AD%97%E5%85%B8%E7%88%86%E7%A0%B4"><span class="toc-number">3.</span> <span class="toc-text">用题目给的密码字典爆破</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-payload%E4%BD%8D%E7%BD%AE%E8%AE%BE%E7%BD%AE"><span class="toc-number">3.1.</span> <span class="toc-text">1.payload位置设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-payload%E8%AE%BE%E7%BD%AE"><span class="toc-number">3.2.</span> <span class="toc-text">2.payload设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%94%BB%E5%87%BB%EF%BC%8C%E7%9C%8B%E9%95%BF%E5%BA%A6%EF%BC%8C%E9%95%BF%E5%BA%A6%E8%B7%9F%E5%85%B6%E4%BB%96%E4%B8%8D%E4%B8%80%E6%A0%B7%E7%9A%84%E4%B8%80%E8%88%AC%E5%B0%B1%E6%98%AF%E8%BF%99%E4%B8%AA"><span class="toc-number">3.3.</span> <span class="toc-text">3.攻击，看长度，长度跟其他不一样的一般就是这个</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%9F%A5%E7%9C%8B%E6%9C%80%E7%BB%88%E6%95%88%E6%9E%9C%E5%8D%B3%E5%8F%AF%E5%BE%97%E5%88%B0flag"><span class="toc-number">3.4.</span> <span class="toc-text">4.查看最终效果即可得到flag</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web22"><span class="toc-number">4.</span> <span class="toc-text">web22</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web23"><span class="toc-number">5.</span> <span class="toc-text">web23</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">5.1.</span> <span class="toc-text">代码分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E4%B8%80%EF%BC%9A%E8%84%9A%E6%9C%AC%E7%88%86%E7%A0%B4"><span class="toc-number">6.</span> <span class="toc-text">法一：脚本爆破</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Python%E7%88%86%E7%A0%B4%E8%84%9A%E6%9C%AC%E7%A4%BA%E4%BE%8B1"><span class="toc-number">6.1.</span> <span class="toc-text">Python爆破脚本示例1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python%E7%88%86%E7%A0%B4%E8%84%9A%E6%9C%AC%E7%A4%BA%E4%BE%8B2-%E5%88%AB%E4%BA%BA%E7%9A%84"><span class="toc-number">6.2.</span> <span class="toc-text">Python爆破脚本示例2(别人的)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#php-%E5%88%AB%E4%BA%BA%E7%9A%84"><span class="toc-number">6.3.</span> <span class="toc-text">php(别人的)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E4%BA%8C%EF%BC%9Afuzz-%E4%B8%8B%E9%9D%A2%E7%9A%84%E5%AD%97%E5%85%B8%E6%98%AF%E7%BB%93%E5%90%88%E8%84%9A%E6%9C%AC%E8%B7%91%E5%87%BA%E6%9D%A5%E7%9A%84%E7%BB%93%E6%9E%9C%E7%9A%84%E5%80%BC"><span class="toc-number">7.</span> <span class="toc-text">法二：fuzz(下面的字典是结合脚本跑出来的结果的值)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web24"><span class="toc-number">8.</span> <span class="toc-text">web24</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90-1"><span class="toc-number">8.1.</span> <span class="toc-text">代码分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E5%8E%9F%E7%90%86"><span class="toc-number">8.2.</span> <span class="toc-text">解题原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4"><span class="toc-number">8.3.</span> <span class="toc-text">解题步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%95%E4%B8%80%EF%BC%9A%E6%9C%AC%E5%9C%B0php"><span class="toc-number">8.3.1.</span> <span class="toc-text">法一：本地php</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%95%E4%BA%8C%EF%BC%9A%E5%9C%A8%E7%BA%BFphp%E6%B2%99%E7%9B%92"><span class="toc-number">8.3.2.</span> <span class="toc-text">法二：在线php沙盒</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%95%E4%B8%80%EF%BC%9AURL"><span class="toc-number">8.3.3.</span> <span class="toc-text">法一：URL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%95%E4%BA%8C%EF%BC%9Abp"><span class="toc-number">8.3.4.</span> <span class="toc-text">法二：bp</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E7%9F%A5%E8%AF%86"><span class="toc-number">8.4.</span> <span class="toc-text">扩展知识</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E8%AE%A1%E7%AE%97mt-rand-%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%80%BC%EF%BC%881155388967%EF%BC%89%E6%98%AF%E6%80%8E%E4%B9%88%E8%AE%A1%E7%AE%97%E7%9A%84%EF%BC%9F"><span class="toc-number">9.</span> <span class="toc-text">本地计算mt_rand()的第一个值（1155388967）是怎么计算的？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%951%EF%BC%9A%E5%9C%A8%E6%9C%AC%E5%9C%B0%E4%BD%BF%E7%94%A8%E7%9B%B8%E5%90%8C%E7%9A%84PHP%E7%8E%AF%E5%A2%83%E8%BF%90%E8%A1%8C%E4%BB%A3%E7%A0%81"><span class="toc-number">9.1.</span> <span class="toc-text">方法1：在本地使用相同的PHP环境运行代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%952%EF%BC%9A%E4%BD%BF%E7%94%A8Python%E7%9A%84-random%E6%A8%A1%E5%9D%97%E6%A8%A1%E6%8B%9FPHP%E7%9A%84mt-rand"><span class="toc-number">9.2.</span> <span class="toc-text">方法2：使用Python的 random模块模拟PHP的mt_rand()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%953%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%9C%A8%E7%BA%BFPHP%E6%B2%99%E7%9B%92"><span class="toc-number">9.3.</span> <span class="toc-text">方法3：使用在线PHP沙盒</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web25"><span class="toc-number">10.</span> <span class="toc-text">web25</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90-2"><span class="toc-number">11.</span> <span class="toc-text">代码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%A7%8D%E5%AD%90%E7%94%9F%E6%88%90"><span class="toc-number">11.1.</span> <span class="toc-text">1. 种子生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%A3%80%E6%9F%A5-r-%E5%8F%82%E6%95%B0"><span class="toc-number">11.2.</span> <span class="toc-text">2. 检查 r 参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="toc-number">12.</span> <span class="toc-text">解题思路</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A41%EF%BC%9A%E8%8E%B7%E5%8F%96%E7%AC%AC%E4%B8%80%E4%B8%AA-mt-rand-%E7%9A%84%E5%80%BC"><span class="toc-number">12.1.</span> <span class="toc-text">步骤1：获取第一个 mt_rand()的值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A42%EF%BC%9A%E6%8E%A8%E6%96%AD%E7%A7%8D%E5%AD%90"><span class="toc-number">12.2.</span> <span class="toc-text">步骤2：推断种子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#php-mt-seed%E5%B7%A5%E5%85%B7"><span class="toc-number">13.</span> <span class="toc-text">php_mt_seed工具</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%B7%A5%E5%85%B7https-www-openwall-com-php-mt-seed-php-mt-seed-4-0-tar-gz"><span class="toc-number">13.0.1.</span> <span class="toc-text">下载工具https:&#x2F;&#x2F;www.openwall.com&#x2F;php_mt_seed&#x2F;php_mt_seed-4.0.tar.gz</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%BF%9B%E5%85%A5%E5%AD%98%E6%94%BE%E5%8E%8B%E7%BC%A9%E5%8C%85%E7%9B%AE%E5%BD%95%E5%B9%B6%E8%A7%A3%E5%8E%8B%E7%BC%A9%EF%BC%9Atar-zxvf-php-mt-seed-4-0-tar-gz"><span class="toc-number">13.1.</span> <span class="toc-text">1.进入存放压缩包目录并解压缩：tar -zxvf php_mt_seed-4.0.tar.gz</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%B5%8B%E4%BA%88%E6%9D%83%E9%99%90%EF%BC%9Achmod-777-php-mt-seed-c"><span class="toc-number">13.2.</span> <span class="toc-text">2.赋予权限：chmod  777 php_mt_seed.c</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%89%A7%E8%A1%8C%EF%BC%9A-php-mt-seed-%E7%AC%AC%E4%B8%80%E6%AC%A1%E7%A7%8D%E5%AD%90%E7%94%9F%E6%88%90%E6%95%B0"><span class="toc-number">13.3.</span> <span class="toc-text">3.执行：.&#x2F;php_mt_seed 第一次种子生成数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%93%8D%E4%BD%9C"><span class="toc-number">13.4.</span> <span class="toc-text">4.操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%95%E4%B8%80%EF%BC%9Ahackbar-%E5%A6%82%E6%9E%9C%E6%B2%A1%E6%9C%89%E5%9B%9E%E6%98%BE%E5%B0%B1%E5%8E%BB%E6%B5%8F%E8%A7%88%E5%99%A8%E9%87%8C%E9%9D%A2%E6%8A%8Acookies%E7%9A%84%E7%BC%93%E5%AD%98%E5%88%A0%E6%8E%89%E5%86%8D%E9%87%8D%E6%96%B0%E8%BF%9B%E5%85%A5%E5%8D%B3%E5%8F%AF"><span class="toc-number">13.4.1.</span> <span class="toc-text">法一：hackbar(如果没有回显就去浏览器里面把cookies的缓存删掉再重新进入即可)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%95%E4%BA%8C%EF%BC%9Abp-%E6%B3%A8%E6%84%8Fcookie%E7%9A%84%E5%AD%98%E6%94%BE%E4%BD%8D%E7%BD%AE%EF%BC%8C%E5%90%A6%E5%88%99%E5%9B%9E%E6%98%BE%E4%B8%8D%E4%BA%86"><span class="toc-number">13.4.2.</span> <span class="toc-text">法二：bp(注意cookie的存放位置，否则回显不了)</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </button>
+            
+
+            
+
+            <a href="#nexmoe-content" class="backtop toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+        </div>
+    </div>
+</div></div><div id="nexmoe-footer"><!--!--></div><div id="nexmoe-search-space"><div class="search-container"><div class="search-header"><div class="search-input-container"><input class="search-input" type="text" placeholder="搜索" onInput="sinput();"></div><a class="search-close" onclick="sclose();">×</a></div><div class="search-body"></div></div></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+</div></body></html>

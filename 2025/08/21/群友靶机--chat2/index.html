@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="zh"><head>
+<title>群友靶机--chat2 - X8@0E的博客</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="description" content="一、信息收集首先，在与目标网络相同的网段下，使用 arp-scan 工具对C段进行扫描，以发现内网中的存活主机。 发现目标主机IP为 192.168.88.12 。接下来，使用 nmap 对该主机进行全端口扫描，以探测其开放的服务。 扫描结果显示，目标主机开放了22端口（SSH服务）和80端口（HTTP服务）。 二、漏洞利用1.Web信息泄露我们首先从80端口的Web服务入手。访问 http:&#x2F;&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="群友靶机--chat2">
+<meta property="og:url" content="http://example.com/2025/08/21/%E7%BE%A4%E5%8F%8B%E9%9D%B6%E6%9C%BA--chat2/index.html">
+<meta property="og:site_name" content="X8@0E的博客">
+<meta property="og:description" content="一、信息收集首先，在与目标网络相同的网段下，使用 arp-scan 工具对C段进行扫描，以发现内网中的存活主机。 发现目标主机IP为 192.168.88.12 。接下来，使用 nmap 对该主机进行全端口扫描，以探测其开放的服务。 扫描结果显示，目标主机开放了22端口（SSH服务）和80端口（HTTP服务）。 二、漏洞利用1.Web信息泄露我们首先从80端口的Web服务入手。访问 http:&#x2F;&#x2F;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821154121693.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821154422667.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821154450460.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821154633584.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821154813175.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821155408583.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821155519923.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821155701498.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821160058520.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821160220288.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821160707220.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821160740362.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821161328017.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821161547900.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821162701582.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821162947291.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821163211770.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821163552196.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821163953332.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821164236938.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821164855733.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821165024846.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821165234329.png">
+<meta property="article:published_time" content="2025-08-21T07:37:29.957Z">
+<meta property="article:modified_time" content="2025-08-28T12:56:06.274Z">
+<meta property="article:author" content="X8@0E">
+<meta property="article:tag" content="正向shell">
+<meta property="article:tag" content="mysql_old_password">
+<meta property="article:tag" content="lsattr--查看文件扩展属性">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250821154121693.png">
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1761989925345">
+
+<link rel="stylesheet" href="/css/style.css?v=1761989925345">
+
+
+
+
+    
+        <link rel="stylesheet" href="/custom.css?v=1761989925345">
+    
+
+
+
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+<script src="/lib/lax.min.js" async></script>
+
+
+<script async src="/js/app.js?v=1761989925345"></script>
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<meta name="generator" content="Hexo 7.3.0"></head><body class="nexmoe mdui-drawer-body-left"><div id="nexmoe-background"><div class="nexmoe-bg" style="background-image: url(https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080)"></div><div class="mdui-appbar mdui-shadow-0"><div class="mdui-toolbar"><a class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: &#039;#drawer&#039;, swipe: true}" title="menu"><i class="mdui-icon nexmoefont icon-menu"></i></a><div class="mdui-toolbar-spacer"></div><a class="mdui-btn mdui-btn-icon" href="/" title="X8@0E"><img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></a></div></div></div><div id="nexmoe-header"><div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="X8@0E">
+            <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E" alt="X8@0E">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>43</div>
+        <div><span>标签</span>77</div>
+        <div><span>分类</span>14</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-douban-fill"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+
+
+	<script async src="/js/search.js?v=1761989925346"></script>
+
+
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://blog.csdn.net/2301_81325456/article/details/147025965"
+			target="_blank"
+			mdui-tooltip="{content: 'CSDN'}"
+			style="
+				color: rgb(247, 132, 34);
+				background-color: rgba(247, 132, 34, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Crypto/">Crypto</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/NSSCTF/">NSSCTF</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnhub/">Vulnhub</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnvm靶机复现/">Vulnvm靶机复现</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-信息收集/">ctfshow-web-信息收集</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-命令执行/">ctfshow-web-命令执行</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件上传/">ctfshow-web-文件上传</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件包含/">ctfshow-web-文件包含</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-爆破/">ctfshow-web-爆破</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/sql注入/">sql注入</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulhub/">vulhub</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulnhub/">vulnhub</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/群友靶机/">群友靶机</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/自制靶机/">自制靶机</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/1Panel/" style="font-size: 10px;">1Panel</a> <a href="/tags/3%E4%B8%AA%E7%82%B9/" style="font-size: 10px;">3个点</a> <a href="/tags/Argon2Cracker/" style="font-size: 10px;">Argon2Cracker</a> <a href="/tags/Cookie-GLOBALS/" style="font-size: 10px;">Cookie--GLOBALS</a> <a href="/tags/Cypher%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">Cypher注入</a> <a href="/tags/DC/" style="font-size: 15px;">DC</a> <a href="/tags/GIF%E7%BB%95%E8%BF%87/" style="font-size: 10px;">GIF绕过</a> <a href="/tags/Jinja2/" style="font-size: 10px;">Jinja2</a> <a href="/tags/JoomScan/" style="font-size: 10px;">JoomScan</a> <a href="/tags/LFI%E5%88%B0RCE-open%E5%87%BD%E6%95%B0/" style="font-size: 10px;">LFI到RCE(open函数)</a> <a href="/tags/NSSCTF/" style="font-size: 15px;">NSSCTF</a> <a href="/tags/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">Nginx解析漏洞</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/RUNPATH/" style="font-size: 10px;">RUNPATH</a> <a href="/tags/Rabbit/" style="font-size: 10px;">Rabbit</a> <a href="/tags/SSRF/" style="font-size: 10px;">SSRF</a> <a href="/tags/Vulnhub/" style="font-size: 15px;">Vulnhub</a> <a href="/tags/Vulnvm/" style="font-size: 10px;">Vulnvm</a> <a href="/tags/WAF/" style="font-size: 10px;">WAF</a> <a href="/tags/WPA-01-cap/" style="font-size: 10px;">WPA-01.cap</a> <a href="/tags/aircrack-ng/" style="font-size: 10px;">aircrack-ng</a> <a href="/tags/basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">basic认证爆破</a> <a href="/tags/cgi%E6%96%87%E4%BB%B6/" style="font-size: 10px;">cgi文件</a> <a href="/tags/ctfshow/" style="font-size: 20px;">ctfshow</a> <a href="/tags/dirtycow/" style="font-size: 10px;">dirtycow</a> <a href="/tags/docker%E4%BA%A4%E4%BA%92%E5%BC%8Fshell/" style="font-size: 10px;">docker交互式shell</a> <a href="/tags/drupal/" style="font-size: 10px;">drupal</a> <a href="/tags/ffuf/" style="font-size: 10px;">ffuf</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E/" style="font-size: 10px;">fork解决断连</a> <a href="/tags/ftp/" style="font-size: 10px;">ftp</a> <a href="/tags/ghfs/" style="font-size: 10px;">ghfs</a> <a href="/tags/ldd/" style="font-size: 10px;">ldd</a> <a href="/tags/les-sh/" style="font-size: 10px;">les.sh</a> <a href="/tags/linpeas-sh/" style="font-size: 10px;">linpeas.sh</a> <a href="/tags/lsattr-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">lsattr--查看文件扩展属性</a> <a href="/tags/motto/" style="font-size: 10px;">motto</a> <a href="/tags/msfvenom/" style="font-size: 15px;">msfvenom</a> <a href="/tags/mysql-old-password/" style="font-size: 10px;">mysql_old_password</a> <a href="/tags/nikto/" style="font-size: 10px;">nikto</a> <a href="/tags/nohup/" style="font-size: 10px;">nohup</a> <a href="/tags/php%E6%8F%90%E6%9D%83root/" style="font-size: 10px;">php提权root</a> <a href="/tags/poc/" style="font-size: 10px;">poc</a> <a href="/tags/put%E6%96%B9%E6%B3%95/" style="font-size: 10px;">put方法</a> <a href="/tags/python3-5/" style="font-size: 10px;">python3.5</a> <a href="/tags/rce/" style="font-size: 10px;">rce</a> <a href="/tags/readelf/" style="font-size: 10px;">readelf</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sqlmap/" style="font-size: 10px;">sqlmap</a> <a href="/tags/sql%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">sql二次注入</a> <a href="/tags/ssh%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4/" style="font-size: 10px;">ssh弱口令爆破</a> <a href="/tags/ssh%E7%A7%98%E9%92%A5%E7%94%9F%E6%88%90%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">ssh秘钥生成连接</a> <a href="/tags/stegseek/" style="font-size: 10px;">stegseek</a> <a href="/tags/suForce/" style="font-size: 10px;">suForce</a> <a href="/tags/url%E6%88%AA%E6%96%AD/" style="font-size: 10px;">url截断</a> <a href="/tags/vite/" style="font-size: 10px;">vite</a> <a href="/tags/web%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="font-size: 10px;">web命令执行</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">web文件上传</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 10px;">web文件包含</a> <a href="/tags/web%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 10px;">web源码泄露</a> <a href="/tags/web%E7%88%86%E7%A0%B4/" style="font-size: 10px;">web爆破</a> <a href="/tags/x-forwarded-for%E7%9A%84ip%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">x-forwarded-for的ip欺骗</a> <a href="/tags/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E-CVE-2025-30208/" style="font-size: 10px;">任意文件读取漏洞(CVE-2025-30208)</a> <a href="/tags/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/" style="font-size: 10px;">凯撒密码</a> <a href="/tags/%E5%90%8E%E9%9D%A2%E5%8A%A0-jpg%E5%90%8E%E7%BC%80/" style="font-size: 10px;">后面加.jpg后缀</a> <a href="/tags/%E5%9F%9F%E6%8E%A7/" style="font-size: 10px;">域控</a> <a href="/tags/%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">密码爆破</a> <a href="/tags/%E6%8F%90%E6%9D%83-env-reset/" style="font-size: 10px;">提权!env_reset</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">插件漏洞</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5-ua%E6%B7%BB%E5%8A%A0%E6%9C%A8%E9%A9%AC/" style="font-size: 10px;">日志注入+ua添加木马</a> <a href="/tags/%E6%AD%A3%E5%90%91shell/" style="font-size: 10px;">正向shell</a> <a href="/tags/%E7%8A%B6%E6%80%81%E7%A0%81/" style="font-size: 10px;">状态码</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 10px;">环境变量</a> <a href="/tags/%E7%A9%BA%E6%A0%BC/" style="font-size: 10px;">空格</a> <a href="/tags/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81/" style="font-size: 10px;">维吉尼亚密码</a> <a href="/tags/%E8%9A%81%E5%89%91/" style="font-size: 10px;">蚁剑</a> <a href="/tags/%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96/" style="font-size: 10px;">越界读取</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(77);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+    
+        
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章归档</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">43</span></li></ul>
+    </div>
+  </div>
+
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">最新文章</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/10/20/Crypto/">Crypto</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/11/%E6%B5%81%E9%87%8F%E6%81%B6%E6%84%8F%E6%94%BB%E5%87%BB/">流量分析恶意攻击</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/10/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/09/hackableII/">hackablell</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/07/Me-and-My-Girlfriend-1/">Me-and-My-Girlfriend-1</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+            <li>
+                <a href="" target="_blank" >
+                    <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></img>
+                    <p>X8@0E</p>
+                </a>
+            </li>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+    
+   
+    <div class="nexmoe-copyright">
+        &copy; 2025 X8@0E
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer --></div><div id="nexmoe-content"><div class="nexmoe-primary"><div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="https://img.shetu66.com/2023/11/22/1700656235757121.jpg" alt="群友靶机--chat2" loading="lazy">
+            <h1>群友靶机--chat2</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2025年08月21日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E7%BE%A4%E5%8F%8B%E9%9D%B6%E6%9C%BA/">群友靶机</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h1 id="一、信息收集"><a href="#一、信息收集" class="headerlink" title="一、信息收集"></a>一、信息收集</h1><p>首先，在与目标网络相同的网段下，使用 arp-scan 工具对C段进行扫描，以发现内网中的存活主机。</p>
+<p>发现目标主机IP为 192.168.88.12 。接下来，使用 nmap 对该主机进行全端口扫描，以探测其开放的服务。</p>
+<p>扫描结果显示，目标主机开放了22端口（SSH服务）和80端口（HTTP服务）。</p>
+<h1 id="二、漏洞利用"><a href="#二、漏洞利用" class="headerlink" title="二、漏洞利用"></a>二、漏洞利用</h1><h2 id="1-Web信息泄露"><a href="#1-Web信息泄露" class="headerlink" title="1.Web信息泄露"></a>1.Web信息泄露</h2><p>我们首先从80端口的Web服务入手。访问 <a target="_blank" rel="noopener" href="http://192.168.88.12/">http://192.168.88.12</a> ，发现是一个Discuz!论坛。在“在线会员”模块中，我们注意到了一个名为 admin 的管理员用户。此外，在默认版块中发现了一篇标题为“Let’s Encrypt”的文章。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821154121693.png" alt="image-20250821154121693" data-caption="image-20250821154121693" loading="lazy"></p>
+<p>查看文章内容，发现是一段摩斯密码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.--. .- ... ... .-- --- .-. -.. .---- ..--- ...--</span><br></pre></td></tr></table></figure>
+
+<p>使用在线摩斯密码解码工具，得到解码结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PASSWORD123</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：摩斯密码本身不区分字母大小写，因此在实际爆破或登录尝试时，需要考虑所有可能的大小写组合，如 password123 , Password123 , PASSWORD123 等。</p>
+<h2 id="2-获取Web后台权限"><a href="#2-获取Web后台权限" class="headerlink" title="2.获取Web后台权限"></a>2.获取Web后台权限</h2><p>我们当前只知道管理员用户名为 admin ，但没有SSH的用户名，因此首先尝试登录Discuz!的Web后台。</p>
+<p>使用用户名 admin 和刚刚解码出的密码 password123 进行登录，成功进入论坛。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821154422667.png" alt="image-20250821154422667" data-caption="image-20250821154422667" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821154450460.png" alt="image-20250821154450460" data-caption="image-20250821154450460" loading="lazy"></p>
+<p>在用户界面中，我们找到了“管理中心”的入口，这正是我们感兴趣的地方。点击进入时，系统要求再次验证密码，我们输入 password123 后成功进入后台。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821154633584.png" alt="image-20250821154633584" data-caption="image-20250821154633584" loading="lazy"></p>
+<h2 id="3-正向Shell"><a href="#3-正向Shell" class="headerlink" title="3.正向Shell"></a>3.正向Shell</h2><p>在后台首页，我们注意到该Discuz! 的版本为 3.5 (20250205)，这是一个较新的版本。经过初步搜索，并未发现该版本存在已知的远程代码执行（RCE）漏洞。</p>
+<p>于是，我们开始探索后台的各项功能。在 <strong>工具</strong> <strong>&gt;</strong> <strong>计划任务</strong> 中，发现一个名为 shell.php 的自定义任务。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821154813175.png" alt="image-20250821154813175" data-caption="image-20250821154813175" loading="lazy"></p>
+<p>尝试编辑该任务，发现其执行的脚本 shell.php 是写死的，无法直接修改其内容。根据命名推测，这可能是一个预留的WebShell或者一个用于建立连接的脚本。我们无法修改脚本，但可以控制其执行时间。</p>
+<p>我们将执行周期的“每周”字段改为 * (代表每天)，并将“分钟”字段修改为当前时间的下一分钟（例如，当前是15:52，就设置为15:53）。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821155408583.png" alt="image-20250821155408583" data-caption="image-20250821155408583" loading="lazy"></p>
+<p><strong>知识点补充</strong>：这是一种利用计划任务获取Shell的常见手法。这里的 shell.php 极有可能是一个正向Shell脚本，它会在被访问或执行时，监听服务器的某个端口，等待攻击者连接.</p>
+<p>到达设定的时间点（xx:53）后，我们再次使用 nmap 扫描目标主机的端口。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821155519923.png" alt="image-20250821155519923" data-caption="image-20250821155519923" loading="lazy"></p>
+<p>扫描结果显示，目标主机多开放了一个 12345 端口。我们尝试使用 netcat (nc) 连接该端口。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821155701498.png" alt="image-20250821155701498" data-caption="image-20250821155701498" loading="lazy"></p>
+<p>成功连接，并且执行 id 命令后得到了回显。这是一个 www-data 用户权限的正向Shell。为了便于后续操作，我们使用以下命令将其升级为一个稳定的交互式Shell。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">script /dev/null -c bash</span><br><span class="line"><span class="comment"># 按下 Ctrl+Z 将其挂起</span></span><br><span class="line"><span class="built_in">stty</span> raw -<span class="built_in">echo</span>; <span class="built_in">fg</span></span><br><span class="line"><span class="comment"># 按下回车</span></span><br><span class="line">reset xterm</span><br><span class="line"><span class="built_in">export</span> TERM=xterm</span><br><span class="line"><span class="built_in">export</span> SHELL=/bin/bash</span><br><span class="line"><span class="built_in">stty</span> rows 24 columns 80</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821160058520.png" alt="image-20250821160058520" data-caption="image-20250821160058520" loading="lazy"></p>
+<h1 id="三、横向移动"><a href="#三、横向移动" class="headerlink" title="三、横向移动"></a>三、横向移动</h1><h2 id="1-数据库凭据发现"><a href="#1-数据库凭据发现" class="headerlink" title="1.数据库凭据发现"></a>1.数据库凭据发现</h2><p>当前我们是 www-data 用户，权限较低。首先，我们在系统中进行信息收集，寻找可以横向移动到其他用户的线索。在 &#x2F;home 目录下，发现了一个名为 discuz 的用户。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821160220288.png" alt="image-20250821160220288" data-caption="image-20250821160220288" loading="lazy"></p>
+<p>由于这是一个CMS应用，数据库配置文件通常包含了高权限的数据库用户凭据。我们在网站根目录&#x2F;var&#x2F;www&#x2F;html&#x2F;config&#x2F; 下找到了配置文件 config_global.php 。这个php文件在网站后台也可以看到有。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821160707220.png" alt="image-20250821160707220" data-caption="image-20250821160707220" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821160740362.png" alt="image-20250821160740362" data-caption="image-20250821160740362" loading="lazy"></p>
+<h2 id="2-数据库信息挖掘"><a href="#2-数据库信息挖掘" class="headerlink" title="2.数据库信息挖掘"></a>2.数据库信息挖掘</h2><p>我们找到了数据库用户 discuz_user 和密码 StrongPassword!123 。使用该凭据连接本地的MariaDB数据库。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql -u discuz_user -p<span class="string">&#x27;StrongPassword!123&#x27;</span></span><br><span class="line"></span><br><span class="line">show databases;</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821161328017.png" alt="image-20250821161328017" data-caption="image-20250821161328017" loading="lazy"></p>
+<p>在 discuz_db 数据库的 maze_ucenter_members 表中，我们只发现了之前登录Web后台的admin用户哈希，这对横向移动没有帮助。<br>于是，我们将目光转向了 mysql 这个系统数据库，它存储了数据库的所有用户信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">use mysql;</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> user, host, password from user;</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821161547900.png" alt="image-20250821161547900" data-caption="image-20250821161547900" loading="lazy"></p>
+<p>查询 user 表后，除了已知的 discuz_user ，我们还发现了一个名为 hackme 的用户，其密码哈希为FAAFFE644E901CFAFAEC7562415E5FAEC243B8B2 。这是一个MySQL 4.1版本之前的旧格式哈希（ mysql_old_password ）。</p>
+<p>我们使用在线哈希破解网站（如 crackstation.net）对此哈希进行查询，成功破解出明文密码为root123 。而discuz_user的哈希密码破解不了</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821162701582.png" alt="image-20250821162701582" data-caption="image-20250821162701582" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821162947291.png" alt="image-20250821162947291" data-caption="image-20250821162947291" loading="lazy"></p>
+<h2 id="3-切换用户"><a href="#3-切换用户" class="headerlink" title="3.切换用户"></a>3.切换用户</h2><p>因为discuz_user的哈希密码破解不了，而hackme不是系统用户，我们猜测 hackme 用户的密码可能就是系统用户 discuz 的密码。尝试使用 su 命令切换到 discuz用户，并输入密码 root123 。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821163211770.png" alt="image-20250821163211770" data-caption="image-20250821163211770" loading="lazy"></p>
+<p>成功切换！我们已经从 www-data 用户横向移动到了 discuz 用户</p>
+<h1 id="四、权限提升"><a href="#四、权限提升" class="headerlink" title="四、权限提升"></a>四、权限提升</h1><h2 id="1-SUID提权向量与文件属性"><a href="#1-SUID提权向量与文件属性" class="headerlink" title="1.SUID提权向量与文件属性"></a>1.SUID提权向量与文件属性</h2><p>登录 discuz 用户后，我们首先检查该用户拥有的 sudo 权限，同时开始寻找系统上其他的提权向量，例如查找具有SUID权限位的二进制文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -perm -4000 -<span class="built_in">type</span> f -<span class="built_in">exec</span> <span class="built_in">ls</span> -l &#123;&#125; \; 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821163552196.png" alt="image-20250821163552196" data-caption="image-20250821163552196" loading="lazy"></p>
+<p>我们得到了两条关键信息：</p>
+<p>1.discuz 用户可以无密码以root权限执行其家目录下的 chat 程序。这是一个非常直接的提权路径。</p>
+<p>2.&#x2F;usr&#x2F;bin&#x2F;chattr 命令被设置了SUID位。</p>
+<p><strong>知识点补充</strong>：SUID（Set User ID）是一种特殊的权限位。当一个可执行文件设置了SUID位后，任何用户在执行它时，进程的有效用户ID（euid）都会变成文件所有者的ID。 chattr 的所有者是root，因此我们现在可以以root权限来执行 chattr 命令。</p>
+<p>我们的主要攻击思路是替换 &#x2F;home&#x2F;discuz&#x2F;chat 文件为一个恶意脚本，然后通过 sudo 执行它来提权。然而，当我们尝试重命名或删除该文件时，却遭到了拒绝。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mv</span> chat chat.bak</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821163953332.png" alt="image-20250821163953332" data-caption="image-20250821163953332" loading="lazy"></p>
+<p>这个现象很不寻常，因为我们作为 discuz 用户，对自己家目录下的文件应该有写权限。这通常意味着文件被设置了特殊的扩展属性。我们使用 lsattr 命令来验证猜想。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821164236938.png" alt="image-20250821164236938" data-caption="image-20250821164236938" loading="lazy"></p>
+<p><strong>知识点补充</strong>： lsattr 命令用于查看文件的扩展属性。这里的 i 属性（immutable）意味着该文件被“锁定”，即便是root用户也无法修改、删除、重命名或创建链接。</p>
+<p>现在，两条线索完美地结合在了一起： chat 文件因为 i 属性而无法被修改，而我们恰好拥有一个带SUID的 chattr 命令，可以用它来移除这个 i 属性。</p>
+<h2 id="2-替换文件并提权"><a href="#2-替换文件并提权" class="headerlink" title="2.替换文件并提权"></a>2.替换文件并提权</h2><p>提权思路已经清晰：</p>
+<ol>
+<li><p>利用带SUID的 &#x2F;usr&#x2F;bin&#x2F;chattr 移除 &#x2F;home&#x2F;discuz&#x2F;chat 的 i 属性。</p>
+</li>
+<li><p>将 &#x2F;home&#x2F;discuz&#x2F;chat 替换为我们自己的恶意脚本。</p>
+</li>
+<li><p>通过 sudo 执行修改后的 chat 脚本，以root权限完成提权。</p>
+</li>
+</ol>
+<p>我们构造的恶意脚本功能是为 &#x2F;bin&#x2F;bash 添加SUID权限位，这样我们就能随时通过 bash -p 获取一个root shell。</p>
+<p>执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 利用SUID chattr移除 i 属性</span></span><br><span class="line">discuz@Chat2:~$ /usr/bin/chattr -i /home/discuz/chat (chattr -i chat)</span><br><span class="line"><span class="comment"># 2. 备份原文件并创建恶意脚本</span></span><br><span class="line">discuz@Chat2:~$ <span class="built_in">mv</span> chat chat.bak</span><br><span class="line">discuz@Chat2:~$ <span class="built_in">echo</span> <span class="string">&#x27;chmod +s /bin/bash&#x27;</span> &gt; chat</span><br><span class="line">discuz@Chat2:~$ <span class="built_in">chmod</span> +x chat</span><br><span class="line"><span class="comment"># 3. 检查 /bin/bash 当前权限</span></span><br><span class="line">discuz@Chat2:~$ <span class="built_in">ls</span> -la /bin/bash</span><br><span class="line">-rwxr-xr-x 1 root root 1168776 Apr 18 2019 /bin/bash</span><br><span class="line"><span class="comment"># 4. 使用sudo执行我们的脚本</span></span><br><span class="line">discuz@Chat2:~$ <span class="built_in">sudo</span> /home/discuz/chat</span><br><span class="line"><span class="comment"># 5. 再次检查 /bin/bash 权限，确认SUID位已添加</span></span><br><span class="line">discuz@Chat2:~$ <span class="built_in">ls</span> -la /bin/bash</span><br><span class="line">-rwsr-sr-x 1 root root 1168776 Apr 18 2019 /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821164855733.png" alt="image-20250821164855733" data-caption="image-20250821164855733" loading="lazy"></p>
+<p>可以看到 &#x2F;bin&#x2F;bash 已经拥有了 rws 权限，SUID位设置成功。</p>
+<h2 id="3-获取Root-Shell"><a href="#3-获取Root-Shell" class="headerlink" title="3.获取Root Shell"></a>3.获取Root Shell</h2><p>最后，执行 bash -p 命令，利用SUID权限获得一个 euid 为 0 (root) 的shell。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821165024846.png" alt="image-20250821165024846" data-caption="image-20250821165024846" loading="lazy"></p>
+<p><strong>知识点补充</strong>： bash -p 中的 -p 参数告诉bash不要将有效用户ID（euid）重置为实际用户ID（uid）。如果一个可执行文件（如bash）设置了SUID位，普通用户执行它时，进程的euid会变成文件所有者（root）的ID。 -p 参数保留了这个提权后的euid，从而让我们获得root权限的shell。</p>
+<h1 id="五、夺取凭证"><a href="#五、夺取凭证" class="headerlink" title="五、夺取凭证"></a>五、夺取凭证</h1><p>成功获取root权限后，我们读取位于用户目录和root目录下的flag文件。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250821165234329.png" alt="image-20250821165234329" data-caption="image-20250821165234329" loading="lazy"></p>
+<p>成功获取所有flag，渗透测试结束。</p>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/lsattr-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%B1%9E%E6%80%A7/" rel="tag">lsattr--查看文件扩展属性</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/mysql-old-password/" rel="tag">mysql_old_password</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E6%AD%A3%E5%90%91shell/" rel="tag">正向shell</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1761989925209"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div></div><div class="nexmoe-post-right">    <div class="nexmoe-fixed">
+        <div class="nexmoe-tool">
+
+            
+
+            
+            
+            <button class="mdui-fab catalog" style="overflow:unset;">
+                <i class="nexmoefont icon-i-catalog"></i>
+                <div class="nexmoe-toc">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.</span> <span class="toc-text">一、信息收集</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">二、漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Web%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2"><span class="toc-number">2.1.</span> <span class="toc-text">1.Web信息泄露</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%8E%B7%E5%8F%96Web%E5%90%8E%E5%8F%B0%E6%9D%83%E9%99%90"><span class="toc-number">2.2.</span> <span class="toc-text">2.获取Web后台权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%AD%A3%E5%90%91Shell"><span class="toc-number">2.3.</span> <span class="toc-text">3.正向Shell</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8"><span class="toc-number">3.</span> <span class="toc-text">三、横向移动</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%87%AD%E6%8D%AE%E5%8F%91%E7%8E%B0"><span class="toc-number">3.1.</span> <span class="toc-text">1.数据库凭据发现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BF%A1%E6%81%AF%E6%8C%96%E6%8E%98"><span class="toc-number">3.2.</span> <span class="toc-text">2.数据库信息挖掘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%88%87%E6%8D%A2%E7%94%A8%E6%88%B7"><span class="toc-number">3.3.</span> <span class="toc-text">3.切换用户</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87"><span class="toc-number">4.</span> <span class="toc-text">四、权限提升</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-SUID%E6%8F%90%E6%9D%83%E5%90%91%E9%87%8F%E4%B8%8E%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7"><span class="toc-number">4.1.</span> <span class="toc-text">1.SUID提权向量与文件属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%9B%BF%E6%8D%A2%E6%96%87%E4%BB%B6%E5%B9%B6%E6%8F%90%E6%9D%83"><span class="toc-number">4.2.</span> <span class="toc-text">2.替换文件并提权</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%8E%B7%E5%8F%96Root-Shell"><span class="toc-number">4.3.</span> <span class="toc-text">3.获取Root Shell</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%A4%BA%E5%8F%96%E5%87%AD%E8%AF%81"><span class="toc-number">5.</span> <span class="toc-text">五、夺取凭证</span></a></li></ol>
+                </div>
+            </button>
+            
+
+            
+
+            <a href="#nexmoe-content" class="backtop toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+        </div>
+    </div>
+</div></div><div id="nexmoe-footer"><!--!--></div><div id="nexmoe-search-space"><div class="search-container"><div class="search-header"><div class="search-input-container"><input class="search-input" type="text" placeholder="搜索" onInput="sinput();"></div><a class="search-close" onclick="sclose();">×</a></div><div class="search-body"></div></div></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+</div></body></html>

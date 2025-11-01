@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="zh"><head>
+<title>文件上传 - X8@0E的博客</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="description" content="[SWPUCTF 2021 新生赛]easyupload1.0(文件上传，文件头绕过，MIME绕过) 抓包看到因为要有符合的文件头格式image&#x2F;jpeg，所以一开始上传木马的时候就要把后缀改成符合的格式(.jpg)才能上传显示路径  再把(.jpg改成.php执行木马)，成功显示路径  用蚁剑连接  发现是假的flag  改变思路，把上传的文件内容改成如下： 12&lt;?php ph">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件上传">
+<meta property="og:url" content="http://example.com/2025/07/31/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/index.html">
+<meta property="og:site_name" content="X8@0E的博客">
+<meta property="og:description" content="[SWPUCTF 2021 新生赛]easyupload1.0(文件上传，文件头绕过，MIME绕过) 抓包看到因为要有符合的文件头格式image&#x2F;jpeg，所以一开始上传木马的时候就要把后缀改成符合的格式(.jpg)才能上传显示路径  再把(.jpg改成.php执行木马)，成功显示路径  用蚁剑连接  发现是假的flag  改变思路，把上传的文件内容改成如下： 12&lt;?php ph">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731190233657.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731191137730.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731191221593.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731191311883.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731191424745.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731191936318.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731191614265.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731191801190.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731190118006.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731182652367.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731182844495.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731182238868.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731182346336.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731182412114.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731182422282.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731194607568.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731204257294.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731205537490.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731204943170.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731204635032.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731204730754.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731204807013.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250801192845664.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250801192835478.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250801193250944.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250801193508947.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250801193232088.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250801193213063.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250801193434995.png">
+<meta property="article:published_time" content="2025-07-31T11:34:38.458Z">
+<meta property="article:modified_time" content="2025-08-01T11:41:03.442Z">
+<meta property="article:author" content="X8@0E">
+<meta property="article:tag" content="NSSCTF">
+<meta property="article:tag" content="web文件上传">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250731190233657.png">
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1761989925414">
+
+<link rel="stylesheet" href="/css/style.css?v=1761989925414">
+
+
+
+
+    
+        <link rel="stylesheet" href="/custom.css?v=1761989925414">
+    
+
+
+
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+<script src="/lib/lax.min.js" async></script>
+
+
+<script async src="/js/app.js?v=1761989925414"></script>
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<meta name="generator" content="Hexo 7.3.0"></head><body class="nexmoe mdui-drawer-body-left"><div id="nexmoe-background"><div class="nexmoe-bg" style="background-image: url(https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080)"></div><div class="mdui-appbar mdui-shadow-0"><div class="mdui-toolbar"><a class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: &#039;#drawer&#039;, swipe: true}" title="menu"><i class="mdui-icon nexmoefont icon-menu"></i></a><div class="mdui-toolbar-spacer"></div><a class="mdui-btn mdui-btn-icon" href="/" title="X8@0E"><img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></a></div></div></div><div id="nexmoe-header"><div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="X8@0E">
+            <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E" alt="X8@0E">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>43</div>
+        <div><span>标签</span>77</div>
+        <div><span>分类</span>14</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-douban-fill"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+
+
+	<script async src="/js/search.js?v=1761989925415"></script>
+
+
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://blog.csdn.net/2301_81325456/article/details/147025965"
+			target="_blank"
+			mdui-tooltip="{content: 'CSDN'}"
+			style="
+				color: rgb(247, 132, 34);
+				background-color: rgba(247, 132, 34, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Crypto/">Crypto</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/NSSCTF/">NSSCTF</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnhub/">Vulnhub</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnvm靶机复现/">Vulnvm靶机复现</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-信息收集/">ctfshow-web-信息收集</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-命令执行/">ctfshow-web-命令执行</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件上传/">ctfshow-web-文件上传</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件包含/">ctfshow-web-文件包含</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-爆破/">ctfshow-web-爆破</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/sql注入/">sql注入</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulhub/">vulhub</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulnhub/">vulnhub</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/群友靶机/">群友靶机</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/自制靶机/">自制靶机</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/1Panel/" style="font-size: 10px;">1Panel</a> <a href="/tags/3%E4%B8%AA%E7%82%B9/" style="font-size: 10px;">3个点</a> <a href="/tags/Argon2Cracker/" style="font-size: 10px;">Argon2Cracker</a> <a href="/tags/Cookie-GLOBALS/" style="font-size: 10px;">Cookie--GLOBALS</a> <a href="/tags/Cypher%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">Cypher注入</a> <a href="/tags/DC/" style="font-size: 15px;">DC</a> <a href="/tags/GIF%E7%BB%95%E8%BF%87/" style="font-size: 10px;">GIF绕过</a> <a href="/tags/Jinja2/" style="font-size: 10px;">Jinja2</a> <a href="/tags/JoomScan/" style="font-size: 10px;">JoomScan</a> <a href="/tags/LFI%E5%88%B0RCE-open%E5%87%BD%E6%95%B0/" style="font-size: 10px;">LFI到RCE(open函数)</a> <a href="/tags/NSSCTF/" style="font-size: 15px;">NSSCTF</a> <a href="/tags/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">Nginx解析漏洞</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/RUNPATH/" style="font-size: 10px;">RUNPATH</a> <a href="/tags/Rabbit/" style="font-size: 10px;">Rabbit</a> <a href="/tags/SSRF/" style="font-size: 10px;">SSRF</a> <a href="/tags/Vulnhub/" style="font-size: 15px;">Vulnhub</a> <a href="/tags/Vulnvm/" style="font-size: 10px;">Vulnvm</a> <a href="/tags/WAF/" style="font-size: 10px;">WAF</a> <a href="/tags/WPA-01-cap/" style="font-size: 10px;">WPA-01.cap</a> <a href="/tags/aircrack-ng/" style="font-size: 10px;">aircrack-ng</a> <a href="/tags/basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">basic认证爆破</a> <a href="/tags/cgi%E6%96%87%E4%BB%B6/" style="font-size: 10px;">cgi文件</a> <a href="/tags/ctfshow/" style="font-size: 20px;">ctfshow</a> <a href="/tags/dirtycow/" style="font-size: 10px;">dirtycow</a> <a href="/tags/docker%E4%BA%A4%E4%BA%92%E5%BC%8Fshell/" style="font-size: 10px;">docker交互式shell</a> <a href="/tags/drupal/" style="font-size: 10px;">drupal</a> <a href="/tags/ffuf/" style="font-size: 10px;">ffuf</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E/" style="font-size: 10px;">fork解决断连</a> <a href="/tags/ftp/" style="font-size: 10px;">ftp</a> <a href="/tags/ghfs/" style="font-size: 10px;">ghfs</a> <a href="/tags/ldd/" style="font-size: 10px;">ldd</a> <a href="/tags/les-sh/" style="font-size: 10px;">les.sh</a> <a href="/tags/linpeas-sh/" style="font-size: 10px;">linpeas.sh</a> <a href="/tags/lsattr-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">lsattr--查看文件扩展属性</a> <a href="/tags/motto/" style="font-size: 10px;">motto</a> <a href="/tags/msfvenom/" style="font-size: 15px;">msfvenom</a> <a href="/tags/mysql-old-password/" style="font-size: 10px;">mysql_old_password</a> <a href="/tags/nikto/" style="font-size: 10px;">nikto</a> <a href="/tags/nohup/" style="font-size: 10px;">nohup</a> <a href="/tags/php%E6%8F%90%E6%9D%83root/" style="font-size: 10px;">php提权root</a> <a href="/tags/poc/" style="font-size: 10px;">poc</a> <a href="/tags/put%E6%96%B9%E6%B3%95/" style="font-size: 10px;">put方法</a> <a href="/tags/python3-5/" style="font-size: 10px;">python3.5</a> <a href="/tags/rce/" style="font-size: 10px;">rce</a> <a href="/tags/readelf/" style="font-size: 10px;">readelf</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sqlmap/" style="font-size: 10px;">sqlmap</a> <a href="/tags/sql%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">sql二次注入</a> <a href="/tags/ssh%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4/" style="font-size: 10px;">ssh弱口令爆破</a> <a href="/tags/ssh%E7%A7%98%E9%92%A5%E7%94%9F%E6%88%90%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">ssh秘钥生成连接</a> <a href="/tags/stegseek/" style="font-size: 10px;">stegseek</a> <a href="/tags/suForce/" style="font-size: 10px;">suForce</a> <a href="/tags/url%E6%88%AA%E6%96%AD/" style="font-size: 10px;">url截断</a> <a href="/tags/vite/" style="font-size: 10px;">vite</a> <a href="/tags/web%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="font-size: 10px;">web命令执行</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">web文件上传</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 10px;">web文件包含</a> <a href="/tags/web%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 10px;">web源码泄露</a> <a href="/tags/web%E7%88%86%E7%A0%B4/" style="font-size: 10px;">web爆破</a> <a href="/tags/x-forwarded-for%E7%9A%84ip%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">x-forwarded-for的ip欺骗</a> <a href="/tags/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E-CVE-2025-30208/" style="font-size: 10px;">任意文件读取漏洞(CVE-2025-30208)</a> <a href="/tags/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/" style="font-size: 10px;">凯撒密码</a> <a href="/tags/%E5%90%8E%E9%9D%A2%E5%8A%A0-jpg%E5%90%8E%E7%BC%80/" style="font-size: 10px;">后面加.jpg后缀</a> <a href="/tags/%E5%9F%9F%E6%8E%A7/" style="font-size: 10px;">域控</a> <a href="/tags/%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">密码爆破</a> <a href="/tags/%E6%8F%90%E6%9D%83-env-reset/" style="font-size: 10px;">提权!env_reset</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">插件漏洞</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5-ua%E6%B7%BB%E5%8A%A0%E6%9C%A8%E9%A9%AC/" style="font-size: 10px;">日志注入+ua添加木马</a> <a href="/tags/%E6%AD%A3%E5%90%91shell/" style="font-size: 10px;">正向shell</a> <a href="/tags/%E7%8A%B6%E6%80%81%E7%A0%81/" style="font-size: 10px;">状态码</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 10px;">环境变量</a> <a href="/tags/%E7%A9%BA%E6%A0%BC/" style="font-size: 10px;">空格</a> <a href="/tags/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81/" style="font-size: 10px;">维吉尼亚密码</a> <a href="/tags/%E8%9A%81%E5%89%91/" style="font-size: 10px;">蚁剑</a> <a href="/tags/%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96/" style="font-size: 10px;">越界读取</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(77);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+    
+        
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章归档</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">43</span></li></ul>
+    </div>
+  </div>
+
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">最新文章</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/10/20/Crypto/">Crypto</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/11/%E6%B5%81%E9%87%8F%E6%81%B6%E6%84%8F%E6%94%BB%E5%87%BB/">流量分析恶意攻击</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/10/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/09/hackableII/">hackablell</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/07/Me-and-My-Girlfriend-1/">Me-and-My-Girlfriend-1</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+            <li>
+                <a href="" target="_blank" >
+                    <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></img>
+                    <p>X8@0E</p>
+                </a>
+            </li>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+    
+   
+    <div class="nexmoe-copyright">
+        &copy; 2025 X8@0E
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer --></div><div id="nexmoe-content"><div class="nexmoe-primary"><div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="https://pic4.zhimg.com/v2-b6a769a38503618fb6dae49f0bb43789_r.jpg?source=1940ef5c" alt="文件上传" loading="lazy">
+            <h1>文件上传</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2025年07月31日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/ctfshow-web-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">ctfshow-web-文件上传</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h2 id="SWPUCTF-2021-新生赛-easyupload1-0-文件上传，文件头绕过，MIME绕过"><a href="#SWPUCTF-2021-新生赛-easyupload1-0-文件上传，文件头绕过，MIME绕过" class="headerlink" title="[SWPUCTF 2021 新生赛]easyupload1.0(文件上传，文件头绕过，MIME绕过)"></a>[SWPUCTF 2021 新生赛]easyupload1.0(文件上传，文件头绕过，MIME绕过)</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731190233657.png" alt="image-20250731190233657" data-caption="image-20250731190233657" loading="lazy"></p>
+<p>抓包看到因为要有符合的文件头格式image&#x2F;jpeg，所以一开始上传木马的时候就要把后缀改成符合的格式(.jpg)才能上传显示路径</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731191137730.png" alt="image-20250731191137730" data-caption="image-20250731191137730" loading="lazy"></p>
+<p>再把(.jpg改成.php执行木马)，成功显示路径</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731191221593.png" alt="image-20250731191221593" data-caption="image-20250731191221593" loading="lazy"></p>
+<p>用蚁剑连接</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731191311883.png" alt="image-20250731191311883" data-caption="image-20250731191311883" loading="lazy"></p>
+<p>发现是假的flag</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731191424745.png" alt="image-20250731191424745" data-caption="image-20250731191424745" loading="lazy"></p>
+<p>改变思路，把上传的文件内容改成如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="title function_ invoke__">phpinfo</span>();<span class="meta">?&gt;</span></span><br><span class="line"><span class="meta">&lt;?php</span> @<span class="keyword">eval</span>(<span class="string">&#x27;phpinfo();&#x27;</span>);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731191936318.png" alt="image-20250731191936318" data-caption="image-20250731191936318" loading="lazy"></p>
+<p>再重新抓包，显示路径</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731191614265.png" alt="image-20250731191614265" data-caption="image-20250731191614265" loading="lazy"></p>
+<p>最后去浏览器里面访问，Ctrl+f搜索flag即可</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url?abc=<span class="title function_ invoke__">phpinfo</span>();  <span class="comment">//这里的abc是我设置的木马密码</span></span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731191801190.png" alt="image-20250731191801190" data-caption="image-20250731191801190" loading="lazy"></p>
+<h2 id="拓展知识"><a href="#拓展知识" class="headerlink" title="拓展知识"></a>拓展知识</h2><p>MIME（Multipurpose Internet Mail Extensions）类型用于标识文件的内容类型（如 <code>image/jpeg</code>、<code>text/plain</code>）。在文件上传漏洞中，<strong>MIME 绕过</strong>是指攻击者通过伪造或篡改文件的 MIME 类型，绕过服务器的文件类型检测，从而上传恶意文件（如 PHP 木马）。</p>
+<hr>
+<h2 id="1-为什么需要-MIME-绕过？"><a href="#1-为什么需要-MIME-绕过？" class="headerlink" title="1. 为什么需要 MIME 绕过？"></a><strong>1. 为什么需要 MIME 绕过？</strong></h2><p>许多网站会对上传的文件进行<strong>MIME 类型检查</strong>，例如：</p>
+<ul>
+<li>只允许 <code>image/jpeg</code>、<code>image/png</code> 等图片类型。</li>
+<li>拒绝 <code>application/x-php</code>、<code>text/x-php</code> 等危险类型。</li>
+</ul>
+<p>如果直接上传 <code>.php</code> 文件，服务器可能会检测到其 MIME 类型是 <code>application/x-php</code> 并拒绝上传。此时，攻击者可以<strong>伪造 MIME 类型</strong>，使其看起来像合法的文件（如 <code>image/jpeg</code>），从而绕过检测。</p>
+<hr>
+<h2 id="2-如何伪造-MIME-类型？"><a href="#2-如何伪造-MIME-类型？" class="headerlink" title="2. 如何伪造 MIME 类型？"></a><strong>2. 如何伪造 MIME 类型？</strong></h2><h3 id="（1）直接修改-HTTP-请求的-Content-Type"><a href="#（1）直接修改-HTTP-请求的-Content-Type" class="headerlink" title="（1）直接修改 HTTP 请求的 Content-Type"></a><strong>（1）直接修改 HTTP 请求的 <code>Content-Type</code></strong></h3><p>在 Burp Suite 或浏览器开发者工具中，拦截文件上传请求，修改 <code>Content-Type</code> 为允许的类型（如 <code>image/jpeg</code>）：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/upload.php</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>multipart/form-data; boundary=----WebKitFormBoundaryABC123</span><br><span class="line"></span><br><span class="line"><span class="language-php-template"><span class="language-xml">------WebKitFormBoundaryABC123</span></span></span><br><span class="line"><span class="language-xml"><span class="language-php-template">Content-Disposition: form-data; name=&quot;file&quot;; filename=&quot;shell.php&quot;</span></span></span><br><span class="line"><span class="language-xml"><span class="language-php-template">Content-Type: image/jpeg  <span class="comment">&lt;!-- 伪造 MIME 类型 --&gt;</span></span></span></span><br><span class="line"><span class="language-xml"><span class="language-php-template"></span></span></span><br><span class="line"><span class="language-xml"><span class="language-php-template"></span><span class="language-php"><span class="meta">&lt;?php</span> <span class="title function_ invoke__">system</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>]); <span class="meta">?&gt;</span></span></span></span><br></pre></td></tr></table></figure>
+
+<p>这样，服务器可能误认为这是一个 JPEG 文件，但实际上它是 PHP 代码。</p>
+<hr>
+<h3 id="（2）修改文件内容-伪造-MIME"><a href="#（2）修改文件内容-伪造-MIME" class="headerlink" title="（2）修改文件内容 + 伪造 MIME"></a><strong>（2）修改文件内容 + 伪造 MIME</strong></h3><p>有些服务器不仅检查 <code>Content-Type</code>，还会检查<strong>文件头（Magic Bytes）</strong>。此时可以：</p>
+<ol>
+<li><p><strong>在 PHP 文件开头添加图片头</strong>（如 <code>GIF89a</code>）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GIF89a</span><br><span class="line"><span class="meta">&lt;?php</span> <span class="title function_ invoke__">system</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>]); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这样文件既是合法的 GIF，又能被 PHP 解析。</p>
+</li>
+<li><p><strong>上传时设置 <code>Content-Type: image/gif</code></strong>：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Disposition</span><span class="punctuation">: </span>form-data; name=&quot;file&quot;; filename=&quot;shell.php&quot;</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>image/gif</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="SWPUCTF-2021-新生赛-easyupload2-0-文件上传，文件头绕过，双写后缀"><a href="#SWPUCTF-2021-新生赛-easyupload2-0-文件上传，文件头绕过，双写后缀" class="headerlink" title="[SWPUCTF 2021 新生赛]easyupload2.0(文件上传，文件头绕过，双写后缀)"></a>[SWPUCTF 2021 新生赛]easyupload2.0(文件上传，文件头绕过，双写后缀)</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731190118006.png" alt="image-20250731190118006" data-caption="image-20250731190118006" loading="lazy"></p>
+<p>1.要传马</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731182652367.png" alt="image-20250731182652367" data-caption="image-20250731182652367" loading="lazy"></p>
+<p>2.传马之后发现php后缀不行</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731182844495.png" alt="image-20250731182844495" data-caption="image-20250731182844495" loading="lazy"></p>
+<p>3.改一个后缀phtml</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731182238868.png" alt="image-20250731182238868" data-caption="image-20250731182238868" loading="lazy"></p>
+<p>4.上传成功，然后用蚁剑连接即可，注意一定勾选base64，不然的话就会报错连接不上</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731182346336.png" alt="image-20250731182346336" data-caption="image-20250731182346336" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731182412114.png" alt="image-20250731182412114" data-caption="image-20250731182412114" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731182422282.png" alt="image-20250731182422282" data-caption="image-20250731182422282" loading="lazy"></p>
+<h2 id="拓展知识-1"><a href="#拓展知识-1" class="headerlink" title="拓展知识"></a>拓展知识</h2><h3 id="1-服务器过滤机制"><a href="#1-服务器过滤机制" class="headerlink" title="1. 服务器过滤机制"></a>1. <strong>服务器过滤机制</strong></h3><ul>
+<li><strong>黑名单过滤</strong>：题目可能使用了黑名单策略拦截常见危险后缀（如 <code>.php</code>、<code>.php5</code>），但未全面覆盖其他可执行后缀（如 <code>.phtml</code>、<code>.phar</code>）。</li>
+<li><strong>MIME类型&#x2F;内容检测</strong>：虽然文件内容被检查，但若题目仅简单验证文件头或后缀，修改后缀可能绕过检测。</li>
+</ul>
+<hr>
+<h3 id="2-phtml-的特殊性"><a href="#2-phtml-的特殊性" class="headerlink" title="2. .phtml 的特殊性"></a>2. <strong><code>.phtml</code> 的特殊性</strong></h3><ul>
+<li><p><strong>历史背景</strong>：<code>.phtml</code> 是早期用于混合HTML和PHP代码的后缀（如 <code>index.phtml</code>），现代PHP环境中仍默认支持解析。</p>
+</li>
+<li><p><strong>绕过效果</strong>：将木马后缀改为 <code>.phtml</code> 可能直接绕过黑名单，同时仍被当作PHP执行。</p>
+</li>
+</ul>
+<h3 id="3-题目设计意图"><a href="#3-题目设计意图" class="headerlink" title="3. 题目设计意图"></a>3. <strong>题目设计意图</strong></h3><ul>
+<li>考察选手对<strong>多种可执行后缀</strong>的了解，而不仅限于 <code>.php</code>。</li>
+<li>提示选手尝试<strong>冷门后缀</strong>（如 <code>.phtml</code>、<code>.php3</code>、<code>.htaccess</code>）或利用<strong>大小写变异</strong>（如 <code>.PhP</code>）。</li>
+</ul>
+<h2 id="SWPUCTF-2021-新生赛-easyupload3-0-文件上传，-htaccess，MIME绕过"><a href="#SWPUCTF-2021-新生赛-easyupload3-0-文件上传，-htaccess，MIME绕过" class="headerlink" title="[SWPUCTF 2021 新生赛]easyupload3.0(文件上传，.htaccess，MIME绕过))"></a>[SWPUCTF 2021 新生赛]easyupload3.0(文件上传，.htaccess，MIME绕过))</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731194607568.png" alt="image-20250731194607568" data-caption="image-20250731194607568" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731204257294.png" alt="image-20250731204257294" data-caption="image-20250731204257294" loading="lazy"></p>
+<p>访问路径后发现文件地址，并且为Apache。<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=Apache&spm=1001.2101.3001.7020">Apache</a>&#x2F;2.4.7 (Ubuntu) ，既然是 Apache，于是就利用.htaccess来getshell。</p>
+<p>先直接上传一个.htaccess文件记住不能.前面不能加任何字符</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731205537490.png" alt="image-20250731205537490" data-caption="image-20250731205537490" loading="lazy"></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FilesMatch <span class="string">&quot;2.jpg&quot;</span>&gt;</span><br><span class="line"></span><br><span class="line">  SetHandler application/x-httpd-php</span><br><span class="line"></span><br><span class="line">&lt;/FilesMatch&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731204943170.png" alt="image-20250731204943170" data-caption="image-20250731204943170" loading="lazy"></p>
+<p>然后send to repeater,send发现文件上传成功，记住FIlewatch后面跟的是文件名，如果你要上传的filename包含这个文件名，则会以PHP的形式上传。</p>
+<p>然后进行上传2.jpg文件，里面是一句话木马,上蚁剑便可以获取，重点是一句话代码与上一行应有一行的空格。不然就不对了</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731204635032.png" alt="image-20250731204635032" data-caption="image-20250731204635032" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731204730754.png" alt="image-20250731204730754" data-caption="image-20250731204730754" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250731204807013.png" alt="image-20250731204807013" data-caption="image-20250731204807013" loading="lazy"></p>
+<h2 id="拓展知识-2"><a href="#拓展知识-2" class="headerlink" title="拓展知识"></a>拓展知识</h2><p>htaccess文件是一个用于Apache Web服务器的配置文件。它允许您在不修改主服务器配置文件的情况下，对单个目录（及其子目录）进行配置。这种方式使得网站管理员可以对特定目录应用特定的设置，例如URL重写、访问控制、MIME类型等。</p>
+<p>主要功能包括：</p>
+<ol>
+<li>重定向和URL重写：可以将旧的URL重定向到新的URL，或者实现更友好的URL结构。</li>
+<li>访问控制：可以限制特定IP地址或用户代理访问网站，或者要求用户提供用户名和密码才能访问某些目录。</li>
+<li>自定义错误页面：可以为特定的HTTP错误代码（如404页面未找到）设置自定义错误页面。</li>
+<li>MIME类型：可以为特定文件扩展名定义MIME类型，以便正确地传输文件内容。</li>
+</ol>
+<h2 id="LitCTF-2023-作业管理系统-文件上传，弱口令"><a href="#LitCTF-2023-作业管理系统-文件上传，弱口令" class="headerlink" title="[LitCTF 2023]作业管理系统(文件上传，弱口令)"></a>[LitCTF 2023]作业管理系统(文件上传，弱口令)</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250801192845664.png" alt="image-20250801192845664" data-caption="image-20250801192845664" loading="lazy"></p>
+<p>Ctrl+u查看源代码，发现用户名和密码</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250801192835478.png" alt="image-20250801192835478" data-caption="image-20250801192835478" loading="lazy"></p>
+<p>上传一句话木马文件</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250801193250944.png" alt="image-20250801193250944" data-caption="image-20250801193250944" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250801193508947.png" alt="image-20250801193508947" data-caption="image-20250801193508947" loading="lazy"></p>
+<p>上传成功，显示木马文件路径</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250801193232088.png" alt="image-20250801193232088" data-caption="image-20250801193232088" loading="lazy"></p>
+<p>用蚁剑连接</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250801193213063.png" alt="image-20250801193213063" data-caption="image-20250801193213063" loading="lazy"></p>
+<p>查找flag</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20250801193434995.png" alt="image-20250801193434995" data-caption="image-20250801193434995" loading="lazy"></p>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/NSSCTF/" rel="tag">NSSCTF</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/web%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" rel="tag">web文件上传</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1761989925210"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div></div><div class="nexmoe-post-right">    <div class="nexmoe-fixed">
+        <div class="nexmoe-tool">
+
+            
+
+            
+            
+            <button class="mdui-fab catalog" style="overflow:unset;">
+                <i class="nexmoefont icon-i-catalog"></i>
+                <div class="nexmoe-toc">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#SWPUCTF-2021-%E6%96%B0%E7%94%9F%E8%B5%9B-easyupload1-0-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%EF%BC%8C%E6%96%87%E4%BB%B6%E5%A4%B4%E7%BB%95%E8%BF%87%EF%BC%8CMIME%E7%BB%95%E8%BF%87"><span class="toc-number">1.</span> <span class="toc-text">[SWPUCTF 2021 新生赛]easyupload1.0(文件上传，文件头绕过，MIME绕过)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%93%E5%B1%95%E7%9F%A5%E8%AF%86"><span class="toc-number">2.</span> <span class="toc-text">拓展知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-MIME-%E7%BB%95%E8%BF%87%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">1. 为什么需要 MIME 绕过？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%A6%82%E4%BD%95%E4%BC%AA%E9%80%A0-MIME-%E7%B1%BB%E5%9E%8B%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">2. 如何伪造 MIME 类型？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E7%9B%B4%E6%8E%A5%E4%BF%AE%E6%94%B9-HTTP-%E8%AF%B7%E6%B1%82%E7%9A%84-Content-Type"><span class="toc-number">4.1.</span> <span class="toc-text">（1）直接修改 HTTP 请求的 Content-Type</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9-%E4%BC%AA%E9%80%A0-MIME"><span class="toc-number">4.2.</span> <span class="toc-text">（2）修改文件内容 + 伪造 MIME</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SWPUCTF-2021-%E6%96%B0%E7%94%9F%E8%B5%9B-easyupload2-0-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%EF%BC%8C%E6%96%87%E4%BB%B6%E5%A4%B4%E7%BB%95%E8%BF%87%EF%BC%8C%E5%8F%8C%E5%86%99%E5%90%8E%E7%BC%80"><span class="toc-number">5.</span> <span class="toc-text">[SWPUCTF 2021 新生赛]easyupload2.0(文件上传，文件头绕过，双写后缀)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%93%E5%B1%95%E7%9F%A5%E8%AF%86-1"><span class="toc-number">6.</span> <span class="toc-text">拓展知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E6%BB%A4%E6%9C%BA%E5%88%B6"><span class="toc-number">6.1.</span> <span class="toc-text">1. 服务器过滤机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-phtml-%E7%9A%84%E7%89%B9%E6%AE%8A%E6%80%A7"><span class="toc-number">6.2.</span> <span class="toc-text">2. .phtml 的特殊性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%A2%98%E7%9B%AE%E8%AE%BE%E8%AE%A1%E6%84%8F%E5%9B%BE"><span class="toc-number">6.3.</span> <span class="toc-text">3. 题目设计意图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SWPUCTF-2021-%E6%96%B0%E7%94%9F%E8%B5%9B-easyupload3-0-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%EF%BC%8C-htaccess%EF%BC%8CMIME%E7%BB%95%E8%BF%87"><span class="toc-number">7.</span> <span class="toc-text">[SWPUCTF 2021 新生赛]easyupload3.0(文件上传，.htaccess，MIME绕过))</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%93%E5%B1%95%E7%9F%A5%E8%AF%86-2"><span class="toc-number">8.</span> <span class="toc-text">拓展知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LitCTF-2023-%E4%BD%9C%E4%B8%9A%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%EF%BC%8C%E5%BC%B1%E5%8F%A3%E4%BB%A4"><span class="toc-number">9.</span> <span class="toc-text">[LitCTF 2023]作业管理系统(文件上传，弱口令)</span></a></li></ol>
+                </div>
+            </button>
+            
+
+            
+
+            <a href="#nexmoe-content" class="backtop toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+        </div>
+    </div>
+</div></div><div id="nexmoe-footer"><!--!--></div><div id="nexmoe-search-space"><div class="search-container"><div class="search-header"><div class="search-input-container"><input class="search-input" type="text" placeholder="搜索" onInput="sinput();"></div><a class="search-close" onclick="sclose();">×</a></div><div class="search-body"></div></div></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+</div></body></html>

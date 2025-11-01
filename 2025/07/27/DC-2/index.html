@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="zh"><head>
+<title>DC-2 - X8@0E的博客</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="description" content="总结出一个点：靶机给出的所有信息都是有用的信息，当没有思路的时候就去看前面得到的信息哪些还没有用，说不定这些信息就是另外的解题思路了nmap -p IP -A 是加-A直接查询更加详细的IP端口的作用 22端口原本是ssh的，但是这里是7744端口说明对方更改了端口映射关系  本地域名解析文件&#x2F;etc&#x2F;hosts主机名到IP地址的映射，优先级高于DNS 访问靶机IP，发现网址跳">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DC-2">
+<meta property="og:url" content="http://example.com/2025/07/27/DC-2/index.html">
+<meta property="og:site_name" content="X8@0E的博客">
+<meta property="og:description" content="总结出一个点：靶机给出的所有信息都是有用的信息，当没有思路的时候就去看前面得到的信息哪些还没有用，说不定这些信息就是另外的解题思路了nmap -p IP -A 是加-A直接查询更加详细的IP端口的作用 22端口原本是ssh的，但是这里是7744端口说明对方更改了端口映射关系  本地域名解析文件&#x2F;etc&#x2F;hosts主机名到IP地址的映射，优先级高于DNS 访问靶机IP，发现网址跳">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725152728688.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725153121395.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725154837623.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725153543575.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725155157012.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725155217038.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725160029312.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725161529622.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725161428102.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725170711368.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725161919353.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725164116180.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725164512091.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725164758335.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725165737547.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725165812206.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725174944093.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725174809118.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725175038171.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725180343753.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725180407852.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725180728883.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725180755379.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725191135041.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725191244389.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725192337626.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725193143872.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725193941402.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725195012533.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725194149236.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725194303696.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725200208099.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725200318872.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725200753008.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725200941650.png">
+<meta property="article:published_time" content="2025-07-27T07:50:18.000Z">
+<meta property="article:modified_time" content="2025-11-01T07:45:09.365Z">
+<meta property="article:author" content="X8@0E">
+<meta property="article:tag" content="Vulnhub">
+<meta property="article:tag" content="DC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20250725152728688.png">
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1761989925433">
+
+<link rel="stylesheet" href="/css/style.css?v=1761989925433">
+
+
+
+
+    
+        <link rel="stylesheet" href="/custom.css?v=1761989925433">
+    
+
+
+
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+<script src="/lib/lax.min.js" async></script>
+
+
+<script async src="/js/app.js?v=1761989925433"></script>
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<meta name="generator" content="Hexo 7.3.0"></head><body class="nexmoe mdui-drawer-body-left"><div id="nexmoe-background"><div class="nexmoe-bg" style="background-image: url(https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080)"></div><div class="mdui-appbar mdui-shadow-0"><div class="mdui-toolbar"><a class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: &#039;#drawer&#039;, swipe: true}" title="menu"><i class="mdui-icon nexmoefont icon-menu"></i></a><div class="mdui-toolbar-spacer"></div><a class="mdui-btn mdui-btn-icon" href="/" title="X8@0E"><img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></a></div></div></div><div id="nexmoe-header"><div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="X8@0E">
+            <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E" alt="X8@0E">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>43</div>
+        <div><span>标签</span>77</div>
+        <div><span>分类</span>14</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-douban-fill"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+
+
+	<script async src="/js/search.js?v=1761989925434"></script>
+
+
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://blog.csdn.net/2301_81325456/article/details/147025965"
+			target="_blank"
+			mdui-tooltip="{content: 'CSDN'}"
+			style="
+				color: rgb(247, 132, 34);
+				background-color: rgba(247, 132, 34, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Crypto/">Crypto</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/NSSCTF/">NSSCTF</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnhub/">Vulnhub</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnvm靶机复现/">Vulnvm靶机复现</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-信息收集/">ctfshow-web-信息收集</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-命令执行/">ctfshow-web-命令执行</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件上传/">ctfshow-web-文件上传</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件包含/">ctfshow-web-文件包含</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-爆破/">ctfshow-web-爆破</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/sql注入/">sql注入</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulhub/">vulhub</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulnhub/">vulnhub</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/群友靶机/">群友靶机</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/自制靶机/">自制靶机</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/1Panel/" style="font-size: 10px;">1Panel</a> <a href="/tags/3%E4%B8%AA%E7%82%B9/" style="font-size: 10px;">3个点</a> <a href="/tags/Argon2Cracker/" style="font-size: 10px;">Argon2Cracker</a> <a href="/tags/Cookie-GLOBALS/" style="font-size: 10px;">Cookie--GLOBALS</a> <a href="/tags/Cypher%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">Cypher注入</a> <a href="/tags/DC/" style="font-size: 15px;">DC</a> <a href="/tags/GIF%E7%BB%95%E8%BF%87/" style="font-size: 10px;">GIF绕过</a> <a href="/tags/Jinja2/" style="font-size: 10px;">Jinja2</a> <a href="/tags/JoomScan/" style="font-size: 10px;">JoomScan</a> <a href="/tags/LFI%E5%88%B0RCE-open%E5%87%BD%E6%95%B0/" style="font-size: 10px;">LFI到RCE(open函数)</a> <a href="/tags/NSSCTF/" style="font-size: 15px;">NSSCTF</a> <a href="/tags/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">Nginx解析漏洞</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/RUNPATH/" style="font-size: 10px;">RUNPATH</a> <a href="/tags/Rabbit/" style="font-size: 10px;">Rabbit</a> <a href="/tags/SSRF/" style="font-size: 10px;">SSRF</a> <a href="/tags/Vulnhub/" style="font-size: 15px;">Vulnhub</a> <a href="/tags/Vulnvm/" style="font-size: 10px;">Vulnvm</a> <a href="/tags/WAF/" style="font-size: 10px;">WAF</a> <a href="/tags/WPA-01-cap/" style="font-size: 10px;">WPA-01.cap</a> <a href="/tags/aircrack-ng/" style="font-size: 10px;">aircrack-ng</a> <a href="/tags/basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">basic认证爆破</a> <a href="/tags/cgi%E6%96%87%E4%BB%B6/" style="font-size: 10px;">cgi文件</a> <a href="/tags/ctfshow/" style="font-size: 20px;">ctfshow</a> <a href="/tags/dirtycow/" style="font-size: 10px;">dirtycow</a> <a href="/tags/docker%E4%BA%A4%E4%BA%92%E5%BC%8Fshell/" style="font-size: 10px;">docker交互式shell</a> <a href="/tags/drupal/" style="font-size: 10px;">drupal</a> <a href="/tags/ffuf/" style="font-size: 10px;">ffuf</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E/" style="font-size: 10px;">fork解决断连</a> <a href="/tags/ftp/" style="font-size: 10px;">ftp</a> <a href="/tags/ghfs/" style="font-size: 10px;">ghfs</a> <a href="/tags/ldd/" style="font-size: 10px;">ldd</a> <a href="/tags/les-sh/" style="font-size: 10px;">les.sh</a> <a href="/tags/linpeas-sh/" style="font-size: 10px;">linpeas.sh</a> <a href="/tags/lsattr-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">lsattr--查看文件扩展属性</a> <a href="/tags/motto/" style="font-size: 10px;">motto</a> <a href="/tags/msfvenom/" style="font-size: 15px;">msfvenom</a> <a href="/tags/mysql-old-password/" style="font-size: 10px;">mysql_old_password</a> <a href="/tags/nikto/" style="font-size: 10px;">nikto</a> <a href="/tags/nohup/" style="font-size: 10px;">nohup</a> <a href="/tags/php%E6%8F%90%E6%9D%83root/" style="font-size: 10px;">php提权root</a> <a href="/tags/poc/" style="font-size: 10px;">poc</a> <a href="/tags/put%E6%96%B9%E6%B3%95/" style="font-size: 10px;">put方法</a> <a href="/tags/python3-5/" style="font-size: 10px;">python3.5</a> <a href="/tags/rce/" style="font-size: 10px;">rce</a> <a href="/tags/readelf/" style="font-size: 10px;">readelf</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sqlmap/" style="font-size: 10px;">sqlmap</a> <a href="/tags/sql%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">sql二次注入</a> <a href="/tags/ssh%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4/" style="font-size: 10px;">ssh弱口令爆破</a> <a href="/tags/ssh%E7%A7%98%E9%92%A5%E7%94%9F%E6%88%90%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">ssh秘钥生成连接</a> <a href="/tags/stegseek/" style="font-size: 10px;">stegseek</a> <a href="/tags/suForce/" style="font-size: 10px;">suForce</a> <a href="/tags/url%E6%88%AA%E6%96%AD/" style="font-size: 10px;">url截断</a> <a href="/tags/vite/" style="font-size: 10px;">vite</a> <a href="/tags/web%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="font-size: 10px;">web命令执行</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">web文件上传</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 10px;">web文件包含</a> <a href="/tags/web%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 10px;">web源码泄露</a> <a href="/tags/web%E7%88%86%E7%A0%B4/" style="font-size: 10px;">web爆破</a> <a href="/tags/x-forwarded-for%E7%9A%84ip%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">x-forwarded-for的ip欺骗</a> <a href="/tags/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E-CVE-2025-30208/" style="font-size: 10px;">任意文件读取漏洞(CVE-2025-30208)</a> <a href="/tags/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/" style="font-size: 10px;">凯撒密码</a> <a href="/tags/%E5%90%8E%E9%9D%A2%E5%8A%A0-jpg%E5%90%8E%E7%BC%80/" style="font-size: 10px;">后面加.jpg后缀</a> <a href="/tags/%E5%9F%9F%E6%8E%A7/" style="font-size: 10px;">域控</a> <a href="/tags/%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">密码爆破</a> <a href="/tags/%E6%8F%90%E6%9D%83-env-reset/" style="font-size: 10px;">提权!env_reset</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">插件漏洞</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5-ua%E6%B7%BB%E5%8A%A0%E6%9C%A8%E9%A9%AC/" style="font-size: 10px;">日志注入+ua添加木马</a> <a href="/tags/%E6%AD%A3%E5%90%91shell/" style="font-size: 10px;">正向shell</a> <a href="/tags/%E7%8A%B6%E6%80%81%E7%A0%81/" style="font-size: 10px;">状态码</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 10px;">环境变量</a> <a href="/tags/%E7%A9%BA%E6%A0%BC/" style="font-size: 10px;">空格</a> <a href="/tags/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81/" style="font-size: 10px;">维吉尼亚密码</a> <a href="/tags/%E8%9A%81%E5%89%91/" style="font-size: 10px;">蚁剑</a> <a href="/tags/%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96/" style="font-size: 10px;">越界读取</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(77);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+    
+        
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章归档</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">43</span></li></ul>
+    </div>
+  </div>
+
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">最新文章</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/10/20/Crypto/">Crypto</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/11/%E6%B5%81%E9%87%8F%E6%81%B6%E6%84%8F%E6%94%BB%E5%87%BB/">流量分析恶意攻击</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/10/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/09/hackableII/">hackablell</a>
+          </li>
+        
+          <li>
+            <a href="/2025/10/07/Me-and-My-Girlfriend-1/">Me-and-My-Girlfriend-1</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+            <li>
+                <a href="" target="_blank" >
+                    <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></img>
+                    <p>X8@0E</p>
+                </a>
+            </li>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+    
+   
+    <div class="nexmoe-copyright">
+        &copy; 2025 X8@0E
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer --></div><div id="nexmoe-content"><div class="nexmoe-primary"><div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="https://ss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b58f8c5494eef01f2d5d569ee3fe9925bc317d1b.jpg" alt="DC-2" loading="lazy">
+            <h1>DC-2</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2025年07月27日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/Vulnhub/">Vulnhub</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h2 id="总结出一个点：靶机给出的所有信息都是有用的信息，当没有思路的时候就去看前面得到的信息哪些还没有用，说不定这些信息就是另外的解题思路了"><a href="#总结出一个点：靶机给出的所有信息都是有用的信息，当没有思路的时候就去看前面得到的信息哪些还没有用，说不定这些信息就是另外的解题思路了" class="headerlink" title="总结出一个点：靶机给出的所有信息都是有用的信息，当没有思路的时候就去看前面得到的信息哪些还没有用，说不定这些信息就是另外的解题思路了"></a>总结出一个点：靶机给出的所有信息都是有用的信息，当没有思路的时候就去看前面得到的信息哪些还没有用，说不定这些信息就是另外的解题思路了</h2><p>nmap -p IP -A 是加-A直接查询更加详细的IP端口的作用</p>
+<p>22端口原本是ssh的，但是这里是7744端口说明对方更改了端口映射关系</p>
+<p><img src="/imgs/$%7Bfiilename%7D/image-20250725152728688.png"></p>
+<h2 id="本地域名解析文件-etc-hosts"><a href="#本地域名解析文件-etc-hosts" class="headerlink" title="本地域名解析文件&#x2F;etc&#x2F;hosts"></a>本地域名解析文件&#x2F;etc&#x2F;hosts</h2><p>主机名到IP地址的映射，优先级高于DNS</p>
+<p>访问靶机IP，发现网址跳转，网址为dc-2，显然，计算机无法进行解析，所以我们要在攻击机上面修改本地域名解析文件&#x2F;etc&#x2F;hosts，添加:靶机IP dc-2</p>
+<p><img src="/imgs/$%7Bfiilename%7D/image-20250725153121395.png"></p>
+<p><strong>&#x2F;etc&#x2F;hosts 文件</strong>是一个操作系统中用于<strong>本地域名解析</strong>的静态配置文件，它的主要作用是将主机名（或域名）映射到对应的 IP 地址。</p>
+<p><strong>解析关系说明：</strong></p>
+<ul>
+<li><strong><code>192.168.196.144</code></strong> → 这是一个 <strong>IP 地址</strong>（通常是局域网内的某台服务器或设备）。</li>
+<li><strong><code>dc-2</code></strong> → 这是你给该 IP 分配的 <strong>主机名（Hostname）</strong>，相当于一个易记的别名。</li>
+</ul>
+<h3 id="域名解析作用："><a href="#域名解析作用：" class="headerlink" title="域名解析作用："></a><strong>域名解析作用：</strong></h3><ul>
+<li><p>当你在终端或浏览器访问 <code>dc-2</code> 时，系统会直接解析到 <code>192.168.196.144</code>，而无需通过 DNS 查询。</p>
+</li>
+<li><p>例如：测试生效方法如下一样</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping dc-2  # 实际访问 192.168.196.144</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725154837623.png" alt="image-20250725154837623" data-caption="image-20250725154837623" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725153543575.png" alt="image-20250725153543575" data-caption="image-20250725153543575" loading="lazy"></p>
+<h2 id="dirsearch扫描并访问"><a href="#dirsearch扫描并访问" class="headerlink" title="dirsearch扫描并访问"></a>dirsearch扫描并访问</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725155157012.png" alt="image-20250725155157012" data-caption="image-20250725155157012" loading="lazy"><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725155217038.png" alt="image-20250725155217038" data-caption="image-20250725155217038" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725160029312.png" alt="image-20250725160029312" data-caption="image-20250725160029312" loading="lazy"></p>
+<h2 id="cewl-生成密码-wpscan-枚举用户名-wpscan-暴力破解"><a href="#cewl-生成密码-wpscan-枚举用户名-wpscan-暴力破解" class="headerlink" title="cewl(生成密码)+wpscan(枚举用户名)&#x3D;wpscan(暴力破解)"></a>cewl(生成密码)+wpscan(枚举用户名)&#x3D;wpscan(暴力破解)</h2><h2 id="cewl—口令字典制作"><a href="#cewl—口令字典制作" class="headerlink" title="cewl—口令字典制作"></a>cewl—口令字典制作</h2><p><strong>Cewl</strong>（Custom Word List generator）是一款用于<strong>爬取目标网站并生成自定义字典</strong>的工具，常用于密码破解（如暴力破解、字典攻击）。它通过分析网页内容提取关键词，生成适合目标特征的字典文件，提高破解效率。</p>
+<hr>
+<h3 id="主要功能"><a href="#主要功能" class="headerlink" title="主要功能"></a><strong>主要功能</strong></h3><ol>
+<li><strong>爬取网站内容</strong>：解析网页文本、链接、表单等。</li>
+<li><strong>生成字典文件</strong>：提取单词、数字、短语等，按频率或规则排序。</li>
+<li><strong>支持深度爬取</strong>：可递归扫描多级页面。</li>
+<li><strong>过滤优化</strong>：排除常见词、设置最小词长度、保留大小写等。</li>
+</ol>
+<hr>
+<h3 id="基本用法-kali自带"><a href="#基本用法-kali自带" class="headerlink" title="基本用法(kali自带)"></a><strong>基本用法</strong>(kali自带)</h3><h4 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a><strong>基础命令</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cewl &lt;目标URL&gt; -w &lt;输出字典文件名&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725161529622.png" alt="image-20250725161529622" data-caption="image-20250725161529622" loading="lazy"><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725161428102.png" alt="image-20250725161428102" data-caption="image-20250725161428102" loading="lazy"></p>
+<h3 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a><strong>常用参数</strong></h3><table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>-d &lt;深度&gt;</code></td>
+<td align="left">爬取深度（默认2）</td>
+</tr>
+<tr>
+<td align="left"><code>-m &lt;最小长度&gt;</code></td>
+<td align="left">单词最小长度（默认3）</td>
+</tr>
+<tr>
+<td align="left"><code>-o</code></td>
+<td align="left">包含文件名&#x2F;路径中的单词</td>
+</tr>
+<tr>
+<td align="left"><code>--with-numbers</code></td>
+<td align="left">保留带数字的单词（如<code>admin123</code>）</td>
+</tr>
+<tr>
+<td align="left"><code>-a</code></td>
+<td align="left">提取元数据（如PDF、Word文档）</td>
+</tr>
+<tr>
+<td align="left"><code>-v</code></td>
+<td align="left">显示详细过程</td>
+</tr>
+</tbody></table>
+<p><strong>示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cewl http://example.com -d 3 -m 5 -w wordlist.txt --with-numbers</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725170711368.png" alt="image-20250725170711368" data-caption="image-20250725170711368" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725161919353.png" alt="image-20250725161919353" data-caption="image-20250725161919353" loading="lazy"></p>
+<h2 id="WPScan-WordPress–CMS专用工具"><a href="#WPScan-WordPress–CMS专用工具" class="headerlink" title="WPScan (WordPress–CMS专用工具)"></a><strong>WPScan</strong> (WordPress–CMS专用工具)</h2><p><strong>WPScan</strong> 是一款专门针对 <strong>WordPress</strong> 网站的安全扫描工具，用于检测漏洞、枚举用户、插件&#x2F;主题信息，以及进行暴力破解等。它是基于 Ruby 开发的命令行工具，被广泛用于渗透测试和 WordPress 安全评估。</p>
+<h2 id="基本使用方法"><a href="#基本使用方法" class="headerlink" title="基本使用方法"></a><strong>基本使用方法</strong></h2><h3 id="1-扫描-WordPress-基本信息"><a href="#1-扫描-WordPress-基本信息" class="headerlink" title="1. 扫描 WordPress 基本信息"></a><strong>1. 扫描 WordPress 基本信息</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url &lt;目标网站&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://example.com</span><br></pre></td></tr></table></figure>
+
+<p>这会检测 WordPress 版本、插件、主题等基本信息。</p>
+<hr>
+<h3 id="2-枚举-WordPress-用户-此次测试用到"><a href="#2-枚举-WordPress-用户-此次测试用到" class="headerlink" title="2. 枚举 WordPress 用户(此次测试用到)"></a><strong>2. 枚举 WordPress 用户</strong>(此次测试用到)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url &lt;目标网站&gt; -e(enumerate) u</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725164116180.png" alt="image-20250725164116180" data-caption="image-20250725164116180" loading="lazy"><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725164512091.png" alt="image-20250725164512091" data-caption="image-20250725164512091" loading="lazy"><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725164758335.png" alt="image-20250725164758335" data-caption="image-20250725164758335" loading="lazy"></p>
+<hr>
+<h3 id="3-扫描插件漏洞"><a href="#3-扫描插件漏洞" class="headerlink" title="3. 扫描插件漏洞"></a><strong>3. 扫描插件漏洞</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url &lt;目标网站&gt; -e p</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://example.com -e p</span><br></pre></td></tr></table></figure>
+
+<p>输出可能显示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[+] Enumerating Plugins (via Passive Methods)</span><br><span class="line"> | plugin-name (v1.0) - Known Vulnerabilities: CVE-2023-XXXX</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="4-扫描主题漏洞"><a href="#4-扫描主题漏洞" class="headerlink" title="4. 扫描主题漏洞"></a><strong>4. 扫描主题漏洞</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url &lt;目标网站&gt; -e t</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://example.com -e t</span><br></pre></td></tr></table></figure>
+
+<p>输出可能显示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[+] Enumerating Themes (via Passive Methods)</span><br><span class="line"> | theme-name (v2.0) - Known Vulnerabilities: CVE-2022-XXXX</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="5-暴力破解-WordPress-登录-此次测试用到"><a href="#5-暴力破解-WordPress-登录-此次测试用到" class="headerlink" title="5. 暴力破解 WordPress 登录(此次测试用到)"></a><strong>5. 暴力破解 WordPress 登录</strong>(此次测试用到)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url &lt;目标网站&gt; -P &lt;字典文件名&gt; -U &lt;用户名文件名&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725165737547.png" alt="image-20250725165737547" data-caption="image-20250725165737547" loading="lazy"><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725165812206.png" alt="image-20250725165812206" data-caption="image-20250725165812206" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725174944093.png" alt="image-20250725174944093" data-caption="image-20250725174944093" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725174809118.png" alt="image-20250725174809118" data-caption="image-20250725174809118" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725175038171.png" alt="image-20250725175038171" data-caption="image-20250725175038171" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725180343753.png" alt="image-20250725180343753" data-caption="image-20250725180343753" loading="lazy"></p>
+<h2 id="ssh"><a href="#ssh" class="headerlink" title="ssh"></a>ssh</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725180407852.png" alt="image-20250725180407852" data-caption="image-20250725180407852" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725180728883.png" alt="image-20250725180728883" data-caption="image-20250725180728883" loading="lazy"></p>
+<h2 id="rbash-逃逸"><a href="#rbash-逃逸" class="headerlink" title="rbash(逃逸)"></a>rbash(逃逸)</h2><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725180755379.png" alt="image-20250725180755379" data-caption="image-20250725180755379" loading="lazy"></p>
+<p><strong>rbash</strong>（Restricted Bash，受限 Bash）是 Bash Shell 的一种受限模式，旨在限制用户的操作权限，防止其执行某些可能影响系统安全的命令（如切换目录、设置环境变量、执行外部脚本等）。它通常用于：</p>
+<ul>
+<li><strong>增强安全性</strong>：限制普通用户或访客的 Shell 权限。</li>
+<li><strong>防止误操作</strong>：避免用户意外执行危险命令。</li>
+<li><strong>创建受控环境</strong>：例如在 FTP 账户、Git 账户或某些服务账户中使用。</li>
+</ul>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725191135041.png" alt="image-20250725191135041" data-caption="image-20250725191135041" loading="lazy"></p>
+<h2 id="ls-home-tom-usr-bin-查看可用的命令"><a href="#ls-home-tom-usr-bin-查看可用的命令" class="headerlink" title="ls &#x2F;home&#x2F;tom&#x2F;usr&#x2F;bin  &#x2F;&#x2F;查看可用的命令"></a>ls &#x2F;home&#x2F;tom&#x2F;usr&#x2F;bin  &#x2F;&#x2F;查看可用的命令</h2><p><code>bin</code> 是 <strong>binary（二进制）</strong> 的缩写，在 Linux&#x2F;Unix 系统中用于存放 <strong>可执行程序（命令）</strong>。不同的 <code>bin</code> 目录用途不同，主要分为以下几类：</p>
+<hr>
+<h2 id="📂-常见的-bin-目录"><a href="#📂-常见的-bin-目录" class="headerlink" title="📂 常见的 bin 目录"></a><strong>📂 常见的 <code>bin</code> 目录</strong></h2><h3 id="1-bin（系统核心命令）"><a href="#1-bin（系统核心命令）" class="headerlink" title="1. /bin（系统核心命令）"></a><strong>1. <code>/bin</code>（系统核心命令）</strong></h3><ul>
+<li><strong>作用</strong>：存放系统启动和修复所需的 <strong>基础命令</strong>（所有用户可用）。</li>
+<li><strong>示例命令</strong>：<code>ls</code>, <code>cp</code>, <code>mv</code>, <code>bash</code>, <code>cat</code>。</li>
+<li><strong>路径</strong>：通常为 <code>/bin</code>（部分系统可能链接到 <code>/usr/bin</code>）。</li>
+</ul>
+<h3 id="2-usr-bin（用户级命令）"><a href="#2-usr-bin（用户级命令）" class="headerlink" title="2. /usr/bin（用户级命令）"></a><strong>2. <code>/usr/bin</code>（用户级命令）</strong></h3><ul>
+<li><strong>作用</strong>：存放大多数 <strong>用户安装的应用程序和工具</strong>。</li>
+<li><strong>示例命令</strong>：<code>python</code>, <code>gcc</code>, <code>vim</code>, <code>ssh</code>。</li>
+<li><strong>路径</strong>：<code>/usr/bin</code>。</li>
+</ul>
+<h3 id="3-usr-local-bin（本地安装的软件）"><a href="#3-usr-local-bin（本地安装的软件）" class="headerlink" title="3. /usr/local/bin（本地安装的软件）"></a><strong>3. <code>/usr/local/bin</code>（本地安装的软件）</strong></h3><ul>
+<li><strong>作用</strong>：存放用户 <strong>手动编译安装</strong> 的软件（避免覆盖系统自带命令）。</li>
+<li><strong>示例</strong>：通过 <code>make install</code> 安装的程序。</li>
+<li><strong>路径</strong>：<code>/usr/local/bin</code>。</li>
+</ul>
+<h3 id="4-sbin-和-usr-sbin（系统管理命令）"><a href="#4-sbin-和-usr-sbin（系统管理命令）" class="headerlink" title="4. /sbin 和 /usr/sbin（系统管理命令）"></a><strong>4. <code>/sbin</code> 和 <code>/usr/sbin</code>（系统管理命令）</strong></h3><ul>
+<li><strong>作用</strong>：存放需要 <strong>root 权限</strong> 的系统管理命令（如网络配置、磁盘管理）。</li>
+<li><strong>示例命令</strong>：<code>ifconfig</code>, <code>iptables</code>, <code>fdisk</code>。</li>
+<li><strong>路径</strong>：<code>/sbin</code>（核心命令）、<code>/usr/sbin</code>（非必要管理工具）。</li>
+</ul>
+<h3 id="5-bin-或-local-bin（用户自定义命令）"><a href="#5-bin-或-local-bin（用户自定义命令）" class="headerlink" title="5. ~/bin 或 ~/.local/bin（用户自定义命令）"></a><strong>5. <code>~/bin</code> 或 <code>~/.local/bin</code>（用户自定义命令）</strong></h3><ul>
+<li><strong>作用</strong>：存放当前用户的 <strong>私有脚本或工具</strong>（仅对当前用户有效）。</li>
+<li><strong>示例</strong>：个人编写的 Shell 脚本、下载的第三方工具。</li>
+<li><strong>路径</strong>：<code>/home/用户名/bin</code> 或 <code>/home/用户名/.local/bin</code>。</li>
+</ul>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="绕过-rbash-的限制（安全风险）"><a href="#绕过-rbash-的限制（安全风险）" class="headerlink" title="绕过 rbash 的限制（安全风险）"></a><strong>绕过 rbash 的限制（安全风险）</strong></h2><p>vi绕过：</p>
+<p>可以进入vi中执行set命令将shell改为&#x2F;bin&#x2F;sh</p>
+<ol>
+<li><p><strong>利用编辑器</strong>：</p>
+<p>vi</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725191244389.png" alt="image-20250725191244389" data-caption="image-20250725191244389" loading="lazy"></p>
+</li>
+<li><p><strong>进入之后直接在编辑的最底下依次输入如下命令</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.:set shell=/bin/sh //给shell赋值</span><br><span class="line">2.:shell   //执行shell</span><br></pre></td></tr></table></figure>
+
+<p>虽然以上操作更改了当前用户的操作权限，但是在当前这个路径并找不到flag3.txt文件，所以要设置全局变量才行</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725192337626.png" alt="image-20250725192337626" data-caption="image-20250725192337626" loading="lazy"></p>
+</li>
+<li><p><strong>设置全局变量</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH=PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin:sbin</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725193143872.png" alt="image-20250725193143872" data-caption="image-20250725193143872" loading="lazy"></p>
+<h4 id="保留原-PATH-并追加新路径（deepseek推荐）"><a href="#保留原-PATH-并追加新路径（deepseek推荐）" class="headerlink" title="保留原 PATH 并追加新路径（deepseek推荐）"></a>保留原 PATH 并追加新路径（deepseek推荐）</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin:/sbin</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：在原有 <code>PATH</code> 基础上追加新目录，避免覆盖已有路径。</li>
+</ul>
+<p>从flag3可以知道要用su命令切换jerry用户</p>
+<p><code>su</code>是 Linux&#x2F;Unix 系统中用于 <strong>切换用户身份</strong> 的核心命令，主要功能是临时以其他用户（通常是 <code>root</code>）的身份执行操作。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725193941402.png" alt="image-20250725193941402" data-caption="image-20250725193941402" loading="lazy"><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725195012533.png" alt="image-20250725195012533" data-caption="image-20250725195012533" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725194149236.png" alt="image-20250725194149236" data-caption="image-20250725194149236" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725194303696.png" alt="image-20250725194303696" data-caption="image-20250725194303696" loading="lazy"></p>
+<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo -l  //授权查看</span><br><span class="line"></span><br><span class="line">git  //开源分布控制系统</span><br><span class="line"></span><br><span class="line">操作命令如下：</span><br><span class="line">1. sudo git -p  //-p是分页的功能</span><br><span class="line">2. :处改为!/bin/sh   //shell转义，所以要避免sudo授权用户vi,vim,ftp.lee,more,git.......</span><br><span class="line">3. cd /root</span><br></pre></td></tr></table></figure>
+
+<p><code>sudo -l</code> 是 Linux&#x2F;Unix 系统中用于 <strong>列出当前用户被允许通过 <code>sudo</code> 执行的命令</strong> 的关键命令。它可以帮助你快速了解自己的权限范围，尤其是在多用户或受控环境中。新登录服务器时快速确认自己能做什么。</p>
+<h2 id="🔧-基本语法"><a href="#🔧-基本语法" class="headerlink" title="🔧 基本语法"></a><strong>🔧 基本语法</strong></h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>需要输入当前用户的密码</strong>（不是 root 密码）。</li>
+<li>输出结果会显示：<ul>
+<li>允许执行的命令路径。</li>
+<li>是否需要密码（<code>NOPASSWD</code> 标签）。</li>
+<li>其他限制条件（如环境变量、用户组等）。</li>
+</ul>
+</li>
+</ul>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725200208099.png" alt="image-20250725200208099" data-caption="image-20250725200208099" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725200318872.png" alt="image-20250725200318872" data-caption="image-20250725200318872" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725200753008.png" alt="image-20250725200753008" data-caption="image-20250725200753008" loading="lazy"></p>
+<p><code>cd /root</code> 是一个 Linux&#x2F;Unix 命令，用于 <strong>切换到系统的 root 用户主目录</strong>（即 <code>/root</code>）。</p>
+<hr>
+<h2 id="📌-核心作用"><a href="#📌-核心作用" class="headerlink" title="📌 核心作用"></a><strong>📌 核心作用</strong></h2><ol>
+<li><strong>进入 root 的主目录</strong><ul>
+<li><code>/root</code> 是超级用户（root）的专属家目录（普通用户的家目录是 <code>/home/用户名</code>）。</li>
+</ul>
+</li>
+<li><strong>执行需 root 权限的操作</strong><ul>
+<li>例如查看或修改 root 的配置文件（如 <code>/root/.bashrc</code>）。</li>
+</ul>
+</li>
+</ol>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/imgs/$%7Bfiilename%7D/image-20250725200941650.png" alt="image-20250725200941650" data-caption="image-20250725200941650" loading="lazy"></p>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/DC/" rel="tag">DC</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Vulnhub/" rel="tag">Vulnhub</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1761989925211"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div></div><div class="nexmoe-post-right">    <div class="nexmoe-fixed">
+        <div class="nexmoe-tool">
+
+            
+
+            
+            
+            <button class="mdui-fab catalog" style="overflow:unset;">
+                <i class="nexmoefont icon-i-catalog"></i>
+                <div class="nexmoe-toc">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E5%87%BA%E4%B8%80%E4%B8%AA%E7%82%B9%EF%BC%9A%E9%9D%B6%E6%9C%BA%E7%BB%99%E5%87%BA%E7%9A%84%E6%89%80%E6%9C%89%E4%BF%A1%E6%81%AF%E9%83%BD%E6%98%AF%E6%9C%89%E7%94%A8%E7%9A%84%E4%BF%A1%E6%81%AF%EF%BC%8C%E5%BD%93%E6%B2%A1%E6%9C%89%E6%80%9D%E8%B7%AF%E7%9A%84%E6%97%B6%E5%80%99%E5%B0%B1%E5%8E%BB%E7%9C%8B%E5%89%8D%E9%9D%A2%E5%BE%97%E5%88%B0%E7%9A%84%E4%BF%A1%E6%81%AF%E5%93%AA%E4%BA%9B%E8%BF%98%E6%B2%A1%E6%9C%89%E7%94%A8%EF%BC%8C%E8%AF%B4%E4%B8%8D%E5%AE%9A%E8%BF%99%E4%BA%9B%E4%BF%A1%E6%81%AF%E5%B0%B1%E6%98%AF%E5%8F%A6%E5%A4%96%E7%9A%84%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%E4%BA%86"><span class="toc-number">1.</span> <span class="toc-text">总结出一个点：靶机给出的所有信息都是有用的信息，当没有思路的时候就去看前面得到的信息哪些还没有用，说不定这些信息就是另外的解题思路了</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90%E6%96%87%E4%BB%B6-etc-hosts"><span class="toc-number">2.</span> <span class="toc-text">本地域名解析文件&#x2F;etc&#x2F;hosts</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90%E4%BD%9C%E7%94%A8%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">域名解析作用：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dirsearch%E6%89%AB%E6%8F%8F%E5%B9%B6%E8%AE%BF%E9%97%AE"><span class="toc-number">3.</span> <span class="toc-text">dirsearch扫描并访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cewl-%E7%94%9F%E6%88%90%E5%AF%86%E7%A0%81-wpscan-%E6%9E%9A%E4%B8%BE%E7%94%A8%E6%88%B7%E5%90%8D-wpscan-%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3"><span class="toc-number">4.</span> <span class="toc-text">cewl(生成密码)+wpscan(枚举用户名)&#x3D;wpscan(暴力破解)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cewl%E2%80%94%E5%8F%A3%E4%BB%A4%E5%AD%97%E5%85%B8%E5%88%B6%E4%BD%9C"><span class="toc-number">5.</span> <span class="toc-text">cewl—口令字典制作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD"><span class="toc-number">5.1.</span> <span class="toc-text">主要功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95-kali%E8%87%AA%E5%B8%A6"><span class="toc-number">5.2.</span> <span class="toc-text">基本用法(kali自带)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4"><span class="toc-number">5.2.1.</span> <span class="toc-text">基础命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0"><span class="toc-number">5.3.</span> <span class="toc-text">常用参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WPScan-WordPress%E2%80%93CMS%E4%B8%93%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">6.</span> <span class="toc-text">WPScan (WordPress–CMS专用工具)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">7.</span> <span class="toc-text">基本使用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%89%AB%E6%8F%8F-WordPress-%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="toc-number">7.1.</span> <span class="toc-text">1. 扫描 WordPress 基本信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%9E%9A%E4%B8%BE-WordPress-%E7%94%A8%E6%88%B7-%E6%AD%A4%E6%AC%A1%E6%B5%8B%E8%AF%95%E7%94%A8%E5%88%B0"><span class="toc-number">7.2.</span> <span class="toc-text">2. 枚举 WordPress 用户(此次测试用到)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%89%AB%E6%8F%8F%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E"><span class="toc-number">7.3.</span> <span class="toc-text">3. 扫描插件漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%89%AB%E6%8F%8F%E4%B8%BB%E9%A2%98%E6%BC%8F%E6%B4%9E"><span class="toc-number">7.4.</span> <span class="toc-text">4. 扫描主题漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3-WordPress-%E7%99%BB%E5%BD%95-%E6%AD%A4%E6%AC%A1%E6%B5%8B%E8%AF%95%E7%94%A8%E5%88%B0"><span class="toc-number">7.5.</span> <span class="toc-text">5. 暴力破解 WordPress 登录(此次测试用到)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ssh"><span class="toc-number">8.</span> <span class="toc-text">ssh</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rbash-%E9%80%83%E9%80%B8"><span class="toc-number">9.</span> <span class="toc-text">rbash(逃逸)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ls-home-tom-usr-bin-%E6%9F%A5%E7%9C%8B%E5%8F%AF%E7%94%A8%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-number">10.</span> <span class="toc-text">ls &#x2F;home&#x2F;tom&#x2F;usr&#x2F;bin  &#x2F;&#x2F;查看可用的命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%82-%E5%B8%B8%E8%A7%81%E7%9A%84-bin-%E7%9B%AE%E5%BD%95"><span class="toc-number">11.</span> <span class="toc-text">📂 常见的 bin 目录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-bin%EF%BC%88%E7%B3%BB%E7%BB%9F%E6%A0%B8%E5%BF%83%E5%91%BD%E4%BB%A4%EF%BC%89"><span class="toc-number">11.1.</span> <span class="toc-text">1. &#x2F;bin（系统核心命令）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-usr-bin%EF%BC%88%E7%94%A8%E6%88%B7%E7%BA%A7%E5%91%BD%E4%BB%A4%EF%BC%89"><span class="toc-number">11.2.</span> <span class="toc-text">2. &#x2F;usr&#x2F;bin（用户级命令）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-usr-local-bin%EF%BC%88%E6%9C%AC%E5%9C%B0%E5%AE%89%E8%A3%85%E7%9A%84%E8%BD%AF%E4%BB%B6%EF%BC%89"><span class="toc-number">11.3.</span> <span class="toc-text">3. &#x2F;usr&#x2F;local&#x2F;bin（本地安装的软件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-sbin-%E5%92%8C-usr-sbin%EF%BC%88%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4%EF%BC%89"><span class="toc-number">11.4.</span> <span class="toc-text">4. &#x2F;sbin 和 &#x2F;usr&#x2F;sbin（系统管理命令）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-bin-%E6%88%96-local-bin%EF%BC%88%E7%94%A8%E6%88%B7%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%EF%BC%89"><span class="toc-number">11.5.</span> <span class="toc-text">5. ~&#x2F;bin 或 ~&#x2F;.local&#x2F;bin（用户自定义命令）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%95%E8%BF%87-rbash-%E7%9A%84%E9%99%90%E5%88%B6%EF%BC%88%E5%AE%89%E5%85%A8%E9%A3%8E%E9%99%A9%EF%BC%89"><span class="toc-number">13.</span> <span class="toc-text">绕过 rbash 的限制（安全风险）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%9D%E7%95%99%E5%8E%9F-PATH-%E5%B9%B6%E8%BF%BD%E5%8A%A0%E6%96%B0%E8%B7%AF%E5%BE%84%EF%BC%88deepseek%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-number">13.0.1.</span> <span class="toc-text">保留原 PATH 并追加新路径（deepseek推荐）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E6%9D%83"><span class="toc-number">14.</span> <span class="toc-text">提权</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%A7-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-number">15.</span> <span class="toc-text">🔧 基本语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%8C-%E6%A0%B8%E5%BF%83%E4%BD%9C%E7%94%A8"><span class="toc-number">16.</span> <span class="toc-text">📌 核心作用</span></a></li></ol>
+                </div>
+            </button>
+            
+
+            
+
+            <a href="#nexmoe-content" class="backtop toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+        </div>
+    </div>
+</div></div><div id="nexmoe-footer"><!--!--></div><div id="nexmoe-search-space"><div class="search-container"><div class="search-header"><div class="search-input-container"><input class="search-input" type="text" placeholder="搜索" onInput="sinput();"></div><a class="search-close" onclick="sclose();">×</a></div><div class="search-body"></div></div></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+</div></body></html>
